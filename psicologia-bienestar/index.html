@@ -1,0 +1,127 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Psicología y Bienestar</title>
+    <link rel="icon" href="assets/logo.png" />
+    <!-- Tailwind CDN -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+      body {
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      }
+    </style>
+  </head>
+  <body class="bg-white text-gray-800">
+
+    <!-- HEADER -->
+    <header class="bg-[#66a6da] text-white shadow">
+      <div class="container mx-auto flex justify-between items-center p-4">
+        <div class="flex items-center space-x-2">
+          <img src="assets/logo.png" alt="Logo Empresa" class="h-10 w-10" />
+          <span class="text-xl font-bold">Psicología & Bienestar</span>
+        </div>
+        <nav class="space-x-4 text-sm font-semibold">
+          <a href="#inicio" class="hover:underline">Inicio</a>
+          <a href="#nosotros" class="hover:underline">Nosotros</a>
+          <a href="#servicios" class="hover:underline">Servicios</a>
+          <a href="#equipo" class="hover:underline">Equipo</a>
+          <a href="#contacto" class="hover:underline">Contacto</a>
+        </nav>
+      </div>
+    </header>
+
+    <!-- INICIO -->
+    <section id="inicio" class="bg-gradient-to-r from-[#66a6da] via-[#627eff] to-[#53c6e4] text-white py-20 px-6 text-center">
+      <div class="max-w-4xl mx-auto">
+        <h1 class="text-4xl md:text-5xl font-bold mb-6">Bienestar Emocional y Psicología Integral</h1>
+        <p class="text-lg md:text-xl">[Aquí puedes incluir una frase inspiradora o resumen de la misión de tu empresa.]</p>
+        <a href="#contacto" class="mt-8 inline-block bg-white text-[#627eff] font-semibold px-6 py-3 rounded shadow hover:bg-gray-100 transition">Agenda una cita</a>
+      </div>
+    </section>
+
+    <!-- NOSOTROS -->
+    <section id="nosotros" class="py-20 px-6 bg-white text-gray-800">
+      <div class="max-w-4xl mx-auto text-center">
+        <h2 class="text-3xl font-bold mb-4">Nosotros</h2>
+        <p class="text-lg leading-relaxed">[Aquí puedes escribir sobre la historia de la empresa, su enfoque psicológico, los valores humanos y profesionales que la definen.]</p>
+      </div>
+    </section>
+
+    <!-- SERVICIOS -->
+    <section id="servicios" class="py-20 px-6 bg-gray-100">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-10">Servicios</h2>
+        <div class="grid md:grid-cols-3 gap-8">
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">Terapia Individual</h3>
+            <p>[Descripción breve del servicio]</p>
+          </div>
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">Terapia de Pareja</h3>
+            <p>[Descripción breve del servicio]</p>
+          </div>
+          <div class="bg-white shadow p-6 rounded-lg">
+            <h3 class="text-xl font-semibold mb-2">Talleres y Charlas</h3>
+            <p>[Descripción breve del servicio]</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- EQUIPO -->
+    <section id="equipo" class="py-20 px-6 bg-white text-gray-800">
+      <div class="max-w-6xl mx-auto">
+        <h2 class="text-3xl font-bold text-center mb-10">Nuestro Equipo</h2>
+        <div class="grid md:grid-cols-3 gap-8 text-center">
+          <div>
+            <img src="assets/profesional1.jpg" class="rounded-full w-32 h-32 mx-auto mb-4" alt="Nombre Psicólogo/a" />
+            <h3 class="text-lg font-semibold">[Nombre]</h3>
+            <p class="text-sm">[Especialidad o Rol]</p>
+          </div>
+          <div>
+            <img src="assets/profesional2.jpg" class="rounded-full w-32 h-32 mx-auto mb-4" alt="Nombre Psicólogo/a" />
+            <h3 class="text-lg font-semibold">[Nombre]</h3>
+            <p class="text-sm">[Especialidad o Rol]</p>
+          </div>
+          <div>
+            <img src="assets/profesional3.jpg" class="rounded-full w-32 h-32 mx-auto mb-4" alt="Nombre Psicólogo/a" />
+            <h3 class="text-lg font-semibold">[Nombre]</h3>
+            <p class="text-sm">[Especialidad o Rol]</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CONTACTO -->
+    <section id="contacto" class="py-20 px-6 bg-gray-100 text-gray-800">
+      <div class="max-w-3xl mx-auto text-center">
+        <h2 class="text-3xl font-bold mb-4">Contacto</h2>
+        <p class="mb-8">Déjanos tu mensaje o consulta y te responderemos lo antes posible.</p>
+        <form action="https://formsubmit.co/tu-correo@example.com" method="POST" class="space-y-4 text-left">
+          <input type="hidden" name="_captcha" value="false">
+          <div>
+            <label class="block mb-1 font-semibold">Nombre</label>
+            <input type="text" name="nombre" class="w-full p-3 border rounded" required />
+          </div>
+          <div>
+            <label class="block mb-1 font-semibold">Correo</label>
+            <input type="email" name="correo" class="w-full p-3 border rounded" required />
+          </div>
+          <div>
+            <label class="block mb-1 font-semibold">Mensaje</label>
+            <textarea name="mensaje" rows="4" class="w-full p-3 border rounded" required></textarea>
+          </div>
+          <button type="submit" class="bg-[#627eff] text-white px-6 py-3 rounded hover:bg-[#53c6e4] transition">Enviar</button>
+        </form>
+      </div>
+    </section>
+
+    <!-- FOOTER -->
+    <footer class="bg-[#66a6da] text-white text-center py-6 mt-12">
+      <p>&copy; 2025 Psicología & Bienestar. Todos los derechos reservados.</p>
+    </footer>
+
+  </body>
+</html>

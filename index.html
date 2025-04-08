@@ -12,7 +12,28 @@
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
         }
+
+        .perspective {
+            perspective: 1000px;
+        }
+
+        .transform-style-preserve-3d {
+            transform-style: preserve-3d;
+        }
+
+        .backface-hidden {
+            backface-visibility: hidden;
+        }
+
+        .rotate-y-180 {
+            transform: rotateY(180deg);
+        }
     </style>
+    <!-- Swiper CSS -->
+    <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
+    <!-- Swiper JS -->
+    <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
+
 </head>
 
 <body class="bg-white text-gray-800">
@@ -71,29 +92,103 @@
 
 
     <!-- SERVICIOS -->
-    <section class="py-16 bg-white">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Nuestros Servicios</h2>
-            <p class="text-gray-700">
-                Entendemos que cada persona y familia es única, por tal motivo ofrecemos servicios de terapia
-                personalizados para ayudarte a superar obstáculos y construir una vida plena.
-            </p>
-            <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
-                <div class="p-6 bg-[#e0f2ff] rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-2">Terapia Individual</h3>
-                    <p>Sesiones personalizadas para el manejo del estrés, ansiedad, autoestima y más.</p>
+    <section id="servicios" class="py-20 bg-gray-100 text-gray-800">
+        <div class="max-w-6xl mx-auto px-4">
+            <h2 class="text-3xl font-bold text-center mb-12">Nuestros Servicios</h2>
+
+            <div class="grid gap-10 sm:grid-cols-2 lg:grid-cols-3">
+
+                <!-- TARJETA 1 -->
+                <div class="group perspective">
+                    <div class="relative w-full h-80 transition-transform duration-700 transform-style-preserve-3d group-[.flipped]:rotate-y-180"
+                        id="card1">
+                        <!-- Cara frontal -->
+                        <div
+                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
+                            <h3 class="text-xl font-semibold mb-2">Terapia</h3>
+                            <p class="text-center text-sm">
+                                Entendemos que cada persona y familia es única, por tal motivo ofrecemos servicios de
+                                terapia personalizados para ayudarte a superar obstáculos y construir una vida plena.
+                            </p>
+                        </div>
+                        <!-- Cara trasera -->
+                        <div
+                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
+                            <h3 class="text-lg font-bold mb-2">Terapias:</h3>
+                            <ul class="text-center text-sm">
+                                <li>Terapia Individual</li>
+                                <li>Terapia de Pareja</li>
+                                <li>Terapia Familiar</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button onclick="flipCard('card1')"
+                        class="mt-4 text-sm text-blue-600 hover:underline mx-auto block">Girar tarjeta</button>
                 </div>
-                <div class="p-6 bg-[#e0f2ff] rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-2">Terapia de Pareja</h3>
-                    <p>Mejora de la comunicación, resolución de conflictos y fortalecimiento del vínculo afectivo.</p>
+
+                <!-- TARJETA 2 -->
+                <div class="group perspective">
+                    <div class="relative w-full h-80 transition-transform duration-700 transform-style-preserve-3d group-[.flipped]:rotate-y-180"
+                        id="card2">
+                        <!-- Cara frontal -->
+                        <div
+                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
+                            <h3 class="text-xl font-semibold mb-2 text-center">Instituciones Educativas / Orientación
+                                Vocacional</h3>
+                            <p class="text-center text-sm">
+                                Nuestros servicios están diseñados para ayudarte a descubrir tus pasiones, habilidades y
+                                metas profesionales.
+                            </p>
+                        </div>
+                        <!-- Cara trasera -->
+                        <div
+                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
+                            <h3 class="text-lg font-bold mb-2">Evaluaciones y Beneficios:</h3>
+                            <ul class="text-sm mb-2 text-center">
+                                <li>Evaluación de Habilidades</li>
+                                <li>Análisis de Intereses</li>
+                                <li>Fortalecimiento de Habilidades Blandas</li>
+                            </ul>
+                            <p class="text-xs text-center">
+                                Claridad sobre tu elección de carrera. Éxito profesional. Supera obstáculos.
+                            </p>
+                        </div>
+                    </div>
+                    <button onclick="flipCard('card2')"
+                        class="mt-4 text-sm text-blue-600 hover:underline mx-auto block">Girar tarjeta</button>
                 </div>
-                <div class="p-6 bg-[#e0f2ff] rounded-lg shadow">
-                    <h3 class="text-xl font-semibold mb-2">Talleres & Charlas</h3>
-                    <p>Espacios educativos grupales sobre salud emocional, relaciones y desarrollo personal.</p>
+
+                <!-- TARJETA 3 -->
+                <div class="group perspective">
+                    <div class="relative w-full h-80 transition-transform duration-700 transform-style-preserve-3d group-[.flipped]:rotate-y-180"
+                        id="card3">
+                        <!-- Cara frontal -->
+                        <div
+                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
+                            <h3 class="text-xl font-semibold mb-2">Talleres & Charlas</h3>
+                            <p class="text-center text-sm">
+                                Espacios educativos grupales sobre salud emocional, relaciones y desarrollo personal.
+                            </p>
+                        </div>
+                        <!-- Cara trasera -->
+                        <div
+                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
+                            <h3 class="text-lg font-bold mb-2">Actividades:</h3>
+                            <ul class="text-center text-sm">
+                                <li>Talleres Lúdicos Preventivos</li>
+                                <li>Talleres Pedagógicos</li>
+                                <li>Taller de Padres</li>
+                            </ul>
+                        </div>
+                    </div>
+                    <button onclick="flipCard('card3')"
+                        class="mt-4 text-sm text-blue-600 hover:underline mx-auto block">Girar tarjeta</button>
                 </div>
+
             </div>
         </div>
     </section>
+
 
 
     <!-- EQUIPO -->
@@ -152,28 +247,27 @@
     <!-- Carrusel Servicios -->
 
     <script>
-        const swiper = new Swiper(".mySwiper", {
-            slidesPerView: 1,
-            spaceBetween: 30,
-            loop: true,
-            pagination: {
-                el: ".swiper-pagination",
-                clickable: true,
-            },
-            navigation: {
-                nextEl: ".swiper-button-next",
-                prevEl: ".swiper-button-prev",
-            },
-            breakpoints: {
-                768: {
-                    slidesPerView: 2,
-                },
-                1024: {
-                    slidesPerView: 3,
-                },
-            },
+        const services = {
+            0: ["Autoestima y desarrollo personal", "Manejo del estrés", "Ansiedad y depresión"],
+            1: ["Resolución de conflictos", "Comunicación familiar", "Apoyo emocional para padres e hijos"],
+            2: ["Fortalecimiento del vínculo", "Toma de decisiones juntos", "Superación de crisis de pareja"]
+        };
+
+        document.querySelectorAll('.service-text').forEach((el, index) => {
+            let i = 0;
+            setInterval(() => {
+                i = (i + 1) % services[index].length;
+                el.classList.remove("opacity-100");
+                el.classList.add("opacity-0");
+                setTimeout(() => {
+                    el.textContent = services[index][i];
+                    el.classList.remove("opacity-0");
+                    el.classList.add("opacity-100");
+                }, 300);
+            }, 3000);
         });
     </script>
+
 
 </body>
 

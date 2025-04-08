@@ -28,6 +28,13 @@
         .rotate-y-180 {
             transform: rotateY(180deg);
         }
+
+        .overflow-y-auto::-webkit-scrollbar {
+            display: none;
+            /* oculta scroll en caso de desborde */
+        }
+    </style>
+
     </style>
     <!-- Swiper CSS -->
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -92,6 +99,7 @@
 
 
     <!-- SERVICIOS -->
+    <!-- Sección Servicios -->
     <section id="servicios" class="py-20 bg-gray-100 text-gray-800">
         <div class="max-w-6xl mx-auto px-4">
             <h2 class="text-3xl font-bold text-center mb-12">Nuestros Servicios</h2>
@@ -104,26 +112,28 @@
                         id="card1">
                         <!-- Cara frontal -->
                         <div
-                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
-                            <h3 class="text-xl font-semibold mb-2">Terapia</h3>
-                            <p class="text-center text-sm">
+                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-xl font-semibold mb-4">Terapia</h3>
+                            <p class="text-sm">
                                 Entendemos que cada persona y familia es única, por tal motivo ofrecemos servicios de
                                 terapia personalizados para ayudarte a superar obstáculos y construir una vida plena.
                             </p>
                         </div>
                         <!-- Cara trasera -->
                         <div
-                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
-                            <h3 class="text-lg font-bold mb-2">Terapias:</h3>
-                            <ul class="text-center text-sm">
-                                <li>Terapia Individual</li>
-                                <li>Terapia de Pareja</li>
-                                <li>Terapia Familiar</li>
+                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-lg font-bold mb-3">Terapias</h3>
+                            <ul class="text-sm space-y-1">
+                                <li>✅ Terapia Individual</li>
+                                <li>✅ Terapia de Pareja</li>
+                                <li>✅ Terapia Familiar</li>
                             </ul>
                         </div>
                     </div>
                     <button onclick="flipCard('card1')"
-                        class="mt-4 text-sm text-blue-600 hover:underline mx-auto block">Girar tarjeta</button>
+                        class="mt-4 flex items-center justify-center text-sm text-blue-600 hover:underline mx-auto">
+                        <span class="mr-1">Girar tarjeta</span> 🔄
+                    </button>
                 </div>
 
                 <!-- TARJETA 2 -->
@@ -132,30 +142,34 @@
                         id="card2">
                         <!-- Cara frontal -->
                         <div
-                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
-                            <h3 class="text-xl font-semibold mb-2 text-center">Instituciones Educativas / Orientación
-                                Vocacional</h3>
-                            <p class="text-center text-sm">
+                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-xl font-semibold mb-3">Instituciones Educativas</h3>
+                            <p class="text-sm">
                                 Nuestros servicios están diseñados para ayudarte a descubrir tus pasiones, habilidades y
                                 metas profesionales.
                             </p>
                         </div>
                         <!-- Cara trasera -->
                         <div
-                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
-                            <h3 class="text-lg font-bold mb-2">Evaluaciones y Beneficios:</h3>
-                            <ul class="text-sm mb-2 text-center">
-                                <li>Evaluación de Habilidades</li>
-                                <li>Análisis de Intereses</li>
-                                <li>Fortalecimiento de Habilidades Blandas</li>
+                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 overflow-y-auto text-center">
+                            <h3 class="text-lg font-bold mb-2">Orientación Vocacional</h3>
+                            <ul class="text-sm space-y-1 mb-4">
+                                <li>🧠 Evaluación de Habilidades</li>
+                                <li>🔍 Análisis de Intereses</li>
+                                <li>🤝 Fortalecimiento de habilidades blandas</li>
                             </ul>
-                            <p class="text-xs text-center">
-                                Claridad sobre tu elección de carrera. Éxito profesional. Supera obstáculos.
-                            </p>
+                            <h4 class="font-semibold mb-1">Beneficios:</h4>
+                            <ul class="text-sm space-y-1">
+                                <li>🎯 Claridad sobre tu elección de carrera</li>
+                                <li>📈 Incremento de la satisfacción y éxito profesional</li>
+                                <li>🛠️ Estrategias para superar obstáculos</li>
+                            </ul>
                         </div>
                     </div>
                     <button onclick="flipCard('card2')"
-                        class="mt-4 text-sm text-blue-600 hover:underline mx-auto block">Girar tarjeta</button>
+                        class="mt-4 flex items-center justify-center text-sm text-blue-600 hover:underline mx-auto">
+                        <span class="mr-1">Girar tarjeta</span> 🔄
+                    </button>
                 </div>
 
                 <!-- TARJETA 3 -->
@@ -164,25 +178,27 @@
                         id="card3">
                         <!-- Cara frontal -->
                         <div
-                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
-                            <h3 class="text-xl font-semibold mb-2">Talleres & Charlas</h3>
-                            <p class="text-center text-sm">
+                            class="absolute w-full h-full backface-hidden bg-white shadow-xl rounded-xl p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-xl font-semibold mb-3">Talleres & Charlas</h3>
+                            <p class="text-sm">
                                 Espacios educativos grupales sobre salud emocional, relaciones y desarrollo personal.
                             </p>
                         </div>
                         <!-- Cara trasera -->
                         <div
-                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 flex flex-col justify-center items-center">
-                            <h3 class="text-lg font-bold mb-2">Actividades:</h3>
-                            <ul class="text-center text-sm">
-                                <li>Talleres Lúdicos Preventivos</li>
-                                <li>Talleres Pedagógicos</li>
-                                <li>Taller de Padres</li>
+                            class="absolute w-full h-full backface-hidden rotate-y-180 bg-blue-100 shadow-xl rounded-xl p-6 flex flex-col justify-center items-center text-center">
+                            <h3 class="text-lg font-bold mb-3">Actividades:</h3>
+                            <ul class="text-sm space-y-1">
+                                <li>🎨 Talleres Lúdicos Preventivos</li>
+                                <li>📘 Talleres Pedagógicos</li>
+                                <li>👨‍👩‍👧 Taller de Padres</li>
                             </ul>
                         </div>
                     </div>
                     <button onclick="flipCard('card3')"
-                        class="mt-4 text-sm text-blue-600 hover:underline mx-auto block">Girar tarjeta</button>
+                        class="mt-4 flex items-center justify-center text-sm text-blue-600 hover:underline mx-auto">
+                        <span class="mr-1">Girar tarjeta</span> 🔄
+                    </button>
                 </div>
 
             </div>
@@ -251,6 +267,7 @@
             card.classList.toggle("rotate-y-180");
         }
     </script>
+
 
 
 

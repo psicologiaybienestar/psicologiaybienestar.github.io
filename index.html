@@ -74,6 +74,10 @@
     <section class="py-16 bg-white">
         <div class="max-w-5xl mx-auto">
             <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Nuestros Servicios</h2>
+            <p class="text-gray-700">
+                Entendemos que cada persona y familia es única, por tal motivo ofrecemos servicios de terapia
+                personalizados para ayudarte a superar obstáculos y construir una vida plena.
+            </p>
             <div class="grid grid-cols-1 md:grid-cols-3 gap-8 text-center">
                 <div class="p-6 bg-[#e0f2ff] rounded-lg shadow">
                     <h3 class="text-xl font-semibold mb-2">Terapia Individual</h3>
@@ -143,6 +147,33 @@
     <footer class="bg-[#66a6da] text-white text-center py-6 mt-12">
         <p>&copy; 2025 Psicología & Bienestar. Todos los derechos reservados.</p>
     </footer>
+
+    <!-- Script -->
+    <!-- Carrusel Servicios -->
+
+    <script>
+        const swiper = new Swiper(".mySwiper", {
+            slidesPerView: 1,
+            spaceBetween: 30,
+            loop: true,
+            pagination: {
+                el: ".swiper-pagination",
+                clickable: true,
+            },
+            navigation: {
+                nextEl: ".swiper-button-next",
+                prevEl: ".swiper-button-prev",
+            },
+            breakpoints: {
+                768: {
+                    slidesPerView: 2,
+                },
+                1024: {
+                    slidesPerView: 3,
+                },
+            },
+        });
+    </script>
 
 </body>
 

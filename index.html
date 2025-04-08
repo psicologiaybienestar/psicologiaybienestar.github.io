@@ -245,28 +245,13 @@
 
     <!-- Script -->
     <!-- Carrusel Servicios -->
-
     <script>
-        const services = {
-            0: ["Autoestima y desarrollo personal", "Manejo del estrés", "Ansiedad y depresión"],
-            1: ["Resolución de conflictos", "Comunicación familiar", "Apoyo emocional para padres e hijos"],
-            2: ["Fortalecimiento del vínculo", "Toma de decisiones juntos", "Superación de crisis de pareja"]
-        };
-
-        document.querySelectorAll('.service-text').forEach((el, index) => {
-            let i = 0;
-            setInterval(() => {
-                i = (i + 1) % services[index].length;
-                el.classList.remove("opacity-100");
-                el.classList.add("opacity-0");
-                setTimeout(() => {
-                    el.textContent = services[index][i];
-                    el.classList.remove("opacity-0");
-                    el.classList.add("opacity-100");
-                }, 300);
-            }, 3000);
-        });
+        function flipCard(id) {
+            const card = document.getElementById(id);
+            card.classList.toggle("rotate-y-180");
+        }
     </script>
+
 
 
 </body>

@@ -57,22 +57,43 @@
 
 <body class="bg-white text-gray-800">
 
-    <!-- HEADER -->
-    <header class="bg-[#66a6da] text-white shadow">
-        <div class="container mx-auto flex justify-between items-center p-4">
-            <div class="flex items-center space-x-2">
-                <img src="assets/logo.png" alt="Logo Empresa" class="h-10 w-10" />
-                <span class="text-xl font-bold font-sego">Psicología & Bienestar</span>
-            </div>
-            <nav class="space-x-4 text-sm font-semibold">
-                <a href="#inicio" class="hover:underline">Inicio</a>
-                <a href="#nosotros" class="hover:underline">Nosotros</a>
-                <a href="#servicios" class="hover:underline">Servicios</a>
-                <a href="#equipo" class="hover:underline">Equipo</a>
-                <a href="#contacto" class="hover:underline">Contacto</a>
-            </nav>
-        </div>
-    </header>
+<!-- HEADER -->
+<header class="bg-[#66a6da] text-white shadow fixed w-full top-0 z-50">
+    <div class="container mx-auto flex justify-between items-center p-4">
+      <!-- Logo + Título -->
+      <div class="flex items-center space-x-2">
+        <img src="assets/logo.png" alt="Logo Empresa" class="h-10 w-10" />
+        <span class="text-xl font-bold font-sego">Psicología & Bienestar</span>
+      </div>
+  
+      <!-- Botón hamburguesa (solo visible en móviles) -->
+      <button id="menu-toggle" class="md:hidden focus:outline-none">
+        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+          xmlns="http://www.w3.org/2000/svg">
+          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
+            d="M4 6h16M4 12h16M4 18h16"></path>
+        </svg>
+      </button>
+  
+      <!-- Menú de navegación -->
+      <nav id="menu" class="hidden md:flex space-x-4 text-sm font-semibold">
+        <a href="#inicio" class="hover:underline">Inicio</a>
+        <a href="#nosotros" class="hover:underline">Nosotros</a>
+        <a href="#servicios" class="hover:underline">Servicios</a>
+        <a href="#equipo" class="hover:underline">Equipo</a>
+        <a href="#contacto" class="hover:underline">Contacto</a>
+      </nav>
+    </div>
+  
+    <!-- Menú desplegable en móviles -->
+    <div id="mobile-menu" class="md:hidden hidden bg-[#66a6da] px-4 pb-4">
+      <a href="#inicio" class="block py-2 hover:underline">Inicio</a>
+      <a href="#nosotros" class="block py-2 hover:underline">Nosotros</a>
+      <a href="#servicios" class="block py-2 hover:underline">Servicios</a>
+      <a href="#equipo" class="block py-2 hover:underline">Equipo</a>
+      <a href="#contacto" class="block py-2 hover:underline">Contacto</a>
+    </div>
+  </header>  
 
     <!-- INICIO -->
     <section id="inicio" class="relative bg-cover bg-center bg-no-repeat h-screen text-white"

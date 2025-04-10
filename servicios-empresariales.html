@@ -1,152 +1,205 @@
 <!DOCTYPE html>
 <html lang="es">
+
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Servicios Empresariales | Psicología y Bienestar</title>
-  <link rel="icon" type="image/png" href="assets/logo-ico.png" />
-  <script src="https://cdn.tailwindcss.com"></script>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Servicios Empresariales | Psicología y Bienestar</title>
+    <link rel="icon" type="image/png" href="assets/logo-ico.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <style>
+        @font-face {
+            font-family: "Sego Serif";
+            src: url("fonts/sego-serif.ttf") format("truetype");
+            font-weight: normal;
+            font-style: normal;
+        }
+
+        .font-sego {
+            font-family: "Sego Serif", serif;
+        }
+    </style>
 </head>
+
 <body class="bg-white text-gray-800">
 
-  <!-- NAVBAR -->
-  <header class="bg-[#66a6da] shadow-md">
-    <div class="container mx-auto flex justify-between items-center py-4 px-6">
-      <div class="flex items-center space-x-2">
-        <img src="assets/logo.png" alt="Logo" class="h-10 w-auto" />
-        <h1 class="text-xl font-bold text-white">Psicología & Bienestar</h1>
-      </div>
-      <nav>
-        <a href="index.html" class="text-white hover:text-gray-200 font-medium">Inicio</a>
-      </nav>
+    <!-- NAVBAR -->
+    <header class="bg-[#66a6da] shadow-md">
+        <div class="container mx-auto flex justify-between items-center py-4 px-6">
+            <div class="flex items-center space-x-2">
+                <img src="assets/logo.png" alt="Logo" class="h-10 w-auto" />
+                <h1 class="text-4xl md:text-6xl font-bold mb-6 font-sego">Psicología & Bienestar</h1>
+            </div>
+            <nav>
+                <a href="index.html" class="text-white hover:text-gray-200 font-medium">Inicio</a>
+            </nav>
+        </div>
+    </header>
+
+    <!-- SECCIÓN SERVICIOS EMPRESARIALES -->
+    <section class="py-16 px-6 md:px-20 bg-[#f4f9ff]">
+        <h2 class="text-3xl md:text-4xl font-bold text-center text-[#627eff] mb-10">
+            Servicios Empresariales
+        </h2>
+
+        <div class="space-y-10 max-w-4xl mx-auto text-justify">
+            <!-- TALLERES -->
+            <div class="bg-white shadow-lg rounded-xl p-6">
+                <h3 class="text-2xl font-semibold mb-3 text-[#627eff]">Talleres</h3>
+                <p>Brindamos talleres preventivos, pedagógicos y complementarios según la necesidad de la compañía.</p>
+            </div>
+
+            <!-- JORNADAS COMPLEMENTARIAS -->
+            <div class="bg-white shadow-lg rounded-xl p-6">
+                <h3 class="text-xl font-semibold text-[#627eff] mb-2">1. Jornadas Complementarias de Bienestar</h3>
+                <p class="mb-2">
+                    Nuestras innovadoras alternativas lúdico-pedagógicas están diseñadas especialmente para ofrecer
+                    jornadas de bienestar empresarial.
+                </p>
+                <p>
+                    Combinamos actividades físicas emocionantes, como escalada y boxeo, con sesiones de relajación que
+                    garantizan una efectiva descarga de estrés.
+                    Nuestro enfoque integral no solo promueve la salud física, sino que también revitaliza el ambiente
+                    laboral, ayudando a tu equipo a recuperar su bienestar y energía, previniendo el síndrome de
+                    Burnout.
+                </p>
+            </div>
+
+            <!-- TERAPIAS -->
+            <div class="bg-white shadow-lg rounded-xl p-6">
+                <h3 class="text-xl font-semibold text-[#627eff] mb-2">2. Terapias</h3>
+                <p>
+                    Servicio de terapia psicológica individual, de pareja o familiar para empleados con costos
+                    especiales por convenio empresarial.
+                    <br><span class="italic text-sm text-gray-600">*Aplica condiciones</span>
+                </p>
+            </div>
+
+            <!-- JORNADAS DE DESCARGA -->
+            <div class="bg-white shadow-lg rounded-xl p-6">
+                <h3 class="text-xl font-semibold text-[#627eff] mb-2">3. Jornadas de Descarga Emocional</h3>
+                <p>
+                    Servicio de jornadas de descarga emocional para empleados, adaptadas a las necesidades de la
+                    compañía, donde se abordan situaciones del día a día brindando herramientas de afrontamiento según
+                    el caso.
+                    <br><span class="italic text-sm text-gray-600">*Aplica condiciones</span>
+                </p>
+            </div>
+
+            <!-- ORIENTACIÓN VOCACIONAL -->
+            <div class="bg-white shadow-lg rounded-xl p-6">
+                <h3 class="text-xl font-semibold text-[#627eff] mb-2">4. Orientación Vocacional</h3>
+                <p>
+                    Servicio de orientación vocacional dirigido a estudiantes de grado noveno a once.
+                    <br><span class="italic text-sm text-gray-600">*Aplica para hijos de empleados de las empresas
+                        aliadas</span>
+                </p>
+            </div>
+        </div>
+
+        <!-- BOTÓN DE REGRESO -->
+        <div class="text-center mt-12">
+            <a href="index.html"
+                class="inline-block bg-[#627eff] text-white py-2 px-6 rounded-lg shadow hover:bg-[#53c6e4] transition">
+                ← Volver a Inicio
+            </a>
+        </div>
+    </section>
+
+    <!-- FORMULARIO DE CONTACTO -->
+    <div class="mt-20 max-w-2xl mx-auto bg-white shadow-lg rounded-xl p-6">
+        <h2 class="text-2xl font-semibold text-[#627eff] mb-4 text-center">Contáctanos</h2>
+
+        <!-- Mensaje de éxito -->
+        <div id="successMessage"
+            class="hidden text-green-700 bg-green-100 border border-green-300 rounded-lg px-4 py-3 mb-4 text-center">
+            ¡Gracias por contactarnos! Tu mensaje fue enviado exitosamente.
+        </div>
+
+        <form id="contactForm" action="https://formspree.io/f/mblgpnvb" method="POST" class="space-y-4">
+            <div>
+                <label class="block text-sm font-medium">Nombre</label>
+                <input type="text" name="nombre" required
+                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66a6da]" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Correo electrónico</label>
+                <input type="email" name="email" required
+                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66a6da]" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Teléfono</label>
+                <input type="tel" name="telefono" pattern="[0-9+ ]+" placeholder="+57 300 123 4567" required
+                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66a6da]" />
+            </div>
+            <div>
+                <label class="block text-sm font-medium">Mensaje</label>
+                <textarea name="mensaje" rows="4" required
+                    class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66a6da]"></textarea>
+            </div>
+            <button type="submit"
+                class="bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-2 rounded-lg transition w-full">
+                Enviar mensaje
+            </button>
+        </form>
     </div>
-  </header>
 
-  <!-- SECCIÓN SERVICIOS EMPRESARIALES -->
-  <section class="py-16 px-6 md:px-20 bg-[#f4f9ff]">
-    <h2 class="text-3xl md:text-4xl font-bold text-center text-[#627eff] mb-10">
-      Servicios Empresariales
-    </h2>
+    <!-- Script para manejar el envío sin recargar -->
+    <script>
+        const form = document.getElementById("contactForm");
+        const successMessage = document.getElementById("successMessage");
 
-    <div class="space-y-10 max-w-4xl mx-auto text-justify">
-      <!-- TALLERES -->
-      <div class="bg-white shadow-lg rounded-xl p-6">
-        <h3 class="text-2xl font-semibold mb-3 text-[#627eff]">Talleres</h3>
-        <p>Brindamos talleres preventivos, pedagógicos y complementarios según la necesidad de la compañía.</p>
-      </div>
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const data = new FormData(form);
+            const action = form.getAttribute("action");
 
-      <!-- JORNADAS COMPLEMENTARIAS -->
-      <div class="bg-white shadow-lg rounded-xl p-6">
-        <h3 class="text-xl font-semibold text-[#627eff] mb-2">1. Jornadas Complementarias de Bienestar</h3>
-        <p class="mb-2">
-          Nuestras innovadoras alternativas lúdico-pedagógicas están diseñadas especialmente para ofrecer jornadas de bienestar empresarial.
-        </p>
-        <p>
-          Combinamos actividades físicas emocionantes, como escalada y boxeo, con sesiones de relajación que garantizan una efectiva descarga de estrés.
-          Nuestro enfoque integral no solo promueve la salud física, sino que también revitaliza el ambiente laboral, ayudando a tu equipo a recuperar su bienestar y energía, previniendo el síndrome de Burnout.
-        </p>
-      </div>
+            const response = await fetch(action, {
+                method: "POST",
+                body: data,
+                headers: {
+                    Accept: "application/json",
+                },
+            });
 
-      <!-- TERAPIAS -->
-      <div class="bg-white shadow-lg rounded-xl p-6">
-        <h3 class="text-xl font-semibold text-[#627eff] mb-2">2. Terapias</h3>
-        <p>
-          Servicio de terapia psicológica individual, de pareja o familiar para empleados con costos especiales por convenio empresarial.
-          <br><span class="italic text-sm text-gray-600">*Aplica condiciones</span>
-        </p>
-      </div>
+            if (response.ok) {
+                form.reset();
+                successMessage.classList.remove("hidden");
+                setTimeout(() => {
+                    successMessage.classList.add("hidden");
+                }, 5000);
+            }
+        });
+    </script>
 
-      <!-- JORNADAS DE DESCARGA -->
-      <div class="bg-white shadow-lg rounded-xl p-6">
-        <h3 class="text-xl font-semibold text-[#627eff] mb-2">3. Jornadas de Descarga Emocional</h3>
-        <p>
-          Servicio de jornadas de descarga emocional para empleados, adaptadas a las necesidades de la compañía, donde se abordan situaciones del día a día brindando herramientas de afrontamiento según el caso.
-          <br><span class="italic text-sm text-gray-600">*Aplica condiciones</span>
-        </p>
-      </div>
 
-      <!-- ORIENTACIÓN VOCACIONAL -->
-      <div class="bg-white shadow-lg rounded-xl p-6">
-        <h3 class="text-xl font-semibold text-[#627eff] mb-2">4. Orientación Vocacional</h3>
-        <p>
-          Servicio de orientación vocacional dirigido a estudiantes de grado noveno a once.
-          <br><span class="italic text-sm text-gray-600">*Aplica para hijos de empleados de las empresas aliadas</span>
-        </p>
-      </div>
+    <!-- FOOTER -->
+    <footer class="bg-[#66a6da] text-white text-center py-4">
+        <p class="font-sego">Psicología & Bienestar © 2025. Todos los derechos reservados.</p>
+    </footer>
+
+    <!-- WhatsApp flotante -->
+    <a href="https://wa.me/573164603881" target="_blank"
+        class="fixed bottom-6 right-6 flex items-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-lg transition transform hover:scale-105 z-50">
+        <img src="https://img.icons8.com/ios-filled/24/ffffff/whatsapp.png" class="mr-2" alt="WhatsApp Icon" />
+        Escríbenos por WhatsApp
+    </a>
+
+    <!-- Redes sociales laterales -->
+    <div class="fixed top-1/3 left-0 z-40 space-y-3 p-2">
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/serviciospsicobienestar?utm_source=qr&igsh=NmtoOWFqMnZwMHY1" target="_blank"
+            class="block bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 rounded-r-full p-2 shadow-md hover:scale-110 transition">
+            <img src="https://img.icons8.com/ios-filled/24/ffffff/instagram-new.png" alt="Instagram Icon" />
+        </a>
+
+        <!-- Facebook -->
+        <a href="https://www.facebook.com/share/1A9WZs7XCb/" target="_blank"
+            class="block bg-blue-600 rounded-r-full p-2 shadow-md hover:scale-110 transition">
+            <img src="https://img.icons8.com/ios-filled/24/ffffff/facebook-new.png" alt="Facebook Icon" />
+        </a>
     </div>
 
-    <!-- BOTÓN DE REGRESO -->
-    <div class="text-center mt-12">
-      <a href="index.html" class="inline-block bg-[#627eff] text-white py-2 px-6 rounded-lg shadow hover:bg-[#53c6e4] transition">
-        ← Volver a Inicio
-      </a>
-    </div>
-  </section>
-
-<!-- FORMULARIO DE CONTACTO -->
-<div class="mt-20 max-w-2xl mx-auto bg-white shadow-lg rounded-xl p-6">
-    <h2 class="text-2xl font-semibold text-[#627eff] mb-4 text-center">Contáctanos</h2>
-  
-    <!-- Mensaje de éxito -->
-    <div id="successMessage" class="hidden text-green-700 bg-green-100 border border-green-300 rounded-lg px-4 py-3 mb-4 text-center">
-      ¡Gracias por contactarnos! Tu mensaje fue enviado exitosamente.
-    </div>
-  
-    <form id="contactForm" action="https://formspree.io/f/mblgpnvb" method="POST" class="space-y-4">
-      <div>
-        <label class="block text-sm font-medium">Nombre</label>
-        <input type="text" name="nombre" required class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66a6da]" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Correo electrónico</label>
-        <input type="email" name="email" required class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66a6da]" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Teléfono</label>
-        <input type="tel" name="telefono" pattern="[0-9+ ]+" placeholder="+57 300 123 4567" required class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66a6da]" />
-      </div>
-      <div>
-        <label class="block text-sm font-medium">Mensaje</label>
-        <textarea name="mensaje" rows="4" required class="w-full mt-1 px-4 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-[#66a6da]"></textarea>
-      </div>
-      <button type="submit" class="bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-2 rounded-lg transition w-full">
-        Enviar mensaje
-      </button>
-    </form>
-  </div>
-  
-  <!-- Script para manejar el envío sin recargar -->
-  <script>
-    const form = document.getElementById("contactForm");
-    const successMessage = document.getElementById("successMessage");
-  
-    form.addEventListener("submit", async (e) => {
-      e.preventDefault();
-      const data = new FormData(form);
-      const action = form.getAttribute("action");
-  
-      const response = await fetch(action, {
-        method: "POST",
-        body: data,
-        headers: {
-          Accept: "application/json",
-        },
-      });
-  
-      if (response.ok) {
-        form.reset();
-        successMessage.classList.remove("hidden");
-        setTimeout(() => {
-          successMessage.classList.add("hidden");
-        }, 5000);
-      }
-    });
-  </script>
-  
-
-  <!-- FOOTER -->
-  <footer class="bg-[#66a6da] text-white text-center py-4 mt-10">
-    <p class="text-sm">© 2025 Psicología y Bienestar. Todos los derechos reservados.</p>
-  </footer>
 </body>
+
 </html>

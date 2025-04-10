@@ -327,27 +327,39 @@
         }
     </script>
 
-    <!-- WhatsApp flotante -->
+    <!-- BOTÓN DE WHATSAPP FLOTANTE -->
     <a href="https://wa.me/573164603881" target="_blank"
-        class="fixed bottom-6 right-6 flex items-center bg-green-500 hover:bg-green-600 text-white font-semibold py-2 px-4 rounded-full shadow-lg transition transform hover:scale-105 z-50">
-        <img src="https://img.icons8.com/ios-filled/24/ffffff/whatsapp.png" class="mr-2" alt="WhatsApp Icon" />
-        Escríbenos por WhatsApp
+        class="fixed bottom-6 right-6 group flex items-center space-x-2 bg-[#25D366] hover:bg-green-600 text-white px-4 py-3 rounded-full shadow-lg transition-all duration-300 z-50">
+        <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp" class="w-6 h-6" />
+        <span class="whitespace-nowrap opacity-0 group-hover:opacity-100 transition-opacity duration-300">Escríbenos por
+            WhatsApp</span>
     </a>
 
-    <!-- Redes sociales laterales -->
-    <div class="fixed top-1/3 left-0 z-40 space-y-3 p-2">
-        <!-- Instagram -->
-        <a href="https://www.instagram.com/serviciospsicobienestar?utm_source=qr&igsh=NmtoOWFqMnZwMHY1" target="_blank"
-            class="block bg-gradient-to-tr from-pink-500 via-red-500 to-yellow-500 rounded-r-full p-2 shadow-md hover:scale-110 transition">
-            <img src="https://img.icons8.com/ios-filled/24/ffffff/instagram-new.png" alt="Instagram Icon" />
-        </a>
-
+    <!-- ICONOS REDES SOCIALES LATERALES -->
+    <div class="fixed top-1/3 left-0 z-50 space-y-4 p-1">
         <!-- Facebook -->
         <a href="https://www.facebook.com/share/1A9WZs7XCb/" target="_blank"
-            class="block bg-blue-600 rounded-r-full p-2 shadow-md hover:scale-110 transition">
-            <img src="https://img.icons8.com/ios-filled/24/ffffff/facebook-new.png" alt="Facebook Icon" />
+            class="group relative flex items-center space-x-2 bg-blue-600 p-2 rounded-r-full hover:bg-blue-700 transition">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg" alt="Facebook"
+                class="w-6 h-6 text-white" />
+            <span
+                class="absolute left-10 opacity-0 group-hover:opacity-100 bg-white text-gray-800 px-3 py-1 rounded shadow transition-all duration-300 text-sm">
+                Visita nuestro Facebook
+            </span>
+        </a>
+
+        <!-- Instagram -->
+        <a href="https://www.instagram.com/serviciospsicobienestar?utm_source=qr&igsh=NmtoOWFqMnZwMHY1" target="_blank"
+            class="group relative flex items-center space-x-2 bg-gradient-to-r from-pink-500 via-red-500 to-yellow-500 p-2 rounded-r-full hover:brightness-110 transition">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg" alt="Instagram"
+                class="w-6 h-6 text-white" />
+            <span
+                class="absolute left-10 opacity-0 group-hover:opacity-100 bg-white text-gray-800 px-3 py-1 rounded shadow transition-all duration-300 text-sm">
+                Síguenos en Instagram
+            </span>
         </a>
     </div>
+
 
 </body>
 

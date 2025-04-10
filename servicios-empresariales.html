@@ -23,44 +23,44 @@
 
 <body class="bg-white text-gray-800">
 
-<!-- HEADER -->
-<header class="bg-[#66a6da] text-white shadow fixed w-full top-0 z-50">
-    <div class="container mx-auto flex justify-between items-center p-4">
-      <!-- Logo + Título -->
-      <div class="flex items-center space-x-2">
-        <img src="assets/logo.png" alt="Logo Empresa" class="h-10 w-10" />
-        <span class="text-xl font-bold font-sego">Psicología & Bienestar</span>
-      </div>
-  
-      <!-- Botón hamburguesa (solo visible en móviles) -->
-      <button id="menu-toggle" class="md:hidden focus:outline-none">
-        <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
-          xmlns="http://www.w3.org/2000/svg">
-          <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2"
-            d="M4 6h16M4 12h16M4 18h16"></path>
-        </svg>
-      </button>
-  
-      <!-- Menú de navegación -->
-      <nav id="menu" class="hidden md:flex space-x-4 text-sm font-semibold">
-        <a href="#inicio" class="hover:underline">Inicio</a>
-        <a href="#nosotros" class="hover:underline">Nosotros</a>
-        <a href="#servicios" class="hover:underline">Servicios</a>
-        <a href="#equipo" class="hover:underline">Equipo</a>
-        <a href="#contacto" class="hover:underline">Contacto</a>
-      </nav>
-    </div>
-  
-    <!-- Menú desplegable en móviles -->
-    <div id="mobile-menu" class="md:hidden hidden bg-[#66a6da] px-4 pb-4">
-      <a href="#inicio" class="block py-2 hover:underline">Inicio</a>
-      <a href="#nosotros" class="block py-2 hover:underline">Nosotros</a>
-      <a href="#servicios" class="block py-2 hover:underline">Servicios</a>
-      <a href="#equipo" class="block py-2 hover:underline">Equipo</a>
-      <a href="#contacto" class="block py-2 hover:underline">Contacto</a>
-    </div>
-  </header>
-  
+    <!-- HEADER -->
+    <header class="bg-[#66a6da] text-white shadow fixed w-full top-0 z-50">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <!-- Logo + Título -->
+            <div class="flex items-center space-x-2">
+                <img src="assets/logo.png" alt="Logo Empresa" class="h-10 w-10" />
+                <span class="text-xl font-bold font-sego">Psicología & Bienestar</span>
+            </div>
+
+            <!-- Botón hamburguesa (solo visible en móviles) -->
+            <button id="menu-toggle" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"
+                    xmlns="http://www.w3.org/2000/svg">
+                    <path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16">
+                    </path>
+                </svg>
+            </button>
+
+            <!-- Menú de navegación -->
+            <nav id="menu" class="hidden md:flex space-x-4 text-sm font-semibold">
+                <a href="#inicio" class="hover:underline">Inicio</a>
+                <a href="#nosotros" class="hover:underline">Nosotros</a>
+                <a href="#servicios" class="hover:underline">Servicios</a>
+                <a href="#equipo" class="hover:underline">Equipo</a>
+                <a href="#contacto" class="hover:underline">Contacto</a>
+            </nav>
+        </div>
+
+        <!-- Menú desplegable en móviles -->
+        <div id="mobile-menu" class="md:hidden hidden bg-[#66a6da] px-4 pb-4">
+            <a href="#inicio" class="block py-2 hover:underline">Inicio</a>
+            <a href="#nosotros" class="block py-2 hover:underline">Nosotros</a>
+            <a href="#servicios" class="block py-2 hover:underline">Servicios</a>
+            <a href="#equipo" class="block py-2 hover:underline">Equipo</a>
+            <a href="#contacto" class="block py-2 hover:underline">Contacto</a>
+        </div>
+    </header>
+
 
     <!-- SECCIÓN SERVICIOS EMPRESARIALES -->
     <section class="py-16 px-6 md:px-20 bg-[#f4f9ff]">
@@ -170,35 +170,6 @@
         </form>
     </div>
 
-    <!-- Script para manejar el envío sin recargar -->
-    <script>
-        const form = document.getElementById("contactForm");
-        const successMessage = document.getElementById("successMessage");
-
-        form.addEventListener("submit", async (e) => {
-            e.preventDefault();
-            const data = new FormData(form);
-            const action = form.getAttribute("action");
-
-            const response = await fetch(action, {
-                method: "POST",
-                body: data,
-                headers: {
-                    Accept: "application/json",
-                },
-            });
-
-            if (response.ok) {
-                form.reset();
-                successMessage.classList.remove("hidden");
-                setTimeout(() => {
-                    successMessage.classList.add("hidden");
-                }, 5000);
-            }
-        });
-    </script>
-
-
     <!-- FOOTER -->
     <footer class="bg-[#66a6da] text-white text-center py-4">
         <p class="font-sego">Psicología & Bienestar © 2025. Todos los derechos reservados.</p>
@@ -247,7 +218,42 @@
         </div>
     </a>
 
+    <!-- Script para manejar el envío sin recargar -->
+    <script>
+        const form = document.getElementById("contactForm");
+        const successMessage = document.getElementById("successMessage");
 
+        form.addEventListener("submit", async (e) => {
+            e.preventDefault();
+            const data = new FormData(form);
+            const action = form.getAttribute("action");
+
+            const response = await fetch(action, {
+                method: "POST",
+                body: data,
+                headers: {
+                    Accept: "application/json",
+                },
+            });
+
+            if (response.ok) {
+                form.reset();
+                successMessage.classList.remove("hidden");
+                setTimeout(() => {
+                    successMessage.classList.add("hidden");
+                }, 5000);
+            }
+        });
+    </script>
+    <!-- script para el despliegue -->
+    <script>
+        const toggle = document.getElementById('menu-toggle');
+        const mobileMenu = document.getElementById('mobile-menu');
+
+        toggle.addEventListener('click', () => {
+            mobileMenu.classList.toggle('hidden');
+        });
+    </script>
 </body>
 
 </html>

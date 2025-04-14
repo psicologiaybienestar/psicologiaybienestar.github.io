@@ -5,30 +5,64 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Todos los Comentarios - Psicología & Bienestar</title>
     <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
-    <link rel="stylesheet" href="style.css"> <style>
+    <link rel="stylesheet" href="style.css"> <!-- Si tienes un archivo de estilos personalizado -->
+    <style>
         .font-sego { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
     </style>
 </head>
 <body class="bg-gray-50 font-sego">
 
-    <header class="bg-[#66a6da] text-white py-4">
-        <div class="container mx-auto text-center">
-            <h1 class="text-2xl font-bold">Psicología & Bienestar</h1>
+    <!-- Header -->
+    <header class="bg-[#66a6da] text-white shadow-md fixed w-full top-0 z-50 border-b border-gray-200">
+        <div class="container mx-auto flex justify-between items-center p-4">
+            <div class="flex items-center">
+                <img src="assets/logo.png" alt="Logo Psicología y Bienestar" class="h-10 w-10 mr-2">
+                <h1 class="text-xl font-bold font-sego lg:text-2xl">Psicología & Bienestar</h1>
+            </div>
+            <nav id="menu" class="hidden md:flex space-x-4 text-sm font-semibold">
+                <a href="#inicio" class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Inicio</a>
+                <a href="#sobre-nosotros"
+                    class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Sobre Nosotros</a>
+                <a href="#servicios"
+                    class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Servicios</a>
+                <a href="#equipo" class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Equipo</a>
+                <a href="#contacto"
+                    class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Contacto</a>
+            </nav>
+            <button id="menu-toggle" class="md:hidden focus:outline-none">
+                <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24">
+                    <path v-if="!isOpen" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M4 6H20V8H4V6ZM4 11H20V13H4V11ZM4 16H20V18H4V16Z" />
+                    <path v-if="isOpen" fill-rule="evenodd" clip-rule="evenodd"
+                        d="M6.29289 6.29289C6.68342 5.90237 7.31658 5.90237 7.70711 6.29289L12 10.5858L16.2929 6.29289C16.6834 5.90237 17.3166 5.90237 17.7071 6.29289C18.0976 6.68342 18.0976 7.31658 17.7071 7.70711L13.4142 12L17.7071 16.2929C18.0976 16.6834 18.0976 17.3166 17.7071 17.7071C17.3166 18.0976 16.6834 18.0976 16.2929 17.7071L12 13.4142L7.70711 17.7071C7.31658 18.0976 6.68342 18.0976 6.29289 17.7071C5.90237 17.3166 5.90237 16.6834 6.29289 16.2929L10.5858 12L6.29289 7.70711C5.90237 7.31658 5.90237 6.68342 6.29289 6.29289Z" />
+                </svg>
+            </button>
+        </div>
+
+        <div id="mobile-menu" class="md:hidden hidden bg-[#66a6da] px-4 pb-4">
+            <a href="#inicio" class="block py-2 hover:text-gray-200">Inicio</a>
+            <a href="#sobre-nosotros" class="block py-2 hover:text-gray-200">Sobre Nosotros</a>
+            <a href="#servicios" class="block py-2 hover:text-gray-200">Servicios</a>
+            <a href="#equipo" class="block py-2 hover:text-gray-200">Equipo</a>
+            <a href="#contacto" class="block py-2 hover:text-gray-200">Contacto</a>
         </div>
     </header>
 
     <div class="container mx-auto py-16">
         <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Todos los Comentarios de Nuestros Clientes</h2>
         <div id="all-testimonials-container" class="space-y-6">
-            </div>
+            <!-- Todos los testimonios se insertarán aquí con JavaScript -->
+        </div>
         <div class="mt-8 text-center">
-            <a href="index.html" class="text-[#627eff] hover:underline">Volver a la página principal</a>
+            <a href="index.html" class="bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-3 rounded-lg transition inline-block font-semibold">Volver a la página principal</a>
         </div>
     </div>
 
+    <!-- Footer -->
     <footer class="bg-[#66a6da] text-white text-center py-8 mt-12">
         <div class="container mx-auto">
             <p class="font-sego text-sm mb-2">Psicología & Bienestar © 2025. Todos los derechos reservados.</p>
+            <!-- Aquí irían tus enlaces a redes sociales u otra información del footer -->
         </div>
     </footer>
 

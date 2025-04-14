@@ -126,7 +126,7 @@
 
         <div id="mobile-menu" class="md:hidden hidden bg-[#66a6da] px-4 pb-4">
             <a href="#inicio" class="block py-2 hover:text-gray-200">Inicio</a>
-            <a href="#sobre-nosotros" class="block py-2 hover:text-gray-200">Sobre Nosotros</a>
+            <a href="#nosotros" class="block py-2 hover:text-gray-200">Sobre Nosotros</a>
             <a href="#servicios" class="block py-2 hover:text-gray-200">Servicios</a>
             <a href="#equipo" class="block py-2 hover:text-gray-200">Equipo</a>
             <a href="#contacto" class="block py-2 hover:text-gray-200">Contacto</a>
@@ -319,17 +319,88 @@
 </section>
 
 <script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=0&single=true&output=csv';
-        const testimoniosContainer = document.getElementById('carousel-wrapper');
+    const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=0&single=true&output=csv';
+    const testimoniosContainer = document.getElementById('testimonios-container');
+    let allTestimonials = [];
+    let currentIndex = 0;
+    const itemsPerPage = 4; // Dos filas de 2
+
+    function showTestimonials(index) {
+        testimoniosContainer.innerHTML = '';
+        const startIndex = index * itemsPerPage;
+        const endIndex = Math.min(startIndex + itemsPerPage, allTestimonials.length);
+
+        for (let i = startIndex; i < endIndex; i++) {
+            const testimonioData = allTestimonials[i];
+            const date = new Date(testimonioData.timestamp);
+            const formattedDate = date.toLocaleDateString();
+
+            let ratingDisplay = '';
+            const ratingValue = testimonioData.calificacion;
+            if (!isNaN(parseInt(ratingValue))) {
+                const numStars = parseInt(ratingValue);
+                for (let j = 0; j < numStars; j++) {
+                    ratingDisplay += '★';
+                }
+            } else if (ratingValue) {
+                ratingDisplay = ratingValue;
+            }
+
+            const testimonioHTML = `
+                <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
+                    <div class="flex justify-between items-center mb-2">
+                        <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData.nombre}</p>
+                        ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
+                    </div>
+                    <p class="text-gray-700 italic mb-2">${testimonioData.testimonio}</p>
+                    <p class="text-xs text-gray-500">${formattedDate}</p>
+                </div>
+            `;
+            testimoniosContainer.innerHTML += testimonioHTML;
+        }
+    }
+
+    function updateNavigationButtons() {
         const prevButton = document.getElementById('prev-testimonial');
         const nextButton = document.getElementById('next-testimonial');
-        const testimonialsPerPage = 4; // Mostrar 4 testimonios por "slide" (dos filas de 2)
-        let currentIndex = 0;
-        let allTestimonials = [];
-        const slideDuration = 5000; // 5 segundos
-        let autoSlideInterval;
 
+        if (prevButton) prevButton.disabled = currentIndex === 0;
+        if (nextButton) nextButton.disabled = currentIndex >= Math.ceil(allTestimonials.length / itemsPerPage) - 1;
+    }
+
+    function nextTestimonials() {
+        currentIndex = Math.min(currentIndex + 1, Math.ceil(allTestimonials.length / itemsPerPage) - 1);
+        showTestimonials(currentIndex);
+        updateNavigationButtons();
+        resetAutoSlide();
+    }
+
+    function prevTestimonials() {
+        currentIndex = Math.max(currentIndex - 1, 0);
+        showTestimonials(currentIndex);
+        updateNavigationButtons();
+        resetAutoSlide();
+    }
+
+    let autoSlideInterval;
+    const autoSlideDelay = 5000; // 5 segundos
+
+    function startAutoSlide() {
+        autoSlideInterval = setInterval(() => {
+            nextTestimonials();
+        }, autoSlideDelay);
+    }
+
+    function stopAutoSlide() {
+        clearInterval(autoSlideInterval);
+    }
+
+    function resetAutoSlide() {
+        stopAutoSlide();
+        startAutoSlide();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
         fetch(googleSheetURL)
             .then(response => response.text())
             .then(csvData => {
@@ -340,113 +411,49 @@
                 }
 
                 const headers = rows[0].split(',');
+                const timestampIndex = headers.findIndex(header => header.trim() === 'Timestamp');
                 const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre');
                 const testimonioIndex = headers.findIndex(header => header.trim() === 'Testimonio');
+                const calificacionIndex = headers.findIndex(header => header.trim() === 'Calificación');
 
-                if (nombreIndex === -1 || testimonioIndex === -1) {
-                    console.error('Las columnas "Nombre" y "Testimonio" no se encontraron en el CSV.');
+                if (nombreIndex === -1 || testimonioIndex === -1 || timestampIndex === -1 || calificacionIndex === -1) {
+                    console.error('Las columnas necesarias ("Timestamp", "Nombre", "Testimonio", "Calificación") no se encontraron en el CSV.');
                     testimoniosContainer.innerHTML = '<p class="text-red-500">Error al leer los testimonios.</p>';
                     return;
                 }
 
-                const primerosDiez = [];
-                for (let i = 1; i < Math.min(rows.length, 13); i++) { // Limitar a los primeros 12
+                const fetchedTestimonials = [];
+                for (let i = 1; i < rows.length; i++) {
                     const values = rows[i].split(',');
-                    if (values.length > nombreIndex && values.length > testimonioIndex) {
+                    if (values.length > nombreIndex && values.length > testimonioIndex && values.length > timestampIndex && values.length > calificacionIndex) {
+                        const timestamp = values[timestampIndex].trim();
                         const nombre = values[nombreIndex].trim();
                         const testimonio = values[testimonioIndex].trim();
-                        if (nombre && testimonio) {
-                            primerosDiez.push({ nombre, testimonio });
-                        }
+                        const calificacion = values[calificacionIndex].trim();
+                        fetchedTestimonials.push({ timestamp, nombre, testimonio, calificacion });
                     }
                 }
-                allTestimonials = primerosDiez;
-                renderCarousel(allTestimonials);
+                allTestimonials = fetchedTestimonials;
+                showTestimonials(currentIndex);
                 updateNavigationButtons();
-                startAutoSlide(); // Iniciar el carrusel automático
+                startAutoSlide();
             })
             .catch(error => {
                 console.error('Error al obtener los testimonios desde Google Sheets (CSV):', error);
                 testimoniosContainer.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios.</p>';
             });
 
-        function renderCarousel(testimonials) {
-            testimoniosContainer.innerHTML = '';
-            const testimonialsPerRow = 2;
-            const totalPages = Math.ceil(testimonials.length / (testimonialsPerRow * 2)); // Dos filas de 2
+        const prevButton = document.getElementById('prev-testimonial');
+        const nextButton = document.getElementById('next-testimonial');
 
-            for (let i = 0; i < totalPages; i++) {
-                const slide = document.createElement('div');
-                slide.classList.add('p-6', 'min-w-full');
+        if (prevButton) prevButton.addEventListener('click', prevTestimonials);
+        if (nextButton) nextButton.addEventListener('click', nextTestimonials);
 
-                for (let row = 0; row < 2; row++) {
-                    const rowContainer = document.createElement('div');
-                    rowContainer.classList.add('flex', 'gap-6', 'mb-4'); // Espacio entre testimonios en una fila, margen debajo de la fila
-
-                    for (let col = 0; col < testimonialsPerRow; col++) {
-                        const index = i * testimonialsPerRow * 2 + row * testimonialsPerRow + col;
-                        if (index < testimonials.length) {
-                            const testimonio = testimonials[index];
-                            const testimonioHTML = `
-                                <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
-                                    <p class="text-gray-700 italic mb-2">${testimonio.testimonio}</p>
-                                    <p class="text-sm font-semibold text-[#627eff]">- ${testimonio.nombre}</p>
-                                </div>
-                            `;
-                            rowContainer.innerHTML += testimonioHTML;
-                        } else {
-                            // Añadir un div vacío para mantener el diseño si hay menos testimonios
-                            rowContainer.innerHTML += '<div class="flex-1"></div>';
-                        }
-                    }
-                    slide.appendChild(rowContainer);
-                }
-                testimoniosContainer.appendChild(slide);
-            }
+        const carouselWrapper = document.querySelector('.splide__track');
+        if (carouselWrapper) {
+            carouselWrapper.addEventListener('mouseenter', stopAutoSlide);
+            carouselWrapper.addEventListener('mouseleave', startAutoSlide);
         }
-
-        function updateNavigationButtons() {
-            const totalPages = Math.ceil(allTestimonials.length / testimonialsPerPage);
-            prevButton.disabled = currentIndex === 0;
-            nextButton.disabled = currentIndex >= totalPages - 1;
-        }
-
-        function startAutoSlide() {
-            autoSlideInterval = setInterval(() => {
-                if (currentIndex < Math.ceil(allTestimonials.length / testimonialsPerPage) - 1) {
-                    currentIndex++;
-                } else {
-                    currentIndex = 0; // Volver al inicio
-                }
-                testimoniosContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-                updateNavigationButtons();
-            }, slideDuration);
-        }
-
-        function stopAutoSlide() {
-            clearInterval(autoSlideInterval);
-        }
-
-        prevButton.addEventListener('click', () => {
-            stopAutoSlide(); // Detener el deslizamiento automático al navegar manualmente
-            if (currentIndex > 0) {
-                currentIndex--;
-                testimoniosContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-                testimoniosContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-                updateNavigationButtons();
-            }
-            setTimeout(startAutoSlide, 5000); // Reiniciar después de 5 segundos de inactividad
-        });
-
-        nextButton.addEventListener('click', () => {
-            stopAutoSlide(); // Detener el deslizamiento automático al navegar manualmente
-            if (currentIndex < Math.ceil(allTestimonials.length / testimonialsPerPage) - 1) {
-                currentIndex++;
-                testimoniosContainer.style.transform = `translateX(-${currentIndex * 100}%)`;
-                updateNavigationButtons();
-            }
-            setTimeout(startAutoSlide, 5000); // Reiniciar después de 5 segundos de inactividad
-        });
     });
 </script>
 <!-- Fin -->

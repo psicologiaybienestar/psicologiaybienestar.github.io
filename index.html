@@ -418,8 +418,20 @@
 
             for (let i = startIndex; i < endIndex; i++) {
                 const testimonioData = allTestimonials[i];
-                const date = new Date(testimonioData["Fecha"]);
-                const formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
+                const fechaStr = testimonioData["Fecha"];
+                let formattedDate = 'Fecha Inválida';
+                if (fechaStr) {
+                    const parts = fechaStr.split('/');
+                    if (parts.length === 3) {
+                        const day = parseInt(parts[0]);
+                        const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
+                        const year = parseInt(parts[2]);
+                        const date = new Date(year, month, day);
+                        formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
+                    } else {
+                        console.error("Formato de fecha incorrecto:", fechaStr);
+                    }
+                }
 
                 let ratingDisplay = '';
                 const ratingValue = testimonioData["Calificación"];

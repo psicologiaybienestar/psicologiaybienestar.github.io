@@ -1,0 +1,88 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Todos los Comentarios - Psicología & Bienestar</title>
+    <link href="https://cdn.jsdelivr.net/npm/tailwindcss@2.2.19/dist/tailwind.min.css" rel="stylesheet">
+    <link rel="stylesheet" href="style.css"> <style>
+        .font-sego { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; }
+    </style>
+</head>
+<body class="bg-gray-50 font-sego">
+
+    <header class="bg-[#66a6da] text-white py-4">
+        <div class="container mx-auto text-center">
+            <h1 class="text-2xl font-bold">Psicología & Bienestar</h1>
+        </div>
+    </header>
+
+    <div class="container mx-auto py-16">
+        <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Todos los Comentarios de Nuestros Clientes</h2>
+        <div id="all-testimonials-container" class="space-y-6">
+            </div>
+        <div class="mt-8 text-center">
+            <a href="index.html" class="text-[#627eff] hover:underline">Volver a la página principal</a>
+        </div>
+    </div>
+
+    <footer class="bg-[#66a6da] text-white text-center py-8 mt-12">
+        <div class="container mx-auto">
+            <p class="font-sego text-sm mb-2">Psicología & Bienestar © 2025. Todos los derechos reservados.</p>
+        </div>
+    </footer>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=0&single=true&output=csv';
+            const allTestimonialsContainer = document.getElementById('all-testimonials-container');
+
+            fetch(googleSheetURL)
+                .then(response => response.text())
+                .then(csvData => {
+                    const rows = csvData.split('\n').map(row => row.trim());
+                    if (rows.length <= 1) {
+                        allTestimonialsContainer.innerHTML = '<p>No hay testimonios disponibles.</p>';
+                        return;
+                    }
+
+                    const headers = rows[0].split(',');
+                    const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre');
+                    const testimonioIndex = headers.findIndex(header => header.trim() === 'Testimonio');
+
+                    if (nombreIndex === -1 || testimonioIndex === -1) {
+                        console.error('Las columnas "Nombre" y "Testimonio" no se encontraron en el CSV.');
+                        allTestimonialsContainer.innerHTML = '<p class="text-red-500">Error al leer los testimonios.</p>';
+                        return;
+                    }
+
+                    for (let i = 1; i < rows.length; i++) {
+                        const values = rows[i].split(',');
+                        if (values.length > nombreIndex && values.length > testimonioIndex) {
+                            const nombre = values[nombreIndex].trim();
+                            const testimonio = values[testimonioIndex].trim();
+                            if (nombre && testimonio) {
+                                const testimonioHTML = `
+                                    <div class="bg-gray-100 rounded-lg p-6 shadow-md">
+                                        <p class="text-gray-700 italic mb-2">${testimonio}</p>
+                                        <p class="text-sm font-semibold text-[#627eff]">- ${nombre}</p>
+                                    </div>
+                                `;
+                                allTestimonialsContainer.innerHTML += testimonioHTML;
+                            }
+                        }
+                    }
+
+                    if (allTestimonialsContainer.innerHTML === '') {
+                        allTestimonialsContainer.innerHTML = '<p>No hay testimonios disponibles.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al obtener todos los testimonios desde Google Sheets (CSV):', error);
+                    allTestimonialsContainer.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios.</p>';
+                });
+        });
+    </script>
+
+</body>
+</html>

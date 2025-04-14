@@ -87,18 +87,18 @@
 
         .bg-gray-100 {
             /* Estilo para cada tarjeta de testimonio (asumiendo esta clase) */
-            flex: 0 0 45%;
-            /* Reducir el ancho al 45% del contenedor */
+            flex: 0 0 35%;
+            /* Reducir aún más el ancho al 35% del contenedor */
+            max-width: 350px;
+            /* Añadir un ancho máximo para evitar que se extiendan demasiado en pantallas grandes */
             padding: 1rem;
             /* Añade un poco de espacio interno */
-            margin-right: 1.5rem;
-            /* Aumentar un poco el espacio entre tarjetas */
+            margin-right: 2rem;
+            /* Aumentar un poco más el espacio entre tarjetas */
             box-sizing: border-box;
             /* Incluye el padding y el border en el ancho y alto del elemento */
             border: 1px solid #e2e8f0;
-            /* Añadir un borde sutil para definirlas mejor */
             border-radius: 0.5rem;
-            /* Bordes un poco redondeados en las tarjetas */
         }
 
         .bg-gray-100:last-child {
@@ -109,24 +109,22 @@
         /* Media query para pantallas más pequeñas (ej. tablets) */
         @media (max-width: 768px) {
             .bg-gray-100 {
-                flex: 0 0 100%;
-                /* En pantallas pequeñas, cada testimonio ocupa el 100% del ancho */
+                flex: 0 0 90%;
+                /* Aumentar el ancho en pantallas pequeñas, pero no al 100% para dejar un poco de margen */
+                max-width: none;
+                /* Quitar el ancho máximo en pantallas pequeñas */
                 margin-right: 0;
-                /* Elimina el margen derecho */
                 margin-bottom: 1rem;
-                /* Añade un margen inferior entre testimonios */
                 border: none;
-                /* Opcional: quitar el borde en pantallas pequeñas */
                 border-radius: 0.25rem;
             }
         }
 
         /* Media query para pantallas aún más pequeñas (ej. móviles) */
         @media (max-width: 480px) {
-
-            /* Puedes ajustar aún más los estilos si es necesario */
             .bg-gray-100 {
-                padding: 0.75rem;
+                flex: 0 0 100%;
+                /* Ocupar todo el ancho en móviles */
             }
         }
 
@@ -136,22 +134,16 @@
             top: 50%;
             transform: translateY(-50%);
             background-color: #627eff;
-            /* Color sólido, sin transparencia */
             color: white;
             border: none;
             padding: 0.75rem 1rem;
-            /* Aumentar un poco el tamaño del botón */
             border-radius: 0.5rem;
-            /* Bordes un poco menos redondos */
             cursor: pointer;
             z-index: 20;
             opacity: 0.9;
-            /* Un poco más opaco por defecto */
             transition: opacity 0.2s ease-in-out;
             font-size: 1rem;
-            /* Tamaño de la fuente de los símbolos */
             font-weight: bold;
-            /* Símbolos en negrita */
         }
 
         #prev-testimonial:hover,

@@ -245,80 +245,81 @@
         });
     </script>
 
-<script>
-    document.addEventListener('DOMContentLoaded', function() {
-        const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=0&single=true&output=csv';
-        const allTestimonialsContainer = document.getElementById('all-testimonials-container');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
+            const allTestimonialsContainer = document.getElementById('all-testimonials-container');
 
-        fetch(googleSheetURL)
-            .then(response => response.text())
-            .then(csvData => {
-                const rows = csvData.split('\n').map(row => row.trim());
-                if (rows.length <= 1) {
-                    allTestimonialsContainer.innerHTML = '<p class="text-center">No hay comentarios disponibles.</p>';
-                    return;
-                }
+            fetch(googleSheetURL)
+                .then(response => response.text())
+                .then(csvData => {
+                    const rows = csvData.split('\n').map(row => row.trim());
+                    if (rows.length <= 1) {
+                        allTestimonialsContainer.innerHTML = '<p class="text-center">No hay comentarios disponibles.</p>';
+                        return;
+                    }
 
-                const headers = rows[0].split(',');
-                const timestampIndex = headers.findIndex(header => header.trim() === 'Timestamp');
-                const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre');
-                const testimonioIndex = headers.findIndex(header => header.trim() === 'Testimonio');
-                const calificacionIndex = headers.findIndex(header => header.trim() === 'Calificación');
+                    const headers = rows[0].split(',');
+                    const timestampIndex = headers.findIndex(header => header.trim() === 'Marca temporal');
+                    const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre Completo');
+                    const testimonioIndex = headers.findIndex(header => header.trim() === 'Tu Testimonio');
+                    const calificacionIndex = headers.findIndex(header => header.trim() === 'Calificación');
 
-                if (nombreIndex === -1 || testimonioIndex === -1 || timestampIndex === -1 || calificacionIndex === -1) {
-                    console.error('Las columnas necesarias ("Timestamp", "Nombre", "Testimonio", "Calificación") no se encontraron en el CSV.');
-                    allTestimonialsContainer.innerHTML = '<p class="text-red-500 text-center">Error al leer los comentarios.</p>';
-                    return;
-                }
+                    if (nombreIndex === -1 || testimonioIndex === -1 || timestampIndex === -1 || calificacionIndex === -1) {
+                        console.error('Las columnas necesarias ("Marca temporal", "Nombre Completo", "Tu Testimonio", "Calificación") no se encontraron en el CSV.');
+                        allTestimonialsContainer.innerHTML = '<p class="text-red-500 text-center">Error al leer los comentarios.</p>';
+                        return;
+                    }
 
-                allTestimonialsContainer.innerHTML = ''; // Limpiar cualquier contenido existente
+                    allTestimonialsContainer.innerHTML = ''; // Limpiar cualquier contenido existente
 
-                for (let i = 1; i < rows.length; i++) {
-                    const values = rows[i].split(',');
-                    if (values.length > nombreIndex && values.length > testimonioIndex && values.length > timestampIndex && values.length > calificacionIndex) {
-                        const timestamp = values[timestampIndex].trim();
-                        const nombre = values[nombreIndex].trim();
-                        const testimonio = values[testimonioIndex].trim();
-                        const calificacion = values[calificacionIndex].trim();
+                    for (let i = 1; i < rows.length; i++) {
+                        const values = rows[i].split(',');
+                        if (values.length > nombreIndex && values.length > testimonioIndex && values.length > timestampIndex && values.length > calificacionIndex) {
+                            const testimonioData = {};
+                            testimonioData["Marca temporal"] = values[timestampIndex].trim();
+                            testimonioData["Nombre Completo"] = values[nombreIndex].trim();
+                            testimonioData["Tu Testimonio"] = values[testimonioIndex].trim();
+                            testimonioData["Calificación"] = values[calificacionIndex].trim();
 
-                        const date = new Date(timestamp);
-                        const formattedDate = date.toLocaleDateString();
+                            const date = new Date(testimonioData["Marca temporal"]);
+                            const formattedDate = date.toLocaleDateString();
 
-                        let ratingDisplay = '';
-                        const ratingValue = calificacion;
-                        if (!isNaN(parseInt(ratingValue))) {
-                            const numStars = parseInt(ratingValue);
-                            for (let j = 0; j < numStars; j++) {
-                                ratingDisplay += '★';
+                            let ratingDisplay = '';
+                            const ratingValue = testimonioData["Calificación"];
+                            if (!isNaN(parseInt(ratingValue))) {
+                                const numStars = parseInt(ratingValue);
+                                for (let j = 0; j < numStars; j++) {
+                                    ratingDisplay += '★';
+                                }
+                            } else if (ratingValue) {
+                                ratingDisplay = ratingValue;
                             }
-                        } else if (ratingValue) {
-                            ratingDisplay = ratingValue;
-                        }
 
-                        const testimonioHTML = `
+                            const testimonioHTML = `
                             <div class="bg-white shadow-xl rounded-2xl p-6 transform transition duration-500 hover:scale-105">
                                 <div class="flex justify-between items-center mb-2">
-                                    <h3 class="text-xl font-semibold text-[#627eff] mb-2">${nombre}</h3>
+                                    <h3 class="text-xl font-semibold text-[#627eff] mb-2">${testimonioData["Nombre Completo"]}</h3>
                                     ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
                                 </div>
-                                <p class="text-gray-700 italic">${testimonio}</p>
+                                <p class="text-gray-700 italic">${testimonioData["Tu Testimonio"]}</p>
                                 <p class="text-xs text-gray-500 mt-2">${formattedDate}</p>
                             </div>
                         `;
-                        allTestimonialsContainer.innerHTML += testimonioHTML;
+                            allTestimonialsContainer.innerHTML += testimonioHTML;
+                        }
                     }
-                }
 
-                if (allTestimonialsContainer.innerHTML === '') {
-                    allTestimonialsContainer.innerHTML = '<p class="text-center">No hay comentarios disponibles.</p>';
-                }
-            })
-            .catch(error => {
-                console.error('Error al obtener todos los testimonios desde Google Sheets (CSV):', error);
-                allTestimonialsContainer.innerHTML = '<p class="text-red-500 text-center">No se pudieron cargar los comentarios.</p>';
-            });
-    });
-</script>
+                    if (allTestimonialsContainer.innerHTML === '') {
+                        allTestimonialsContainer.innerHTML = '<p class="text-center">No hay comentarios disponibles.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al obtener todos los testimonios desde Google Sheets (CSV):', error);
+                    allTestimonialsContainer.innerHTML = '<p class="text-red-500 text-center">No se pudieron cargar los comentarios.</p>';
+                });
+        });
+    </script>
 
 </body>
 

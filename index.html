@@ -296,167 +296,172 @@
 
     <!-- Testimonios -->
     <!-- SECCIÓN DE TESTIMONIOS (CAROUSEL) -->
-<section class="py-16 bg-white scroll-mt-20" id="testimonios">
-    <div class="max-w-5xl mx-auto">
-        <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Comentarios / Testimonios</h2>
-        <div class="relative">
-            <div id="carousel-container" class="overflow-hidden">
-                <div id="carousel-wrapper" class="flex transition-transform duration-300 ease-in-out">
-                    <!-- Los testimonios se insertarán aquí con JavaScript -->
+    <section class="py-16 bg-white scroll-mt-20" id="testimonios">
+        <div class="max-w-5xl mx-auto">
+            <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Comentarios / Testimonios</h2>
+            <div class="relative">
+                <div id="carousel-container" class="overflow-hidden">
+                    <div id="carousel-wrapper" class="flex transition-transform duration-300 ease-in-out">
+                        <!-- Los testimonios se insertarán aquí con JavaScript -->
+                    </div>
                 </div>
+                <button id="prev-testimonial"
+                    class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-[#627eff] hover:bg-[#53c6e4] text-white font-bold py-2 px-3 rounded-full z-10">
+                    &lt;
+                </button>
+                <button id="next-testimonial"
+                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#627eff] hover:bg-[#53c6e4] text-white font-bold py-2 px-3 rounded-full z-10">
+                    &gt;
+                </button>
             </div>
-            <button id="prev-testimonial" class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-[#627eff] hover:bg-[#53c6e4] text-white font-bold py-2 px-3 rounded-full z-10">
-                &lt;
-            </button>
-            <button id="next-testimonial" class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#627eff] hover:bg-[#53c6e4] text-white font-bold py-2 px-3 rounded-full z-10">
-                &gt;
-            </button>
+            <div class="mt-6 text-center">
+                <a href="page/testimonios-completos.html"
+                    class="bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-3 rounded-lg transition inline-block font-semibold">Ver
+                    todos los comentarios</a>
+            </div>
         </div>
-        <div class="mt-6 text-center">
-            <a href="page/testimonios-completos.html" class="bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-3 rounded-lg transition inline-block font-semibold">Ver todos los comentarios</a>
-        </div>
-    </div>
-</section>
+    </section>
 
-<script>
-    const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=0&single=true&output=csv';
-    const testimoniosContainer = document.getElementById('testimonios-container');
-    let allTestimonials = [];
-    let currentIndex = 0;
-    const itemsPerPage = 4; // Dos filas de 2
+    <script>
+        const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
+        const testimoniosContainer = document.getElementById('testimonios-container');
+        let allTestimonials = [];
+        let currentIndex = 0;
+        const itemsPerPage = 4; // Dos filas de 2
 
-    function showTestimonials(index) {
-        testimoniosContainer.innerHTML = '';
-        const startIndex = index * itemsPerPage;
-        const endIndex = Math.min(startIndex + itemsPerPage, allTestimonials.length);
+        function showTestimonials(index) {
+            testimoniosContainer.innerHTML = '';
+            const startIndex = index * itemsPerPage;
+            const endIndex = Math.min(startIndex + itemsPerPage, allTestimonials.length);
 
-        for (let i = startIndex; i < endIndex; i++) {
-            const testimonioData = allTestimonials[i];
-            const date = new Date(testimonioData.timestamp);
-            const formattedDate = date.toLocaleDateString();
+            for (let i = startIndex; i < endIndex; i++) {
+                const testimonioData = allTestimonials[i];
+                const date = new Date(testimonioData["Marca temporal"]);
+                const formattedDate = date.toLocaleDateString();
 
-            let ratingDisplay = '';
-            const ratingValue = testimonioData.calificacion;
-            if (!isNaN(parseInt(ratingValue))) {
-                const numStars = parseInt(ratingValue);
-                for (let j = 0; j < numStars; j++) {
-                    ratingDisplay += '★';
+                let ratingDisplay = '';
+                const ratingValue = testimonioData["Calificación"];
+                if (!isNaN(parseInt(ratingValue))) {
+                    const numStars = parseInt(ratingValue);
+                    for (let j = 0; j < numStars; j++) {
+                        ratingDisplay += '★';
+                    }
+                } else if (ratingValue) {
+                    ratingDisplay = ratingValue;
                 }
-            } else if (ratingValue) {
-                ratingDisplay = ratingValue;
-            }
 
-            const testimonioHTML = `
+                const testimonioHTML = `
                 <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
                     <div class="flex justify-between items-center mb-2">
-                        <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData.nombre}</p>
+                        <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
                         ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
                     </div>
-                    <p class="text-gray-700 italic mb-2">${testimonioData.testimonio}</p>
+                    <p class="text-gray-700 italic mb-2">${testimonioData["Tu Testimonio"]}</p>
                     <p class="text-xs text-gray-500">${formattedDate}</p>
                 </div>
             `;
-            testimoniosContainer.innerHTML += testimonioHTML;
+                testimoniosContainer.innerHTML += testimonioHTML;
+            }
         }
-    }
 
-    function updateNavigationButtons() {
-        const prevButton = document.getElementById('prev-testimonial');
-        const nextButton = document.getElementById('next-testimonial');
+        function updateNavigationButtons() {
+            const prevButton = document.getElementById('prev-testimonial');
+            const nextButton = document.getElementById('next-testimonial');
 
-        if (prevButton) prevButton.disabled = currentIndex === 0;
-        if (nextButton) nextButton.disabled = currentIndex >= Math.ceil(allTestimonials.length / itemsPerPage) - 1;
-    }
+            if (prevButton) prevButton.disabled = currentIndex === 0;
+            if (nextButton) nextButton.disabled = currentIndex >= Math.ceil(allTestimonials.length / itemsPerPage) - 1;
+        }
 
-    function nextTestimonials() {
-        currentIndex = Math.min(currentIndex + 1, Math.ceil(allTestimonials.length / itemsPerPage) - 1);
-        showTestimonials(currentIndex);
-        updateNavigationButtons();
-        resetAutoSlide();
-    }
+        function nextTestimonials() {
+            currentIndex = Math.min(currentIndex + 1, Math.ceil(allTestimonials.length / itemsPerPage) - 1);
+            showTestimonials(currentIndex);
+            updateNavigationButtons();
+            resetAutoSlide();
+        }
 
-    function prevTestimonials() {
-        currentIndex = Math.max(currentIndex - 1, 0);
-        showTestimonials(currentIndex);
-        updateNavigationButtons();
-        resetAutoSlide();
-    }
+        function prevTestimonials() {
+            currentIndex = Math.max(currentIndex - 1, 0);
+            showTestimonials(currentIndex);
+            updateNavigationButtons();
+            resetAutoSlide();
+        }
 
-    let autoSlideInterval;
-    const autoSlideDelay = 5000; // 5 segundos
+        let autoSlideInterval;
+        const autoSlideDelay = 5000; // 5 segundos
 
-    function startAutoSlide() {
-        autoSlideInterval = setInterval(() => {
-            nextTestimonials();
-        }, autoSlideDelay);
-    }
+        function startAutoSlide() {
+            autoSlideInterval = setInterval(() => {
+                nextTestimonials();
+            }, autoSlideDelay);
+        }
 
-    function stopAutoSlide() {
-        clearInterval(autoSlideInterval);
-    }
+        function stopAutoSlide() {
+            clearInterval(autoSlideInterval);
+        }
 
-    function resetAutoSlide() {
-        stopAutoSlide();
-        startAutoSlide();
-    }
+        function resetAutoSlide() {
+            stopAutoSlide();
+            startAutoSlide();
+        }
 
-    document.addEventListener('DOMContentLoaded', function() {
-        fetch(googleSheetURL)
-            .then(response => response.text())
-            .then(csvData => {
-                const rows = csvData.split('\n').map(row => row.trim());
-                if (rows.length <= 1) {
-                    testimoniosContainer.innerHTML = '<p>No hay testimonios disponibles.</p>';
-                    return;
-                }
-
-                const headers = rows[0].split(',');
-                const timestampIndex = headers.findIndex(header => header.trim() === 'Timestamp');
-                const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre');
-                const testimonioIndex = headers.findIndex(header => header.trim() === 'Testimonio');
-                const calificacionIndex = headers.findIndex(header => header.trim() === 'Calificación');
-
-                if (nombreIndex === -1 || testimonioIndex === -1 || timestampIndex === -1 || calificacionIndex === -1) {
-                    console.error('Las columnas necesarias ("Timestamp", "Nombre", "Testimonio", "Calificación") no se encontraron en el CSV.');
-                    testimoniosContainer.innerHTML = '<p class="text-red-500">Error al leer los testimonios.</p>';
-                    return;
-                }
-
-                const fetchedTestimonials = [];
-                for (let i = 1; i < rows.length; i++) {
-                    const values = rows[i].split(',');
-                    if (values.length > nombreIndex && values.length > testimonioIndex && values.length > timestampIndex && values.length > calificacionIndex) {
-                        const timestamp = values[timestampIndex].trim();
-                        const nombre = values[nombreIndex].trim();
-                        const testimonio = values[testimonioIndex].trim();
-                        const calificacion = values[calificacionIndex].trim();
-                        fetchedTestimonials.push({ timestamp, nombre, testimonio, calificacion });
+        document.addEventListener('DOMContentLoaded', function () {
+            fetch(googleSheetURL)
+                .then(response => response.text())
+                .then(csvData => {
+                    const rows = csvData.split('\n').map(row => row.trim());
+                    if (rows.length <= 1) {
+                        testimoniosContainer.innerHTML = '<p>No hay testimonios disponibles.</p>';
+                        return;
                     }
-                }
-                allTestimonials = fetchedTestimonials;
-                showTestimonials(currentIndex);
-                updateNavigationButtons();
-                startAutoSlide();
-            })
-            .catch(error => {
-                console.error('Error al obtener los testimonios desde Google Sheets (CSV):', error);
-                testimoniosContainer.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios.</p>';
-            });
 
-        const prevButton = document.getElementById('prev-testimonial');
-        const nextButton = document.getElementById('next-testimonial');
+                    const headers = rows[0].split(',');
+                    const timestampIndex = headers.findIndex(header => header.trim() === 'Marca temporal');
+                    const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre Completo');
+                    const testimonioIndex = headers.findIndex(header => header.trim() === 'Tu Testimonio');
+                    const calificacionIndex = headers.findIndex(header => header.trim() === 'Calificación');
 
-        if (prevButton) prevButton.addEventListener('click', prevTestimonials);
-        if (nextButton) nextButton.addEventListener('click', nextTestimonials);
+                    if (nombreIndex === -1 || testimonioIndex === -1 || timestampIndex === -1 || calificacionIndex === -1) {
+                        console.error('Las columnas necesarias ("Marca temporal", "Nombre Completo", "Tu Testimonio", "Calificación") no se encontraron en el CSV.');
+                        testimoniosContainer.innerHTML = '<p class="text-red-500">Error al leer los testimonios.</p>';
+                        return;
+                    }
 
-        const carouselWrapper = document.querySelector('.splide__track');
-        if (carouselWrapper) {
-            carouselWrapper.addEventListener('mouseenter', stopAutoSlide);
-            carouselWrapper.addEventListener('mouseleave', startAutoSlide);
-        }
-    });
-</script>
-<!-- Fin -->
+                    const fetchedTestimonials = [];
+                    for (let i = 1; i < rows.length; i++) {
+                        const values = rows[i].split(',');
+                        if (values.length > nombreIndex && values.length > testimonioIndex && values.length > timestampIndex && values.length > calificacionIndex) {
+                            const testimonioData = {};
+                            testimonioData["Marca temporal"] = values[timestampIndex].trim();
+                            testimonioData["Nombre Completo"] = values[nombreIndex].trim();
+                            testimonioData["Tu Testimonio"] = values[testimonioIndex].trim();
+                            testimonioData["Calificación"] = values[calificacionIndex].trim();
+                            fetchedTestimonials.push(testimonioData);
+                        }
+                    }
+                    allTestimonials = fetchedTestimonials;
+                    showTestimonials(currentIndex);
+                    updateNavigationButtons();
+                    startAutoSlide();
+                })
+                .catch(error => {
+                    console.error('Error al obtener los testimonios desde Google Sheets (CSV):', error);
+                    testimoniosContainer.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios.</p>';
+                });
+
+            const prevButton = document.getElementById('prev-testimonial');
+            const nextButton = document.getElementById('next-testimonial');
+
+            if (prevButton) prevButton.addEventListener('click', prevTestimonials);
+            if (nextButton) nextButton.addEventListener('click', nextTestimonials);
+
+            const carouselWrapper = document.querySelector('.splide__track');
+            if (carouselWrapper) {
+                carouselWrapper.addEventListener('mouseenter', stopAutoSlide);
+                carouselWrapper.addEventListener('mouseleave', startAutoSlide);
+            }
+        });
+    </script>
+    <!-- Fin -->
 
     <div class="mt-20 max-w-2xl mx-auto bg-[#53c6e4]/5 shadow-lg rounded-xl p-6 scroll-mt-20" id="contacto">
         <h2 class="text-2xl font-semibold text-[#627eff] mb-4 text-center">Contáctanos</h2>

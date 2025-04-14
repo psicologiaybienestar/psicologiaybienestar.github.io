@@ -70,6 +70,88 @@
                 /* Un pulso más sutil */
             }
         }
+
+        /* Testimonios */
+        /* Estilos para la sección de testimonios en index.html */
+        #carousel-container {
+            overflow: hidden;
+            /* Asegura que los testimonios que no estén visibles estén ocultos */
+        }
+
+        #carousel-wrapper {
+            display: flex;
+            /* Permite alinear los testimonios en fila */
+            transition: transform 0.3s ease-in-out;
+            /* Añade una transición suave para el movimiento del carrusel */
+        }
+
+        .bg-gray-100 {
+            /* Estilo para cada tarjeta de testimonio (asumiendo esta clase) */
+            flex: 0 0 50%;
+            /* Inicialmente, cada testimonio ocupa el 50% del ancho */
+            padding: 1rem;
+            /* Añade un poco de espacio interno */
+            margin-right: 1rem;
+            /* Espacio entre testimonios */
+            box-sizing: border-box;
+            /* Incluye el padding y el border en el ancho y alto del elemento */
+        }
+
+        .bg-gray-100:last-child {
+            margin-right: 0;
+            /* Elimina el margen derecho del último testimonio */
+        }
+
+        /* Media query para pantallas más pequeñas (ej. tablets) */
+        @media (max-width: 768px) {
+            .bg-gray-100 {
+                flex: 0 0 100%;
+                /* En pantallas pequeñas, cada testimonio ocupa el 100% del ancho */
+                margin-right: 0;
+                /* Elimina el margen derecho */
+                margin-bottom: 1rem;
+                /* Añade un margen inferior entre testimonios */
+            }
+        }
+
+        /* Media query para pantallas aún más pequeñas (ej. móviles) */
+        @media (max-width: 480px) {
+
+            /* Puedes ajustar aún más los estilos si es necesario */
+            .bg-gray-100 {
+                padding: 0.75rem;
+            }
+        }
+
+        #prev-testimonial,
+        #next-testimonial {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background-color: rgba(98, 126, 255, 0.8);
+            /* Un poco de transparencia */
+            color: white;
+            border: none;
+            padding: 0.5rem 0.75rem;
+            border-radius: 50%;
+            cursor: pointer;
+            z-index: 20;
+            opacity: 0.8;
+            transition: opacity 0.2s ease-in-out;
+        }
+
+        #prev-testimonial:hover,
+        #next-testimonial:hover {
+            opacity: 1;
+        }
+
+        #prev-testimonial {
+            left: 10px;
+        }
+
+        #next-testimonial {
+            right: 10px;
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

@@ -5,6 +5,7 @@
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Todos los Comentarios - Psicología y Bienestar</title>
+    <link rel="icon" type="image/png" href="/assets/logo-ico.png">
     <script src="https://cdn.tailwindcss.com"></script>
     <script src="https://unpkg.com/@splidejs/splide@4.1.3/dist/js/splide.min.js"></script>
     <link rel="stylesheet" href="https://unpkg.com/@splidejs/splide@4.1.3/dist/css/splide.min.css" />
@@ -40,7 +41,7 @@
 
         @font-face {
             font-family: "Sego Serif";
-            src: url("fonts/sego-serif.ttf") format("truetype");
+            src: url("/fonts/sego-serif.ttf") format("truetype");
             font-weight: normal;
             font-style: normal;
         }
@@ -73,7 +74,7 @@
     <header class="bg-[#66a6da] text-white shadow fixed w-full top-0 z-50">
         <div class="container mx-auto flex justify-between items-center p-4">
             <div class="flex items-center space-x-2">
-                <img src="assets/logo.png" alt="Logo Empresa" class="h-10 w-10" />
+                <img src="/assets/logo.png" alt="Logo Empresa" class="h-10 w-10" />
                 <span class="text-xl font-bold font-sego">Psicología & Bienestar</span>
             </div>
 
@@ -86,19 +87,19 @@
             </button>
 
             <nav id="menu" class="hidden md:flex space-x-4 text-sm font-semibold">
-                <a href="index.html" class="hover:text-gray-200">Inicio</a>
-                <a href="index.html#nosotros" class="hover:text-gray-200">Nosotros</a>
-                <a href="index.html#servicios" class="hover:text-gray-200">Servicios</a>
-                <a href="index.html#equipo" class="hover:text-gray-200">Equipo</a>
+                <a href="/index.html" class="hover:text-gray-200">Inicio</a>
+                <a href="/index.html#nosotros" class="hover:text-gray-200">Nosotros</a>
+                <a href="/index.html#servicios" class="hover:text-gray-200">Servicios</a>
+                <a href="/index.html#equipo" class="hover:text-gray-200">Equipo</a>
                 <a href="#contacto" class="hover:text-gray-200">Contacto</a>
             </nav>
         </div>
 
         <div id="mobile-menu" class="md:hidden hidden bg-[#66a6da] px-4 pb-4">
-            <a href="index.html" class="block py-2 hover:text-gray-200">Inicio</a>
-            <a href="index.html#nosotros" class="block py-2 hover:text-gray-200">Nosotros</a>
-            <a href="index.html#servicios" class="block py-2 hover:text-gray-200">Servicios</a>
-            <a href="index.html#equipo" class="block py-2 hover:text-gray-200">Equipo</a>
+            <a href="/index.html" class="block py-2 hover:text-gray-200">Inicio</a>
+            <a href="/index.html#nosotros" class="block py-2 hover:text-gray-200">Nosotros</a>
+            <a href="/index.html#servicios" class="block py-2 hover:text-gray-200">Servicios</a>
+            <a href="/index.html#equipo" class="block py-2 hover:text-gray-200">Equipo</a>
             <a href="#contacto" class="block py-2 hover:text-gray-200">Contacto</a>
         </div>
     </header>
@@ -245,7 +246,7 @@
     </script>
 
     <script>
-        document.addEventListener('DOMContentLoaded', function() {
+        document.addEventListener('DOMContentLoaded', function () {
             const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=0&single=true&output=csv';
             const allTestimonialsContainer = document.getElementById('all-testimonials-container');
 

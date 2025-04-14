@@ -324,7 +324,7 @@
 
     <script>
         const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
-        const testimoniosContainer = document.getElementById('testimonios-container');
+        const testimoniosContainer = document.getElementById('carousel-wrapper'); // ¡CORRECCIÓN AQUÍ!
         let allTestimonials = [];
         let currentIndex = 0;
         const itemsPerPage = 4; // Dos filas de 2
@@ -351,15 +351,15 @@
                 }
 
                 const testimonioHTML = `
-                <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
-                    <div class="flex justify-between items-center mb-2">
-                        <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
-                        ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
+                    <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
+                        <div class="flex justify-between items-center mb-2">
+                            <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
+                            ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
+                        </div>
+                        <p class="text-gray-700 italic mb-2">${testimonioData["Tu Testimonio"]}</p>
+                        <p class="text-xs text-gray-500">${formattedDate}</p>
                     </div>
-                    <p class="text-gray-700 italic mb-2">${testimonioData["Tu Testimonio"]}</p>
-                    <p class="text-xs text-gray-500">${formattedDate}</p>
-                </div>
-            `;
+                `;
                 testimoniosContainer.innerHTML += testimonioHTML;
             }
         }
@@ -410,7 +410,8 @@
                 .then(csvData => {
                     const rows = csvData.split('\n').map(row => row.trim());
                     if (rows.length <= 1) {
-                        testimoniosContainer.innerHTML = '<p>No hay testimonios disponibles.</p>';
+                        const container = document.getElementById('carousel-wrapper');
+                        if (container) container.innerHTML = '<p>No hay testimonios disponibles.</p>';
                         return;
                     }
 
@@ -422,7 +423,8 @@
 
                     if (nombreIndex === -1 || testimonioIndex === -1 || timestampIndex === -1 || calificacionIndex === -1) {
                         console.error('Las columnas necesarias ("Marca temporal", "Nombre Completo", "Tu Testimonio", "Calificación") no se encontraron en el CSV.');
-                        testimoniosContainer.innerHTML = '<p class="text-red-500">Error al leer los testimonios.</p>';
+                        const container = document.getElementById('carousel-wrapper');
+                        if (container) container.innerHTML = '<p class="text-red-500">Error al leer los testimonios.</p>';
                         return;
                     }
 
@@ -445,7 +447,8 @@
                 })
                 .catch(error => {
                     console.error('Error al obtener los testimonios desde Google Sheets (CSV):', error);
-                    testimoniosContainer.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios.</p>';
+                    const container = document.getElementById('carousel-wrapper');
+                    if (container) container.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios.</p>';
                 });
 
             const prevButton = document.getElementById('prev-testimonial');
@@ -454,7 +457,7 @@
             if (prevButton) prevButton.addEventListener('click', prevTestimonials);
             if (nextButton) nextButton.addEventListener('click', nextTestimonials);
 
-            const carouselWrapper = document.querySelector('.splide__track');
+            const carouselWrapper = document.querySelector('.splide__track'); // Esto parece ser de otra librería, podrías tener un conflicto si no la estás usando para el carrusel principal
             if (carouselWrapper) {
                 carouselWrapper.addEventListener('mouseenter', stopAutoSlide);
                 carouselWrapper.addEventListener('mouseleave', startAutoSlide);

@@ -313,7 +313,7 @@
             </button>
         </div>
         <div class="mt-6 text-center">
-            <a href="testimonios-completos.html" class="bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-3 rounded-lg transition inline-block font-semibold">Ver todos los comentarios</a>
+            <a href="page/testimonios-completos.html" class="bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-3 rounded-lg transition inline-block font-semibold">Ver todos los comentarios</a>
         </div>
     </div>
 </section>
@@ -350,7 +350,7 @@
                 }
 
                 const primerosDiez = [];
-                for (let i = 1; i < Math.min(rows.length, 11); i++) { // Limitar a los primeros 10
+                for (let i = 1; i < Math.min(rows.length, 13); i++) { // Limitar a los primeros 12
                     const values = rows[i].split(',');
                     if (values.length > nombreIndex && values.length > testimonioIndex) {
                         const nombre = values[nombreIndex].trim();

@@ -260,13 +260,13 @@
                     }
 
                     const headers = rows[0].split(',');
-                    const timestampIndex = headers.findIndex(header => header.trim() === 'Marca temporal');
                     const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre Completo');
                     const testimonioIndex = headers.findIndex(header => header.trim() === 'Tu Testimonio');
                     const calificacionIndex = headers.findIndex(header => header.trim() === 'Calificación');
+                    const fechaIndex = headers.findIndex(header => header.trim() === 'Fecha');
 
-                    if (nombreIndex === -1 || testimonioIndex === -1 || timestampIndex === -1 || calificacionIndex === -1) {
-                        console.error('Las columnas necesarias ("Marca temporal", "Nombre Completo", "Tu Testimonio", "Calificación") no se encontraron en el CSV.');
+                    if (nombreIndex === -1 || testimonioIndex === -1 || calificacionIndex === -1 || fechaIndex === -1) {
+                        console.error('Las columnas necesarias ("Nombre Completo", "Tu Testimonio", "Calificación", "Fecha") no se encontraron en el CSV.');
                         allTestimonialsContainer.innerHTML = '<p class="text-red-500 text-center">Error al leer los comentarios.</p>';
                         return;
                     }
@@ -275,14 +275,14 @@
 
                     for (let i = 1; i < rows.length; i++) {
                         const values = rows[i].split(',');
-                        if (values.length > nombreIndex && values.length > testimonioIndex && values.length > timestampIndex && values.length > calificacionIndex) {
+                        if (values.length > nombreIndex && values.length > testimonioIndex && values.length > calificacionIndex && values.length > fechaIndex) {
                             const testimonioData = {};
-                            testimonioData["Marca temporal"] = values[timestampIndex].trim();
                             testimonioData["Nombre Completo"] = values[nombreIndex].trim();
                             testimonioData["Tu Testimonio"] = values[testimonioIndex].trim();
                             testimonioData["Calificación"] = values[calificacionIndex].trim();
+                            testimonioData["Fecha"] = values[fechaIndex].trim();
 
-                            const date = new Date(testimonioData["Marca temporal"]);
+                            const date = new Date(testimonioData["Fecha"]);
                             const formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
 
                             let ratingDisplay = '';

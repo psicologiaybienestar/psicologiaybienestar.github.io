@@ -283,7 +283,7 @@
                             testimonioData["Calificación"] = values[calificacionIndex].trim();
 
                             const date = new Date(testimonioData["Marca temporal"]);
-                            const formattedDate = date.toLocaleDateString();
+                            const formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
 
                             let ratingDisplay = '';
                             const ratingValue = testimonioData["Calificación"];

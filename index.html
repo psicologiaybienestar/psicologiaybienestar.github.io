@@ -337,7 +337,7 @@
             for (let i = startIndex; i < endIndex; i++) {
                 const testimonioData = allTestimonials[i];
                 const date = new Date(testimonioData["Marca temporal"]);
-                const formattedDate = date.toLocaleDateString();
+                const formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
 
                 let ratingDisplay = '';
                 const ratingValue = testimonioData["Calificación"];

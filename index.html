@@ -545,6 +545,10 @@
                         }
                     }
                     allTestimonials = fetchedTestimonials;
+                    // línea para limitar a 12 testimonios
+                    if (allTestimonials.length > 12) {
+                        allTestimonials = allTestimonials.slice(0, 12);
+                    }
                     showTestimonials(currentIndex);
                     updateNavigationButtons();
                     startAutoSlide();

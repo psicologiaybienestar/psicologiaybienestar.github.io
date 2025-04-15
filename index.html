@@ -440,7 +440,6 @@
         let currentIndex = 0;
         const itemsPerPage = 4; // Dos filas de 2
 
-
         function showTestimonials(index) {
             testimoniosContainer.innerHTML = '';
             const startIndex = index * itemsPerPage;
@@ -529,9 +528,7 @@
         }
 
         document.addEventListener('DOMContentLoaded', function () {
-            if (window.innerWidth <= 480) {
-                itemsPerPage = 1; // Mostrar solo un item por página en móviles
-            }
+            
             fetch(googleSheetURL)
                 .then(response => response.text())
                 .then(csvData => {

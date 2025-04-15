@@ -66,6 +66,13 @@
                 window.location.reload(true);
             });
         }
+         // Recargar la página al hacer clic en el enlace a Testimonios Completos
+         const testimoniosCompletosLink = document.querySelector('a[href="testimonios-completos.html"]');
+        if (testimoniosCompletosLink) {
+            testimoniosCompletosLink.addEventListener('click', (event) => {
+                window.location.reload(true); // Forzar la recarga desde el servidor
+            });
+        }
     </script>
 </head>
 

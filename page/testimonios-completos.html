@@ -255,150 +255,93 @@
         });
     </script>
 
-<script>
-    const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
-    // Apuntamos al contenedor correcto en esta página
-    const allTestimonialsContainer = document.getElementById('all-testimonials-container');
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
+            const allTestimonialsContainer = document.getElementById('all-testimonials-container');
 
-    document.addEventListener('DOMContentLoaded', function() {
-        if (!allTestimonialsContainer) {
-            console.error("Error: Elemento con ID 'all-testimonials-container' no encontrado en testimonios-completos.html");
-            return;
-        }
+            fetch(googleSheetURL)
+                .then(response => response.text())
+                .then(csvData => {
+                    const rows = csvData.split('\n').map(row => row.trim());
+                    if (rows.length <= 1) {
+                        allTestimonialsContainer.innerHTML = '<p class="text-center">No hay comentarios disponibles.</p>';
+                        return;
+                    }
 
-        fetch(googleSheetURL)
-            .then(response => response.text())
-            .then(csvData => {
-                const rows = csvData.split('\n').map(row => row.trim());
-                if (rows.length <= 1) {
-                    allTestimonialsContainer.innerHTML = '<p>No hay testimonios disponibles.</p>';
-                    return;
-                }
+                    const headers = rows[0].split(',');
+                    const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre Completo');
+                    const testimonioIndex = headers.findIndex(header => header.trim() === 'Tu Testimonio');
+                    const calificacionIndex = headers.findIndex(header => header.trim() === 'Calificación');
+                    const fechaIndex = headers.findIndex(header => header.trim() === 'Fecha');
 
-                // Mantenemos la lógica de lectura de encabezados y parsing CSV mejorada
-                const headers = rows[0].split(',').map(header => header.trim());
-                const nombreIndex = headers.indexOf('Nombre Completo');
-                const testimonioIndex = headers.indexOf('Tu Testimonio');
-                const calificacionIndex = headers.indexOf('Calificación');
-                const fechaIndex = headers.indexOf('Fecha');
+                    if (nombreIndex === -1 || testimonioIndex === -1 || calificacionIndex === -1 || fechaIndex === -1) {
+                        console.error('Las columnas necesarias ("Nombre Completo", "Tu Testimonio", "Calificación", "Fecha") no se encontraron en el CSV.');
+                        allTestimonialsContainer.innerHTML = '<p class="text-red-500 text-center">Error al leer los comentarios.</p>';
+                        return;
+                    }
 
-                console.log("Encabezados detectados:", headers);
-                console.log("Índice Nombre Completo:", nombreIndex);
-                console.log("Índice Tu Testimonio:", testimonioIndex);
-                console.log("Índice Calificación:", calificacionIndex);
-                console.log("Índice Fecha:", fechaIndex);
+                    allTestimonialsContainer.innerHTML = ''; // Limpiar cualquier contenido existente
 
+                    for (let i = 1; i < rows.length; i++) {
+                        const values = rows[i].split(',');
+                        if (values.length > nombreIndex && values.length > testimonioIndex && values.length > calificacionIndex && values.length > fechaIndex) {
+                            const testimonioData = {};
+                            testimonioData["Nombre Completo"] = values[nombreIndex].trim();
+                            testimonioData["Tu Testimonio"] = values[testimonioIndex].trim();
+                            testimonioData["Calificación"] = values[calificacionIndex].trim();
+                            testimonioData["Fecha"] = values[fechaIndex].trim();
 
-                if (nombreIndex === -1 || testimonioIndex === -1 || calificacionIndex === -1 || fechaIndex === -1) {
-                    console.error('Las columnas necesarias no se encontraron en el CSV.');
-                    allTestimonialsContainer.innerHTML = '<p class="text-red-500">Error al leer los testimonios (columnas no encontradas).</p>';
-                    return;
-                }
+                            const fechaStr = testimonioData["Fecha"];
+                            let formattedDate = 'Fecha Inválida';
+                            if (fechaStr) {
+                                const parts = fechaStr.split('/');
+                                if (parts.length === 3) {
+                                    const day = parseInt(parts[0]);
+                                    const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
+                                    const year = parseInt(parts[2]);
+                                    const date = new Date(year, month, day);
+                                    formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
+                                } else {
+                                    console.error("Formato de fecha incorrecto:", fechaStr);
+                                }
+                            }
 
-                let testimonialsHTML = ''; // Acumularemos el HTML de todos los testimonios aquí
+                            let ratingDisplay = '';
+                            const ratingValue = testimonioData["Calificación"];
+                            if (!isNaN(parseInt(ratingValue))) {
+                                const numStars = parseInt(ratingValue);
+                                for (let j = 0; j < numStars; j++) {
+                                    ratingDisplay += '★';
+                                }
+                            } else if (ratingValue) {
+                                ratingDisplay = ratingValue;
+                            }
 
-                for (let i = 1; i < rows.length; i++) {
-                     const row = rows[i];
-                     if (!row) continue; // Saltar filas vacías
-
-                     // Intentar parsear la fila CSV manualmente para manejar comas dentro de comillas dobles
-                     const values = [];
-                     let inQuotes = false;
-                     let currentValue = '';
-                     for (let j = 0; j < row.length; j++) {
-                         const char = row[j];
-                         if (char === '"' && (j === 0 || row[j-1] === ',' || /\s/.test(row[j-1]))) {
-                             inQuotes = true;
-                             continue;
-                         }
-                          if (char === '"' && (j === row.length - 1 || row[j+1] === ',' || /\s/.test(row[j+1]))) {
-                             inQuotes = false;
-                             continue;
-                         }
-                         if (char === ',' && !inQuotes) {
-                             values.push(currentValue.trim());
-                             currentValue = '';
-                         } else {
-                             currentValue += char;
-                         }
-                     }
-                     values.push(currentValue.trim()); // Añadir el último valor trimado
-
-
-                    if (values.length > Math.max(nombreIndex, testimonioIndex, calificacionIndex, fechaIndex) &&
-                        nombreIndex !== -1 && testimonioIndex !== -1 && calificacionIndex !== -1 && fechaIndex !== -1) {
-
-                        const testimonioData = {};
-                        testimonioData["Nombre Completo"] = values[nombreIndex];
-                        testimonioData["Tu Testimonio"] = values[testimonioIndex];
-                        testimonioData["Calificación"] = values[calificacionIndex];
-                        testimonioData["Fecha"] = values[fechaIndex];
-
-                        console.log("Datos del testimonio (fila", i, "):", testimonioData);
-
-                        // --- Generar HTML para una sola tarjeta de testimonio ---
-                        const fechaStr = testimonioData["Fecha"];
-                        let formattedDate = 'Fecha Inválida';
-                        if (fechaStr) {
-                             const parts = fechaStr.split('/');
-                             if (parts.length === 3) {
-                                  const day = parseInt(parts[0]);
-                                  const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
-                                  const year = parseInt(parts[2]);
-                                  const date = new Date(year, month, day);
-                                  if (!isNaN(date.getTime())) { // Verificar si la fecha es válida
-                                       formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
-                                  } else {
-                                       console.error("Fecha inválida construida desde partes:", fechaStr);
-                                  }
-                             } else {
-                                  console.error("Formato de fecha incorrecto al dividir:", fechaStr);
-                             }
-                        } else {
-                             console.warn("La cadena de fecha está vacía para un testimonio.");
-                        }
-
-                        let ratingDisplay = '';
-                        const ratingValue = testimonioData["Calificación"];
-                        if (ratingValue && !isNaN(parseInt(ratingValue))) {
-                             const numStars = parseInt(ratingValue);
-                             for (let k = 0; k < numStars; k++) { // Usar 'k' para evitar conflicto con el bucle externo 'i' y 'j'
-                                  ratingDisplay += '★';
-                             }
-                        } else if (ratingValue) {
-                             ratingDisplay = ratingValue;
-                        }
-
-                        // Usamos las mismas clases de estilo que en el carrusel
-                        testimonialsHTML += `
-                            <div class="bg-gray-100 rounded-lg p-6 shadow-md"> {/* Ya no necesita flex-1 aquí, el grid se encarga del diseño */}
+                            const testimonioHTML = `
+                            <div class="bg-white shadow-xl rounded-2xl p-6 transform transition duration-500 hover:scale-105">
                                 <div class="flex justify-between items-center mb-2">
-                                    <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
+                                    <h3 class="text-xl font-semibold text-[#627eff] mb-2">${testimonioData["Nombre Completo"]}</h3>
                                     ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
                                 </div>
-                                <p class="text-gray-700 italic mb-2"><span class="math-inline">\{testimonioData\["Tu Testimonio"\]\}</p\>
-<p class\="text\-xs text\-gray\-500"\></span>{formattedDate}</p>
+                                <p class="text-gray-700 italic">${testimonioData["Tu Testimonio"]}</p>
+                                <p class="text-xs text-gray-500 mt-2">${formattedDate}</p>
                             </div>
                         `;
-                         // --- Fin Generar HTML ---
-
-                    } else {
-                        console.warn("Saltando fila con datos incompletos, índices inválidos o error de parseo:", row);
+                            allTestimonialsContainer.innerHTML += testimonioHTML;
+                        }
                     }
-                }
 
-                 // Insertar todo el HTML generado en el contenedor
-                allTestimonialsContainer.innerHTML = testimonialsHTML;
-
-            })
-            .catch(error => {
-                console.error('Error al obtener los testimonios desde Google Sheets (CSV):', error);
-                if (allTestimonialsContainer) {
-                    allTestimonialsContainer.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios (error de red o CSV).</p>';
-                }
-            });
-    });
-</script>
+                    if (allTestimonialsContainer.innerHTML === '') {
+                        allTestimonialsContainer.innerHTML = '<p class="text-center">No hay comentarios disponibles.</p>';
+                    }
+                })
+                .catch(error => {
+                    console.error('Error al obtener todos los testimonios desde Google Sheets (CSV):', error);
+                    allTestimonialsContainer.innerHTML = '<p class="text-red-500 text-center">No se pudieron cargar los comentarios.</p>';
+                });
+        });
+    </script>
 
 </body>
 

@@ -460,75 +460,126 @@
             const startIndex = index * itemsPerPage;
             const endIndex = Math.min(startIndex + itemsPerPage, allTestimonials.length);
 
-            // Crear filas para la vista de escritorio si itemsPerPage > 1
-            const testimonialsPerRow = itemsPerPage > 1 ? 2 : 1; // 2 por fila si itemsPerPage > 1, 1 si no
-            const totalRows = Math.ceil((endIndex - startIndex) / testimonialsPerRow);
+            // Determinar cuántos testimonios mostrar por fila en el diseño flexbox
+            const testimonialsPerFlexRow = itemsPerPage > 1 && window.innerWidth > 480 ? 2 : 1; // 2 por fila solo si itemsPerPage > 1 y NO estamos en móviles
 
-            for (let row = 0; row < totalRows; row++) {
-                 const rowContainer = document.createElement('div');
-                 rowContainer.classList.add('flex', 'gap-6', 'mb-4'); // Clases para la fila
+            // Si solo se muestra 1 item por página, no necesitamos la estructura de fila flex adicional
+            if (testimonialsPerFlexRow === 1) {
+                 for (let i = startIndex; i < endIndex; i++) {
+                     const testimonioData = allTestimonials[i];
+                     const fechaStr = testimonioData["Fecha"];
+                     let formattedDate = 'Fecha Inválida';
+                     if (fechaStr) {
+                          const parts = fechaStr.split('/');
+                          if (parts.length === 3) {
+                               const day = parseInt(parts[0]);
+                               const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
+                               const year = parseInt(parts[2]);
+                               const date = new Date(year, month, day);
+                               if (!isNaN(date.getTime())) { // Verificar si la fecha es válida
+                                    formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
+                               } else {
+                                    console.error("Fecha inválida construida desde partes:", fechaStr);
+                               }
+                          } else {
+                               console.error("Formato de fecha incorrecto al dividir:", fechaStr);
+                          }
+                     } else {
+                          console.warn("La cadena de fecha está vacía para un testimonio.");
+                     }
 
-                 for (let col = 0; col < testimonialsPerRow; col++) {
-                      const currentTestimonialIndex = startIndex + row * testimonialsPerRow + col;
-                      if (currentTestimonialIndex < endIndex) {
-                           const testimonioData = allTestimonials[currentTestimonialIndex];
+                     let ratingDisplay = '';
+                     const ratingValue = testimonioData["Calificación"];
+                     if (ratingValue && !isNaN(parseInt(ratingValue))) { // Verificar si hay valor antes de parseInt
+                          const numStars = parseInt(ratingValue);
+                          for (let j = 0; j < numStars; j++) {
+                               ratingDisplay += '★';
+                          }
+                     } else if (ratingValue) {
+                          ratingDisplay = ratingValue;
+                     }
 
-                           const fechaStr = testimonioData["Fecha"];
-                           let formattedDate = 'Fecha Inválida';
-                           if (fechaStr) {
-                                const parts = fechaStr.split('/');
-                                if (parts.length === 3) {
-                                     const day = parseInt(parts[0]);
-                                     const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
-                                     const year = parseInt(parts[2]);
-                                     const date = new Date(year, month, day);
-                                     if (!isNaN(date.getTime())) { // Verificar si la fecha es válida
-                                          formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
-                                     } else {
-                                          console.error("Fecha inválida construida desde partes:", fechaStr);
-                                     }
-                                } else {
-                                     console.error("Formato de fecha incorrecto al dividir:", fechaStr);
-                                }
-                           } else {
-                               console.warn("La cadena de fecha está vacía para un testimonio.");
-                           }
-
-
-                           let ratingDisplay = '';
-                           const ratingValue = testimonioData["Calificación"];
-                           if (!isNaN(parseInt(ratingValue))) {
-                                const numStars = parseInt(ratingValue);
-                                for (let j = 0; j < numStars; j++) {
-                                     ratingDisplay += '★';
-                                }
-                           } else if (ratingValue) {
-                                ratingDisplay = ratingValue;
-                           }
-
-                           const testimonioHTML = `
-                               <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
-                                   <div class="flex justify-between items-center mb-2">
-                                       <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
-                                       ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
-                                   </div>
-                                   <p class="text-gray-700 italic mb-2">${testimonioData["Tu Testimonio"]}</p>
-                                   <p class="text-xs text-gray-500">${formattedDate}</p>
-                               </div>
-                           `;
-                           rowContainer.innerHTML += testimonioHTML;
-                      } else {
-                           // Añadir un div vacío para mantener el diseño flex si hay menos testimonios en la última fila/columna
-                           rowContainer.innerHTML += '<div class="flex-1"></div>';
-                      }
+                     const testimonioHTML = `
+                          <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
+                              <div class="flex justify-between items-center mb-2">
+                                  <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
+                                  ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
+                              </div>
+                              <p class="text-gray-700 italic mb-2"><span class="math-inline">\{testimonioData\["Tu Testimonio"\]\}</p\>
+<p class\="text\-xs text\-gray\-500"\></span>{formattedDate}</p>
+                          </div>
+                     `;
+                     testimoniosContainer.innerHTML += testimonioHTML; // Añadir directamente al contenedor principal
                  }
-                 testimoniosContainer.appendChild(rowContainer);
-            }
+            } else { // Si se muestran varios items por fila (escritorio/tablet)
+                 const totalRows = Math.ceil((endIndex - startIndex) / testimonialsPerFlexRow);
+                 for (let row = 0; row < totalRows; row++) {
+                     const rowContainer = document.createElement('div');
+                     rowContainer.classList.add('flex', 'gap-6', 'mb-4'); // Clases para la fila flex
 
-            // Eliminar la última fila si está vacía (puede ocurrir si itemsPerPage > 1 y el número total de testimonios es múltiplo de itemsPerPage pero no de testimonialsPerRow * 2)
-             if (testimoniosContainer.lastChild && testimoniosContainer.lastChild.innerHTML.trim() === '') {
-                 testimoniosContainer.removeChild(testimoniosContainer.lastChild);
-             }
+                     for (let col = 0; col < testimonialsPerFlexRow; col++) {
+                          const currentTestimonialIndex = startIndex + row * testimonialsPerFlexRow + col;
+                          if (currentTestimonialIndex < endIndex) {
+                               const testimonioData = allTestimonials[currentTestimonialIndex];
+
+                               const fechaStr = testimonioData["Fecha"];
+                               let formattedDate = 'Fecha Inválida';
+                               if (fechaStr) {
+                                    const parts = fechaStr.split('/');
+                                    if (parts.length === 3) {
+                                         const day = parseInt(parts[0]);
+                                         const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
+                                         const year = parseInt(parts[2]);
+                                         const date = new Date(year, month, day);
+                                         if (!isNaN(date.getTime())) { // Verificar si la fecha es válida
+                                              formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
+                                         } else {
+                                              console.error("Fecha inválida construida desde partes:", fechaStr);
+                                         }
+                                    } else {
+                                         console.error("Formato de fecha incorrecto al dividir:", fechaStr);
+                                    }
+                               } else {
+                                    console.warn("La cadena de fecha está vacía para un testimonio.");
+                               }
+
+                               let ratingDisplay = '';
+                               const ratingValue = testimonioData["Calificación"];
+                               if (ratingValue && !isNaN(parseInt(ratingValue))) { // Verificar si hay valor antes de parseInt
+                                    const numStars = parseInt(ratingValue);
+                                    for (let j = 0; j < numStars; j++) {
+                                         ratingDisplay += '★';
+                                    }
+                               } else if (ratingValue) {
+                                    ratingDisplay = ratingValue;
+                               }
+
+                               const testimonioHTML = `
+                                   <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
+                                       <div class="flex justify-between items-center mb-2">
+                                           <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
+                                           ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
+                                       </div>
+                                       <p class="text-gray-700 italic mb-2"><span class="math-inline">\{testimonioData\["Tu Testimonio"\]\}</p\>
+<p class\="text\-xs text\-gray\-500"\></span>{formattedDate}</p>
+                                   </div>
+                               `;
+                               rowContainer.innerHTML += testimonioHTML;
+                          } else {
+                               // Añadir un div vacío para mantener el diseño flex si hay menos testimonios en la última fila/columna
+                               rowContainer.innerHTML += '<div class="flex-1"></div>';
+                          }
+                     }
+                     testimoniosContainer.appendChild(rowContainer);
+                 }
+                 // La lógica para eliminar la última fila vacía podría necesitar ajuste.
+                 // Si itemsPerPage > 1 y el número total de testimonios es múltiplo de itemsPerPage
+                 // pero no es un múltiplo de testimonialsPerFlexRow * 2, podría quedar una fila incompleta.
+                 // Esta parte la dejaré por ahora, pero podría ser fuente de problemas si el número de testimonios es irregular.
+                if (testimoniosContainer.lastChild && testimoniosContainer.lastChild.classList.contains('flex') && testimoniosContainer.lastChild.innerHTML.trim() === '<div class="flex-1"></div>'.repeat(testimonialsPerFlexRow).trim()) {
+                    testimoniosContainer.removeChild(testimoniosContainer.lastChild);
+                }
+            }
 
         }
 
@@ -568,6 +619,8 @@
                    currentIndex = (currentIndex + 1) % totalPages; // Ciclar al siguiente índice
                    showTestimonials(currentIndex);
                    updateNavigationButtons();
+                } else {
+                    stopAutoSlide(); // Detener auto-slide si solo hay una página
                 }
             }, autoSlideDelay);
         }
@@ -604,40 +657,67 @@
                          const nextButton = document.getElementById('next-testimonial');
                          if (prevButton) prevButton.disabled = true;
                          if (nextButton) nextButton.disabled = true;
-
+                         stopAutoSlide(); // Detener auto-slide si no hay testimonios
                         return;
                     }
 
-                    const headers = rows[0].split(',');
-                    const timestampIndex = headers.findIndex(header => header.trim() === 'Marca temporal');
-                    const nombreIndex = headers.findIndex(header => header.trim() === 'Nombre Completo');
-                    const testimonioIndex = headers.findIndex(header => header.trim() === 'Tu Testimonio');
-                    const calificacionIndex = headers.findIndex(header => header.trim() === 'Calificación');
-                    const fechaIndex = headers.findIndex(header => header.trim() === 'Fecha');
+                    // Mejorar la lectura de encabezados trimando los espacios
+                    const headers = rows[0].split(',').map(header => header.trim());
+                    const nombreIndex = headers.indexOf('Nombre Completo');
+                    const testimonioIndex = headers.indexOf('Tu Testimonio');
+                    const calificacionIndex = headers.indexOf('Calificación');
+                    const fechaIndex = headers.indexOf('Fecha');
 
                     if (nombreIndex === -1 || testimonioIndex === -1 || calificacionIndex === -1 || fechaIndex === -1) {
-                        console.error('Las columnas necesarias ("Nombre Completo", "Tu Testimonio", "Calificación", "Fecha") no se encontraron en el CSV.');
+                        console.error('Las columnas necesarias ("Nombre Completo", "Tu Testimonio", "Calificación", "Fecha") no se encontraron en el CSV o tienen nombres incorrectos/espacios adicionales.');
                         const container = document.getElementById('carousel-wrapper');
-                        if (container) container.innerHTML = '<p class="text-red-500">Error al leer los testimonios.</p>';
+                        if (container) container.innerHTML = '<p class="text-red-500">Error al leer los testimonios (columnas no encontradas).</p>';
                          // Deshabilitar botones si hay error de columnas
                          const prevButton = document.getElementById('prev-testimonial');
                          const nextButton = document.getElementById('next-testimonial');
                          if (prevButton) prevButton.disabled = true;
                          if (nextButton) nextButton.disabled = true;
-
+                         stopAutoSlide(); // Detener auto-slide en caso de error
                         return;
                     }
 
                     const fetchedTestimonials = [];
                     for (let i = 1; i < rows.length; i++) {
-                         // Manejar casos donde la fila pueda tener menos columnas de las esperadas
-                         const values = rows[i].split(',');
+                         // Una forma más robusta de dividir (aunque no es un parser CSV completo)
+                         // Intenta manejar comas dentro de campos citados
+                         const values = [];
+                         let inQuotes = false;
+                         let currentValue = '';
+                         for (let j = 0; j < rows[i].length; j++) {
+                             const char = rows[i][j];
+                             // Verificar si es el inicio o fin de una celda citada
+                             if (char === '"' && (j === 0 || rows[i][j-1] === ',' || /\s/.test(rows[i][j-1]))) { // Posible inicio de comillas
+                                 inQuotes = true;
+                                 continue;
+                             }
+                              if (char === '"' && (j === rows[i].length - 1 || rows[i][j+1] === ',' || /\s/.test(rows[i][j+1]))) { // Posible fin de comillas
+                                 inQuotes = false;
+                                 continue;
+                             }
+
+
+                             if (char === ',' && !inQuotes) {
+                                 values.push(currentValue.trim()); // Trim aquí también
+                                 currentValue = '';
+                             } else {
+                                 currentValue += char;
+                             }
+                         }
+                         values.push(currentValue.trim()); // Añadir el último valor trimado
+
+
+                         // Verificar si tenemos suficientes columnas antes de intentar acceder a ellas
                          if (values.length > Math.max(nombreIndex, testimonioIndex, calificacionIndex, fechaIndex)) {
                             const testimonioData = {};
-                            testimonioData["Nombre Completo"] = values[nombreIndex].trim();
-                            testimonioData["Tu Testimonio"] = values[testimonioIndex].trim();
-                            testimonioData["Calificación"] = values[calificacionIndex] ? values[calificacionIndex].trim() : ''; // Manejar calificación vacía
-                            testimonioData["Fecha"] = values[fechaIndex] ? values[fechaIndex].trim() : ''; // Manejar fecha vacía
+                            testimonioData["Nombre Completo"] = values[nombreIndex]; // Ya trimado
+                            testimonioData["Tu Testimonio"] = values[testimonioIndex]; // Ya trimado
+                            testimonioData["Calificación"] = values[calificacionIndex]; // Ya trimado
+                            testimonioData["Fecha"] = values[fechaIndex]; // Ya trimado
                             fetchedTestimonials.push(testimonioData);
                          } else {
                              console.warn("Saltando fila con datos incompletos:", rows[i]);
@@ -650,6 +730,18 @@
                     if (allTestimonials.length > 12) {
                          allTestimonials = allTestimonials.slice(0, 12);
                     }
+
+                     // Si después de limitar no hay testimonios, mostrar mensaje y deshabilitar botones
+                     if (allTestimonials.length === 0) {
+                         const container = document.getElementById('carousel-wrapper');
+                         if (container) container.innerHTML = '<p>No hay testimonios disponibles.</p>';
+                         const prevButton = document.getElementById('prev-testimonial');
+                         const nextButton = document.getElementById('next-testimonial');
+                         if (prevButton) prevButton.disabled = true;
+                         if (nextButton) nextButton.disabled = true;
+                         stopAutoSlide();
+                         return;
+                     }
 
 
                     showTestimonials(currentIndex);
@@ -680,12 +772,13 @@
                 .catch(error => {
                     console.error('Error al obtener los testimonios desde Google Sheets (CSV):', error);
                     const container = document.getElementById('carousel-wrapper');
-                    if (container) container.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios.</p>';
+                    if (container) container.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios (error de red o CSV).</p>';
                      // Deshabilitar botones si hay error en la carga
                      const prevButton = document.getElementById('prev-testimonial');
                      const nextButton = document.getElementById('next-testimonial');
                      if (prevButton) prevButton.disabled = true;
                      if (nextButton) nextButton.disabled = true;
+                     stopAutoSlide(); // Detener auto-slide en caso de error
                 });
 
             const prevButton = document.getElementById('prev-testimonial');

@@ -71,106 +71,71 @@
             }
         }
 
-        /* Testimonios */
-        /* Estilos para la sección de testimonios en index.html */
+        /* Estilos Adaptados para el Carrusel de Testimonios en index.html */
+
+        /* Contenedor principal del carrusel - solo necesita overflow hidden */
         #carousel-container {
             overflow: hidden;
-            /* Asegura que los testimonios que no estén visibles estén ocultos */
         }
 
+        /* Wrapper del carrusel - el JS y Tailwind manejan display: flex, transform, gap, mb */
         #carousel-wrapper {
-            display: flex;
             transition: transform 0.3s ease-in-out;
-            justify-content: center;
-            /* Centra los elementos horizontalmente */
-            padding: 1rem 0;
-            /* Opcional: añade un poco de espacio vertical si lo necesitas */
+            /* Mantén la transición para el desplazamiento */
+            /* Las clases de Tailwind (flex, gap-6, mb-4) en las filas generadas por JS manejan el layout */
+            /* justify-content: center; Esto lo puedes controlar con clases de Tailwind si es necesario en el contenedor padre del wrapper */
+            /* padding: 1rem 0; Si necesitas espacio vertical alrededor del carrusel, ajusta el padding/margin de la sección o un div contenedor */
         }
 
+        /* Estilo para cada tarjeta de testimonio */
+        /* Las clases de Tailwind (flex-1, flex-shrink-0, w-full) manejan el tamaño y cómo se contraen/expanden */
         .bg-gray-100 {
-            /* Estilo para cada tarjeta de testimonio (asumiendo esta clase) */
-            flex: 0 0 35%;
-            /* Reducir aún más el ancho al 35% del contenedor */
-            max-width: 350px;
-            /* Añadir un ancho máximo para evitar que se extiendan demasiado en pantallas grandes */
             padding: 1rem;
-            /* Añade un poco de espacio interno */
-            margin-right: 2rem;
-            /* Aumentar un poco más el espacio entre tarjetas */
+            /* Mantén el padding interno */
             box-sizing: border-box;
-            /* Incluye el padding y el border en el ancho y alto del elemento */
+            /* Crucial para que el padding y borde no aumenten el tamaño total */
             border: 1px solid #e2e8f0;
+            /* Mantén el borde */
             border-radius: 0.5rem;
+            /* Mantén las esquinas redondeadas */
+            /* Los márgenes entre tarjetas están controlados por gap-6 en las filas flex y mb-4 entre filas/items individuales */
         }
 
-        .bg-gray-100:last-child {
-            margin-right: 0;
-            /* Elimina el margen derecho del último testimonio */
-        }
+        /* No necesitas reglas específicas de flex-basis, max-width o margin-right para .bg-gray-100 aquí si confías en Tailwind y el JS */
+        /* No necesitas reglas :last-child para margin-right si usas gap */
 
-        /* Media query para pantallas más pequeñas (ej. tablets) */
-        @media (max-width: 768px) {
-            .bg-gray-100 {
-                flex: 0 0 90%;
-                /* Aumentar el ancho en pantallas pequeñas, pero no al 100% para dejar un poco de margen */
-                max-width: none;
-                /* Quitar el ancho máximo en pantallas pequeñas */
-                margin-right: 0;
-                margin-bottom: 1rem;
-                border: none;
-                border-radius: 0.25rem;
-            }
-        }
 
-        /* Media query para pantallas aún más pequeñas (ej. móviles) */
-        @media (max-width: 480px) {
-            .bg-gray-100 {
-                flex: 0 0 100%;
-                /* Ocupar todo el ancho en móviles */
-                margin-right: 0;
-                /* Eliminar el margen derecho */
-                margin-bottom: 1.5rem;
-                /* Añadir margen inferior para dar espacio entre comentarios */
-                padding: 1rem;
-                /* Asegurar que haya espacio interno */
-                border-radius: 0.25rem;
-            }
-
-            #carousel-wrapper {
-                width: 100%;
-                /* Asegurar que el contenedor del carrusel ocupe todo el ancho */
-            }
-        }
-
+        /* Estilos para los botones de navegación del carrusel */
         #prev-testimonial,
         #next-testimonial {
             position: absolute;
             top: 50%;
             transform: translateY(-50%);
             background-color: #627eff;
+            /* Mantén el color de fondo */
             color: white;
+            /* Mantén el color del texto */
             border: none;
             padding: 0.75rem 1rem;
+            /* Mantén el padding */
             border-radius: 0.5rem;
+            /* Mantén las esquinas redondeadas */
             cursor: pointer;
             z-index: 20;
             opacity: 0.9;
             transition: opacity 0.2s ease-in-out;
+            /* Mantén la transición al pasar el ratón */
             font-size: 1rem;
             font-weight: bold;
+            /* La posición (left/right) está controlada por las clases de Tailwind en el HTML (left-0/md:left-2, right-0/md:right-2) */
+            /* Elimina las reglas 'left' y 'right' de aquí para evitar conflictos */
+            /* left: 20px; */
+            /* right: 20px; */
         }
 
         #prev-testimonial:hover,
         #next-testimonial:hover {
             opacity: 1;
-        }
-
-        #prev-testimonial {
-            left: 20px;
-        }
-
-        #next-testimonial {
-            right: 20px;
         }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
@@ -411,103 +376,111 @@
     <!-- Testimonios -->
     <!-- SECCIÓN DE TESTIMONIOS (CAROUSEL) -->
     <section class="py-16 bg-white scroll-mt-20" id="testimonios">
-        <div class="max-w-5xl mx-auto">
-            <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Comentarios / Testimonios</h2>
+        <div class="max-w-5xl mx-auto px-6 md:px-0">
+            <h2 class="text-3xl md:text-4xl font-bold text-[#627eff] text-center mb-10">Comentarios / Testimonios</h2>
             <div class="relative">
                 <div id="carousel-container" class="overflow-hidden">
                     <div id="carousel-wrapper" class="flex transition-transform duration-300 ease-in-out">
-                        <!-- Los testimonios se insertarán aquí con JavaScript -->
                     </div>
                 </div>
                 <button id="prev-testimonial"
-                    class="absolute left-2 top-1/2 transform -translate-y-1/2 bg-[#627eff] hover:bg-[#53c6e4] text-white font-bold py-2 px-3 rounded-full z-10">
+                    class="absolute left-0 md:left-2 top-1/2 transform -translate-y-1/2 bg-[#627eff] hover:bg-[#53c6e4] text-white font-bold py-2 px-3 rounded-full z-10 shadow-md">
                     &lt;
                 </button>
                 <button id="next-testimonial"
-                    class="absolute right-2 top-1/2 transform -translate-y-1/2 bg-[#627eff] hover:bg-[#53c6e4] text-white font-bold py-2 px-3 rounded-full z-10">
+                    class="absolute right-0 md:right-2 top-1/2 transform -translate-y-1/2 bg-[#627eff] hover:bg-[#53c6e4] text-white font-bold py-2 px-3 rounded-full z-10 shadow-md">
                     &gt;
                 </button>
             </div>
-            <div class="mt-6 text-center">
+            <div class="mt-10 text-center">
                 <a href="page/testimonios-completos.html"
-                    class="bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-3 rounded-lg transition inline-block font-semibold">Ver
-                    todos los comentarios</a>
+                    class="inline-block bg-[#627eff] hover:bg-[#53c6e4] text-white px-6 py-3 rounded-lg transition shadow-lg font-semibold">
+                    Ver todos los comentarios
+                </a>
             </div>
         </div>
     </section>
-
     <script>
-        const googleSheetURL = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
-        const testimoniosContainer = document.getElementById('carousel-wrapper'); // Asegura que este es el ID correcto
-        let allTestimonials = [];
-        let currentIndex = 0;
-        let itemsPerPage = 4; // Por defecto, 4 items por página (2 filas de 2)
+        // NOTA: Otros scripts para el menú móvil, formulario de contacto, etc., deben estar SEPARADOS de este script.
+        // Este script maneja ÚNICAMENTE el carrusel de testimonios en index.html.
+
+        const googleSheetURL_index = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
+        const testimoniosContainer_index = document.getElementById('carousel-wrapper');
+        let allTestimonials_index = [];
+        let currentIndex_index = 0;
+        let itemsPerPage_index = 4; // Por defecto para escritorio (2 filas de 2)
+        const maxTestimonials_index = 12; // Limitar el carrusel a los primeros 12
 
         // Función para determinar itemsPerPage basado en el tamaño de la pantalla
-        function updateItemsPerPage() {
-             if (window.innerWidth <= 480) {
-                 itemsPerPage = 1; // En móviles, mostrar 1 item por página
-             } else if (window.innerWidth <= 768) {
-                  itemsPerPage = 2; // En tablets, mostrar 2 items por página (si prefieres)
-             } else {
-                 itemsPerPage = 4; // En pantallas grandes, mostrar 4 items por página
-             }
+        function updateItemsPerPage_index() {
+            if (window.innerWidth <= 480) {
+                itemsPerPage_index = 1; // 1 item por página en móvil
+            } else if (window.innerWidth <= 768) {
+                itemsPerPage_index = 2; // 2 items por página en tablet (1 fila de 2)
+            } else {
+                itemsPerPage_index = 4; // 4 items por página en escritorio (2 filas de 2)
+            }
         }
 
         // Llamar al inicio para establecer itemsPerPage inicial
-        updateItemsPerPage();
+        updateItemsPerPage_index();
 
 
-        function showTestimonials(index) {
-            if (!testimoniosContainer) {
-                 console.error("Error: Elemento con ID 'carousel-wrapper' no encontrado.");
-                 return; // Salir si el contenedor no existe
+        function showTestimonials_index(index) {
+            if (!testimoniosContainer_index) {
+                console.error("Error: Elemento con ID 'carousel-wrapper' no encontrado en index.html.");
+                return;
             }
-            testimoniosContainer.innerHTML = '';
-            const startIndex = index * itemsPerPage;
-            const endIndex = Math.min(startIndex + itemsPerPage, allTestimonials.length);
+            testimoniosContainer_index.innerHTML = '';
+            const startIndex = index * itemsPerPage_index;
+            const endIndex = Math.min(startIndex + itemsPerPage_index, allTestimonials_index.length);
 
             // Determinar cuántos testimonios mostrar por fila en el diseño flexbox
-            const testimonialsPerFlexRow = itemsPerPage > 1 && window.innerWidth > 480 ? 2 : 1; // 2 por fila solo si itemsPerPage > 1 y NO estamos en móviles
+            // 2 por fila flexbox solo si itemsPerPage es 4 (escritorio), de lo contrario 1
+            const testimonialsPerFlexRow = (itemsPerPage_index === 4 && window.innerWidth > 768) ? 2 : 1;
 
-            // Si solo se muestra 1 item por página, no necesitamos la estructura de fila flex adicional
-            if (testimonialsPerFlexRow === 1) {
-                 for (let i = startIndex; i < endIndex; i++) {
-                     const testimonioData = allTestimonials[i];
-                     const fechaStr = testimonioData["Fecha"];
-                     let formattedDate = 'Fecha Inválida';
-                     if (fechaStr) {
-                          const parts = fechaStr.split('/');
-                          if (parts.length === 3) {
-                               const day = parseInt(parts[0]);
-                               const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
-                               const year = parseInt(parts[2]);
-                               const date = new Date(year, month, day);
-                               if (!isNaN(date.getTime())) { // Verificar si la fecha es válida
-                                    formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
-                               } else {
-                                    console.error("Fecha inválida construida desde partes:", fechaStr);
-                               }
-                          } else {
-                               console.error("Formato de fecha incorrecto al dividir:", fechaStr);
-                          }
-                     } else {
-                          console.warn("La cadena de fecha está vacía para un testimonio.");
-                     }
 
-                     let ratingDisplay = '';
-                     const ratingValue = testimonioData["Calificación"];
-                     if (ratingValue && !isNaN(parseInt(ratingValue))) { // Verificar si hay valor antes de parseInt
-                          const numStars = parseInt(ratingValue);
-                          for (let j = 0; j < numStars; j++) {
-                               ratingDisplay += '★';
-                          }
-                     } else if (ratingValue) {
-                          ratingDisplay = ratingValue;
-                     }
+            // Lógica para renderizar testimonios, manejando 1 item por página o múltiples por página/fila
+            if (itemsPerPage_index === 1) { // Vista móvil (1 testimonio por página)
+                for (let i = startIndex; i < endIndex; i++) {
+                    const testimonioData = allTestimonials_index[i];
+                    const fechaStr = testimonioData["Fecha"];
+                    let formattedDate = 'Fecha Inválida';
+                    // Lógica de análisis de fecha (igual que antes)
+                    if (fechaStr) {
+                        const parts = fechaStr.split('/');
+                        if (parts.length === 3) {
+                            const day = parseInt(parts[0]);
+                            const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
+                            const year = parseInt(parts[2]);
+                            const date = new Date(year, month, day);
+                            if (!isNaN(date.getTime())) { // Verificar si la fecha es válida
+                                formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
+                            } else {
+                                console.error("Fecha inválida construida desde partes:", fechaStr);
+                            }
+                        } else {
+                            console.error("Formato de fecha incorrecto al dividir:", fechaStr);
+                        }
+                    } else {
+                        console.warn("La cadena de fecha está vacía para un testimonio.");
+                    }
 
-                     const testimonioHTML = `
-                          <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
+                    let ratingDisplay = '';
+                    const ratingValue = testimonioData["Calificación"];
+                    // Lógica de visualización de calificación (igual que antes)
+                    if (ratingValue && !isNaN(parseInt(ratingValue))) { // Verificar si hay valor antes de parseInt
+                        const numStars = parseInt(ratingValue);
+                        for (let k = 0; k < numStars; k++) { // Usar 'k' para evitar conflicto
+                            ratingDisplay += '★';
+                        }
+                    } else if (ratingValue) {
+                        ratingDisplay = ratingValue;
+                    }
+
+                    // Estructura HTML para una sola tarjeta de testimonio
+                    const testimonioHTML = `
+                          <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-shrink-0" style="width: 100%;"> {/* Flex-shrink-0 y width para el item del carrusel en móvil */}
                               <div class="flex justify-between items-center mb-2">
                                   <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
                                   ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
@@ -516,295 +489,302 @@
 <p class\="text\-xs text\-gray\-500"\></span>{formattedDate}</p>
                           </div>
                      `;
-                     testimoniosContainer.innerHTML += testimonioHTML; // Añadir directamente al contenedor principal
-                 }
-            } else { // Si se muestran varios items por fila (escritorio/tablet)
-                 const totalRows = Math.ceil((endIndex - startIndex) / testimonialsPerFlexRow);
-                 for (let row = 0; row < totalRows; row++) {
-                     const rowContainer = document.createElement('div');
-                     rowContainer.classList.add('flex', 'gap-6', 'mb-4'); // Clases para la fila flex
-
-                     for (let col = 0; col < testimonialsPerFlexRow; col++) {
-                          const currentTestimonioIndex = startIndex + row * testimonialsPerFlexRow + col;
-                          if (currentTestimonioIndex < endIndex) {
-                               const testimonioData = allTestimonials[currentTestimonioIndex];
-
-                               const fechaStr = testimonioData["Fecha"];
-                               let formattedDate = 'Fecha Inválida';
-                               if (fechaStr) {
-                                    const parts = fechaStr.split('/');
-                                    if (parts.length === 3) {
-                                         const day = parseInt(parts[0]);
-                                         const month = parseInt(parts[1]) - 1; // JavaScript months are 0-indexed
-                                         const year = parseInt(parts[2]);
-                                         const date = new Date(year, month, day);
-                                         if (!isNaN(date.getTime())) { // Verificar si la fecha es válida
-                                              formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
-                                         } else {
-                                              console.error("Fecha inválida construida desde partes:", fechaStr);
-                                         }
-                                    } else {
-                                         console.error("Formato de fecha incorrecto al dividir:", fechaStr);
-                                    }
-                               } else {
-                                    console.warn("La cadena de fecha está vacía para un testimonio.");
-                               }
-
-                               let ratingDisplay = '';
-                               const ratingValue = testimonioData["Calificación"];
-                               if (ratingValue && !isNaN(parseInt(ratingValue))) { // Verificar si hay valor antes de parseInt
-                                    const numStars = parseInt(ratingValue);
-                                    for (let j = 0; j < numStars; j++) {
-                                         ratingDisplay += '★';
-                                    }
-                               } else if (ratingValue) {
-                                    ratingDisplay = ratingValue;
-                               }
-
-                               const testimonioHTML = `
-                                   <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1">
-                                       <div class="flex justify-between items-center mb-2">
-                                           <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
-                                           ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
-                                       </div>
-                                       <p class="text-gray-700 italic mb-2"><span class="math-inline">\{testimonioData\["Tu Testimonio"\]\}</p\>
-<p class\="text\-xs text\-gray\-500"\></span>{formattedDate}</p>
-                                   </div>
-                               `;
-                               rowContainer.innerHTML += testimonioHTML;
-                          } else {
-                               // Añadir un div vacío para mantener el diseño flex si hay menos testimonios en la última fila/columna
-                               rowContainer.innerHTML += '<div class="flex-1"></div>';
-                          }
-                     }
-                     testimoniosContainer.appendChild(rowContainer);
-                 }
-                 // La lógica para eliminar la última fila vacía podría necesitar ajuste.
-                if (testimoniosContainer.lastChild && testimoniosContainer.lastChild.classList.contains('flex') && testimoniosContainer.lastChild.innerHTML.trim() === '<div class="flex-1"></div>'.repeat(testimonialsPerFlexRow).trim()) {
-                    testimoniosContainer.removeChild(testimoniosContainer.lastChild);
+                    testimoniosContainer_index.innerHTML += testimonioHTML; // Añadir directamente para 1 item por página
                 }
+
+            } else { // Vista Tablet/Escritorio (2 o 4 items por página, organizados en filas flex)
+
+                const totalRows = Math.ceil((endIndex - startIndex) / testimonialsPerFlexRow);
+
+                for (let row = 0; row < totalRows; row++) {
+                    const rowContainer = document.createElement('div');
+                    rowContainer.classList.add('flex', 'gap-6', 'mb-4'); // Contenedor de fila flex
+
+                    for (let col = 0; col < testimonialsPerFlexRow; col++) {
+                        const currentTestimonioIndex = startIndex + row * testimonialsPerFlexRow + col;
+                        if (currentTestimonioIndex < endIndex) {
+                            const testimonioData = allTestimonials_index[currentTestimonioIndex];
+
+                            const fechaStr = testimonioData["Fecha"];
+                            let formattedDate = 'Fecha Inválida';
+                            // Lógica de análisis de fecha (igual que antes)
+                            if (fechaStr) {
+                                const parts = fechaStr.split('/');
+                                if (parts.length === 3) {
+                                    const day = parseInt(parts[0]);
+                                    const month = parseInt(parts[1]) - 1;
+                                    const year = parseInt(parts[2]);
+                                    const date = new Date(year, month, day);
+                                    if (!isNaN(date.getTime())) { // Verificar si la fecha es válida
+                                        formattedDate = date.toLocaleDateString('es-CO', { year: 'numeric', month: 'numeric', day: 'numeric' });
+                                    } else {
+                                        console.error("Fecha inválida construida desde partes:", fechaStr);
+                                    }
+                                } else {
+                                    console.error("Formato de fecha incorrecto al dividir:", fechaStr);
+                                }
+                            } else {
+                                console.warn("La cadena de fecha está vacía para un testimonio.");
+                            }
+
+                            let ratingDisplay = '';
+                            const ratingValue = testimonioData["Calificación"];
+                            // Lógica de visualización de calificación (igual que antes)
+                            if (ratingValue && !isNaN(parseInt(ratingValue))) {
+                                const numStars = parseInt(ratingValue);
+                                for (let k = 0; k < numStars; k++) {
+                                    ratingDisplay += '★';
+                                }
+                            } else if (ratingValue) {
+                                ratingDisplay = ratingValue;
+                            }
+
+                            // Estructura HTML para una sola tarjeta de testimonio
+                            const testimonioHTML = `
+                                  <div class="bg-gray-100 rounded-lg p-6 shadow-md flex-1"> {/* Flex-1 para items dentro de la fila flex */}
+                                      <div class="flex justify-between items-center mb-2">
+                                          <p class="text-sm font-semibold text-[#627eff]">- ${testimonioData["Nombre Completo"]}</p>
+                                          ${ratingDisplay ? `<div class="text-yellow-500">${ratingDisplay}</div>` : ''}
+                                      </div>
+                                      <p class="text-gray-700 italic mb-2"><span class="math-inline">\{testimonioData\["Tu Testimonio"\]\}</p\>
+<p class\="text\-xs text\-gray\-500"\></span>{formattedDate}</p>
+                                  </div>
+                              `;
+                            rowContainer.innerHTML += testimonioHTML; // Añadir al contenedor de fila flex
+
+                        } else {
+                            // Añadir un div vacío para mantener el diseño flex si es necesario en la última fila
+                            rowContainer.innerHTML += '<div class="flex-1"></div>';
+                        }
+                    }
+                    testimoniosContainer_index.appendChild(rowContainer); // Añadir la fila al wrapper
+                }
+                // Eliminar la última fila si solo contiene divs vacíos
+                if (testimoniosContainer_index.lastChild && testimoniosContainer_index.lastChild.classList.contains('flex') && testimoniosContainer_index.lastChild.innerHTML.trim() === '<div class="flex-1"></div>'.repeat(testimonialsPerFlexRow).trim()) {
+                    testimoniosContainer_index.removeChild(testimoniosContainer_index.lastChild);
+                }
+
             }
 
+
+            // Ajustar la transformación del wrapper para la paginación del carrusel
+            // Esto se basa en la anchura del contenedor visible
+            const wrapperWidth = testimoniosContainer_index.clientWidth;
+            const offset = -currentIndex_index * wrapperWidth;
+            testimoniosContainer_index.style.transform = `translateX(${offset}px)`;
+
         }
 
-        function updateNavigationButtons() {
+        function updateNavigationButtons_index() {
             const prevButton = document.getElementById('prev-testimonial');
             const nextButton = document.getElementById('next-testimonial');
-            const totalPages = Math.ceil(allTestimonials.length / itemsPerPage);
+            // La lógica del número total de páginas debe basarse en itemsPerPage
+            const totalPages = Math.ceil(allTestimonials_index.length / itemsPerPage_index);
 
 
-            if (prevButton) prevButton.disabled = currentIndex === 0;
-            if (nextButton) nextButton.disabled = currentIndex >= totalPages - 1;
+            if (prevButton) prevButton.disabled = currentIndex_index === 0;
+            if (nextButton) nextButton.disabled = currentIndex_index >= totalPages - 1;
         }
 
-        function nextTestimonials() {
-            const totalPages = Math.ceil(allTestimonials.length / itemsPerPage);
-            currentIndex = Math.min(currentIndex + 1, totalPages - 1);
-            showTestimonials(currentIndex);
-            updateNavigationButtons();
-            resetAutoSlide();
+        function nextTestimonials_index() {
+            const totalPages = Math.ceil(allTestimonials_index.length / itemsPerPage_index);
+            currentIndex_index = Math.min(currentIndex_index + 1, totalPages - 1);
+            showTestimonials_index(currentIndex_index); // Volver a renderizar el contenido para la página actual
+            // No es necesario transformar manualmente aquí, showTestimonials_index lo maneja
+            updateNavigationButtons_index();
+            resetAutoSlide_index();
         }
 
-        function prevTestimonials() {
-            currentIndex = Math.max(currentIndex - 1, 0);
-            showTestimonials(currentIndex);
-            updateNavigationButtons();
-            resetAutoSlide();
+        function prevTestimonials_index() {
+            currentIndex_index = Math.max(currentIndex_index - 1, 0);
+            showTestimonials_index(currentIndex_index); // Volver a renderizar el contenido para la página actual
+            // No es necesario transformar manualmente aquí, showTestimonials_index lo maneja
+            updateNavigationButtons_index();
+            resetAutoSlide_index();
         }
 
-        let autoSlideInterval;
-        const autoSlideDelay = 5000; // 5 segundos
+        let autoSlideInterval_index;
+        const autoSlideDelay_index = 5000; // 5 segundos
 
-        function startAutoSlide() {
-            stopAutoSlide(); // Asegurarse de que no haya múltiples intervalos corriendo
-            autoSlideInterval = setInterval(() => {
-                const totalPages = Math.ceil(allTestimonials.length / itemsPerPage);
-                if (totalPages > 1) { // Solo avanzar si hay más de una página
-                   currentIndex = (currentIndex + 1) % totalPages; // Ciclar al siguiente índice
-                   showTestimonials(currentIndex);
-                   updateNavigationButtons();
+        function startAutoSlide_index() {
+            stopAutoSlide_index(); // Asegurarse de que no haya múltiples intervalos corriendo
+            autoSlideInterval_index = setInterval(() => {
+                const totalPages = Math.ceil(allTestimonials_index.length / itemsPerPage_index);
+                if (totalPages > 1) {
+                    currentIndex_index = (currentIndex_index + 1) % totalPages; // Ciclar al siguiente índice
+                    showTestimonials_index(currentIndex_index); // Volver a renderizar para la siguiente página
+                    updateNavigationButtons_index();
                 } else {
-                    stopAutoSlide(); // Detener auto-slide si solo hay una página
+                    stopAutoSlide_index(); // Detener auto-slide si solo hay una página
                 }
-            }, autoSlideDelay);
+            }, autoSlideDelay_index);
         }
 
 
-        function stopAutoSlide() {
-            clearInterval(autoSlideInterval);
+        function stopAutoSlide_index() {
+            clearInterval(autoSlideInterval_index);
         }
 
-        function resetAutoSlide() {
-            stopAutoSlide();
-            startAutoSlide();
+        function resetAutoSlide_index() {
+            stopAutoSlide_index();
+            startAutoSlide_index();
         }
 
-        document.addEventListener('DOMContentLoaded', function() {
-             // Recalcular itemsPerPage por si la ventana se redimensionó antes de DOMContentLoaded
-             updateItemsPerPage();
+        document.addEventListener('DOMContentLoaded', function () {
+            // Recalcular itemsPerPage al cargar el DOM
+            updateItemsPerPage_index();
 
 
-            fetch(googleSheetURL)
+            fetch(googleSheetURL_index)
                 .then(response => response.text())
                 .then(csvData => {
-                     // Intenta manejar comas dentro de comillas dobles y trimar encabezados/valores
-                    const rows = csvData.split('\n').map(row => row.trim());
+                    // Lógica mejorada de análisis de CSV para intentar manejar comas y espacios
+                    const rows = csvData.split('\n').map(row => row.trim()).filter(row => row.length > 0); // Filtrar filas vacías
                     if (rows.length <= 1) {
-                        const container = document.getElementById('carousel-wrapper');
-                        if (container) container.innerHTML = '<p>No hay testimonios disponibles.</p>';
-                        // Deshabilitar botones si no hay testimonios
-                         const prevButton = document.getElementById('prev-testimonial');
-                         const nextButton = document.getElementById('next-testimonial');
-                         if (prevButton) prevButton.disabled = true;
-                         if (nextButton) nextButton.disabled = true;
-                         stopAutoSlide(); // Detener auto-slide si no hay testimonios
+                        if (testimoniosContainer_index) testimoniosContainer_index.innerHTML = '<p>No hay testimonios disponibles.</p>';
+                        const prevButton = document.getElementById('prev-testimonial');
+                        const nextButton = document.getElementById('next-testimonial');
+                        if (prevButton) prevButton.disabled = true;
+                        if (nextButton) nextButton.disabled = true;
+                        stopAutoSlide_index();
                         return;
                     }
 
-                    // Mejorar la lectura de encabezados trimando los espacios
+                    // Leer encabezados y trimar espacios
                     const headers = rows[0].split(',').map(header => header.trim());
                     const nombreIndex = headers.indexOf('Nombre Completo');
                     const testimonioIndex = headers.indexOf('Tu Testimonio');
                     const calificacionIndex = headers.indexOf('Calificación');
                     const fechaIndex = headers.indexOf('Fecha');
-                    // Añadimos console.log para depurar los índices encontrados
-                    console.log("Encabezados detectados:", headers);
-                    console.log("Índice Nombre Completo:", nombreIndex);
-                    console.log("Índice Tu Testimonio:", testimonioIndex);
-                    console.log("Índice Calificación:", calificacionIndex);
-                    console.log("Índice Fecha:", fechaIndex);
+
+                    console.log("index.html - Encabezados detectados:", headers);
+                    console.log("index.html - Índice Nombre Completo:", nombreIndex);
+                    console.log("index.html - Índice Tu Testimonio:", testimonioIndex);
+                    console.log("index.html - Índice Calificación:", calificacionIndex);
+                    console.log("index.html - Índice Fecha:", fechaIndex);
 
 
                     if (nombreIndex === -1 || testimonioIndex === -1 || calificacionIndex === -1 || fechaIndex === -1) {
-                        console.error('Las columnas necesarias ("Nombre Completo", "Tu Testimonio", "Calificación", "Fecha") no se encontraron en el CSV o tienen nombres incorrectos/espacios adicionales.');
-                        const container = document.getElementById('carousel-wrapper');
-                        if (container) container.innerHTML = '<p class="text-red-500">Error al leer los testimonios (columnas no encontradas).</p>';
-                         // Deshabilitar botones si hay error de columnas
-                         const prevButton = document.getElementById('prev-testimonial');
-                         const nextButton = document.getElementById('next-testimonial');
-                         if (prevButton) prevButton.disabled = true;
-                         if (nextButton) nextButton.disabled = true;
-                         stopAutoSlide(); // Detener auto-slide en caso de error
+                        console.error('index.html - Las columnas necesarias ("Nombre Completo", "Tu Testimonio", "Calificación", "Fecha") no se encontraron en el CSV.');
+                        if (testimoniosContainer_index) testimoniosContainer_index.innerHTML = '<p class="text-red-500">Error al leer los testimonios (columnas no encontradas).</p>';
+                        const prevButton = document.getElementById('prev-testimonial');
+                        const nextButton = document.getElementById('next-testimonial');
+                        if (prevButton) prevButton.disabled = true;
+                        if (nextButton) nextButton.disabled = true;
+                        stopAutoSlide_index();
                         return;
                     }
 
                     const fetchedTestimonials = [];
                     for (let i = 1; i < rows.length; i++) {
-                         const row = rows[i];
-                         if (!row) continue; // Saltar filas vacías
+                        const row = rows[i];
+                        // Intentar parsear la fila CSV manualmente para manejar comas dentro de comillas dobles
+                        const values = [];
+                        let inQuotes = false;
+                        let currentValue = '';
+                        for (let j = 0; j < row.length; j++) {
+                            const char = row[j];
 
-                         // Intentar parsear la fila CSV manualmente para manejar comas dentro de comillas dobles
-                         const values = [];
-                         let inQuotes = false;
-                         let currentValue = '';
-                         for (let j = 0; j < row.length; j++) {
-                             const char = row[j];
-
-                             if (char === '"' && (j === 0 || row[j-1] === ',' || /\s/.test(row[j-1]))) {
-                                 inQuotes = true;
-                                 continue;
-                             }
-                              if (char === '"' && (j === row.length - 1 || row[j+1] === ',' || /\s/.test(row[j+1]))) {
-                                 inQuotes = false;
-                                 continue;
-                             }
-
-
-                             if (char === ',' && !inQuotes) {
-                                 values.push(currentValue.trim());
-                                 currentValue = '';
-                             } else {
-                                 currentValue += char;
-                             }
-                         }
-                         values.push(currentValue.trim()); // Añadir el último valor trimado
+                            if (char === '"' && (j === 0 || row[j - 1] === ',' || /\s/.test(row[j - 1]))) {
+                                inQuotes = true;
+                                continue;
+                            }
+                            if (char === '"' && (j === row.length - 1 || row[j + 1] === ',' || /\s/.test(row[j + 1]))) {
+                                inQuotes = false;
+                                continue;
+                            }
+                            if (char === ',' && !inQuotes) {
+                                values.push(currentValue.trim());
+                                currentValue = '';
+                            } else {
+                                currentValue += char;
+                            }
+                        }
+                        values.push(currentValue.trim());
 
 
-                         // Verificar si tenemos suficientes columnas antes de intentar acceder a ellas
-                         // y que los índices encontrados son válidos
-                         if (values.length > Math.max(nombreIndex, testimonioIndex, calificacionIndex, fechaIndex) &&
-                             nombreIndex !== -1 && testimonioIndex !== -1 && calificacionIndex !== -1 && fechaIndex !== -1) {
+                        if (values.length > Math.max(nombreIndex, testimonioIndex, calificacionIndex, fechaIndex) &&
+                            nombreIndex !== -1 && testimonioIndex !== -1 && calificacionIndex !== -1 && fechaIndex !== -1) {
 
                             const testimonioData = {};
-                            testimonioData["Nombre Completo"] = values[nombreIndex]; // Ya trimado
-                            testimonioData["Tu Testimonio"] = values[testimonioIndex]; // Ya trimado
-                            testimonioData["Calificación"] = values[calificacionIndex]; // Ya trimado
-                            testimonioData["Fecha"] = values[fechaIndex]; // Ya trimado
+                            testimonioData["Nombre Completo"] = values[nombreIndex];
+                            testimonioData["Tu Testimonio"] = values[testimonioIndex];
+                            testimonioData["Calificación"] = values[calificacionIndex];
+                            testimonioData["Fecha"] = values[fechaIndex];
 
                             fetchedTestimonials.push(testimonioData);
 
-                            // Añadimos console.log para depurar los datos de cada testimonio
-                            console.log("Datos del testimonio (fila", i, "):", testimonioData);
+                            console.log("index.html - Datos del testimonio (fila", i, "):", testimonioData);
 
-                         } else {
-                             console.warn("Saltando fila con datos incompletos, índices inválidos o error de parseo:", row);
-                         }
+                        } else {
+                            console.warn("index.html - Saltando fila con datos incompletos, índices inválidos o error de parseo:", row);
+                        }
                     }
 
-                    allTestimonials = fetchedTestimonials;
+                    allTestimonials_index = fetchedTestimonials;
 
-                    // Limitar a 12 testimonios para el carrusel si hay más
-                    if (allTestimonials.length > 12) {
-                         allTestimonials = allTestimonials.slice(0, 12);
+                    // Limitar a los primeros 12 testimonios para el carrusel
+                    if (allTestimonials_index.length > maxTestimonials_index) {
+                        allTestimonials_index = allTestimonials_index.slice(0, maxTestimonials_index);
                     }
 
-                     // Si después de limitar no hay testimonios, mostrar mensaje y deshabilitar botones
-                     if (allTestimonials.length === 0) {
-                         const container = document.getElementById('carousel-wrapper');
-                         if (container) container.innerHTML = '<p>No hay testimonios disponibles.</p>';
-                         const prevButton = document.getElementById('prev-testimonial');
-                         const nextButton = document.getElementById('next-testimonial');
-                         if (prevButton) prevButton.disabled = true;
-                         if (nextButton) nextButton.disabled = true;
-                         stopAutoSlide();
-                         return;
-                     }
+                    // Si después de limitar no hay testimonios, mostrar mensaje y deshabilitar botones
+                    if (allTestimonials_index.length === 0) {
+                        if (testimoniosContainer_index) testimoniosContainer_index.innerHTML = '<p>No hay testimonios disponibles.</p>';
+                        const prevButton = document.getElementById('prev-testimonial');
+                        const nextButton = document.getElementById('next-testimonial');
+                        if (prevButton) prevButton.disabled = true;
+                        if (nextButton) nextButton.disabled = true;
+                        stopAutoSlide_index();
+                        return;
+                    }
 
 
-                    showTestimonials(currentIndex);
-                    updateNavigationButtons();
-                    startAutoSlide(); // Iniciar el carrusel automático
+                    showTestimonials_index(currentIndex_index); // Renderizar la primera página de testimonios
+                    updateNavigationButtons_index();
+                    startAutoSlide_index(); // Iniciar el carrusel automático
 
 
-                     // Añadir listener para redimensionamiento para ajustar itemsPerPage y recargar la vista del carrusel
-                     window.addEventListener('resize', () => {
-                          const oldItemsPerPage = itemsPerPage;
-                          updateItemsPerPage(); // Recalcular itemsPerPage
-                          if (itemsPerPage !== oldItemsPerPage) {
-                              currentIndex = 0; // Reset al índice 0 al cambiar el número de items por página
-                              showTestimonials(currentIndex);
-                              updateNavigationButtons();
-                              resetAutoSlide(); // Reiniciar auto-slide con la nueva configuración
-                          }
-                     });
+                    // Añadir listener para redimensionamiento para ajustar itemsPerPage y recargar la vista del carrusel
+                    window.addEventListener('resize', () => {
+                        const oldItemsPerPage = itemsPerPage_index;
+                        updateItemsPerPage_index(); // Recalcular itemsPerPage
+                        // Solo volver a renderizar si itemsPerPage realmente cambió
+                        if (itemsPerPage_index !== oldItemsPerPage) {
+                            currentIndex_index = 0; // Resetear índice a 0 cuando cambia el diseño
+                            showTestimonials_index(currentIndex_index);
+                            updateNavigationButtons_index();
+                            resetAutoSlide_index(); // Reiniciar auto-slide
+                        }
+                    });
 
 
                 })
                 .catch(error => {
-                    console.error('Error al obtener los testimonios desde Google Sheets (CSV):', error);
-                    const container = document.getElementById('carousel-wrapper');
-                    if (container) container.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios (error de red o CSV).</p>';
-                     // Deshabilitar botones si hay error en la carga
-                     const prevButton = document.getElementById('prev-testimonial');
-                     const nextButton = document.getElementById('next-testimonial');
-                     if (prevButton) prevButton.disabled = true;
-                     if (nextButton) nextButton.disabled = true;
-                     stopAutoSlide(); // Detener auto-slide en caso de error
+                    console.error('index.html - Error al obtener los testimonios desde Google Sheets (CSV):', error);
+                    if (testimoniosContainer_index) testimoniosContainer_index.innerHTML = '<p class="text-red-500">No se pudieron cargar los testimonios (error de red o CSV).</p>';
+                    const prevButton = document.getElementById('prev-testimonial');
+                    const nextButton = document.getElementById('next-testimonial');
+                    if (prevButton) prevButton.disabled = true;
+                    if (nextButton) nextButton.disabled = true;
+                    stopAutoSlide_index();
                 });
 
             const prevButton = document.getElementById('prev-testimonial');
             const nextButton = document.getElementById('next-testimonial');
 
-            if (prevButton) prevButton.addEventListener('click', prevTestimonials);
-            if (nextButton) nextButton.addEventListener('click', nextTestimonials);
+            // Añadir event listeners solo si los botones existen
+            if (prevButton) prevButton.addEventListener('click', prevTestimonials_index); // Botón izquierdo -> Anterior
+            if (nextButton) nextButton.addEventListener('click', nextTestimonials_index); // Botón derecho -> Siguiente
+
 
             // Manejar eventos de hover en el contenedor del carrusel para pausar el auto-slide
-            const carouselContainerElement = document.getElementById('carousel-container'); // O el elemento que envuelve el carrusel visualmente
+            const carouselContainerElement = document.getElementById('carousel-container');
             if (carouselContainerElement) {
-                 carouselContainerElement.addEventListener('mouseenter', stopAutoSlide);
-                 carouselContainerElement.addEventListener('mouseleave', startAutoSlide);
+                carouselContainerElement.addEventListener('mouseenter', stopAutoSlide_index);
+                carouselContainerElement.addEventListener('mouseleave', startAutoSlide_index);
             } else {
-                 console.warn("Elemento #carousel-container no encontrado. El auto-slide no se pausará al pasar el ratón.");
+                console.warn("index.html - Elemento #carousel-container no encontrado. El auto-slide no se pausará al pasar el ratón.");
             }
 
 

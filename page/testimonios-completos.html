@@ -38,8 +38,10 @@
 
         /* --- Estilos de las tarjetas de testimonios (copiados de index) --- */
         .comentario-tarjeta {
-            background-color: #fff; /* Fondo blanco para las tarjetas */
-            color: #333; /* Color base oscuro para el texto general */
+            background-color: #fff;
+            /* Fondo blanco para las tarjetas */
+            color: #333;
+            /* Color base oscuro para el texto general */
             border-radius: 10px;
             padding: 20px;
             box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
@@ -53,21 +55,30 @@
             /* overflow-y: visible; */
             box-sizing: border-box;
             border: 1px solid #ddd;
-            height: 100%; /* Ayuda en el grid para que las tarjetas de la misma fila tengan la misma altura */
+            height: 100%;
+            /* Ayuda en el grid para que las tarjetas de la misma fila tengan la misma altura */
         }
 
         .comentario-tarjeta .testimonio {
             color: #333;
             font-style: italic;
             margin-bottom: 15px;
-            flex-grow: 1; /* Permite que el testimonio ocupe el espacio restante */
+            flex-grow: 1;
+            /* Permite que el testimonio ocupe el espacio restante */
             /* Quitar estilos de scroll si estaban */
             overflow-y: visible;
-             padding-right: 0;
+            padding-right: 0;
         }
-         /* Asegurarse de que no tengan scrollbars ocultas */
-         .comentario-tarjeta .testimonio::-webkit-scrollbar { display: auto; }
-         .comentario-tarjeta .testimonio { -ms-overflow-style: auto; scrollbar-width: auto; }
+
+        /* Asegurarse de que no tengan scrollbars ocultas */
+        .comentario-tarjeta .testimonio::-webkit-scrollbar {
+            display: auto;
+        }
+
+        .comentario-tarjeta .testimonio {
+            -ms-overflow-style: auto;
+            scrollbar-width: auto;
+        }
 
 
         .comentario-tarjeta .nombre {
@@ -87,36 +98,47 @@
         .comentario-tarjeta .calificacion-fecha span {
             margin-left: 15px;
         }
+
         /* --- Fin Estilos de las tarjetas de testimonios --- */
 
 
         /* --- Estilos para el Grid de Testimonios --- */
         #grid-testimonios {
             display: grid;
-            gap: 25px; /* Espacio entre las tarjetas en el grid */
-            padding: 0 20px; /* Padding lateral dentro del contenedor */
-            max-width: 1200px; /* Ancho máximo del grid (ajusta si es necesario) */
-            margin: 0 auto; /* Centra el grid */
+            gap: 25px;
+            /* Espacio entre las tarjetas en el grid */
+            padding: 0 20px;
+            /* Padding lateral dentro del contenedor */
+            max-width: 1200px;
+            /* Ancho máximo del grid (ajusta si es necesario) */
+            margin: 0 auto;
+            /* Centra el grid */
         }
 
         /* Grid responsive: 1 columna en móvil, 2 en tablet, 3 en desktop */
-        @media (min-width: 640px) { /* sm breakpoint en Tailwind */
+        @media (min-width: 640px) {
+
+            /* sm breakpoint en Tailwind */
             #grid-testimonios {
-                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr)); /* 2 columnas flexibles en pantallas pequeñas */
+                grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+                /* 2 columnas flexibles en pantallas pequeñas */
                 gap: 20px;
             }
         }
 
-        @media (min-width: 1024px) { /* lg breakpoint en Tailwind */
+        @media (min-width: 1024px) {
+
+            /* lg breakpoint en Tailwind */
             #grid-testimonios {
-                 grid-template-columns: repeat(auto-fill, minmax(350px, 1fr)); /* 3 columnas flexibles en desktop */
-                 gap: 25px;
+                grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+                /* 3 columnas flexibles en desktop */
+                gap: 25px;
             }
         }
-        /* --- Fin Estilos para el Grid de Testimonios --- */
 
+        /* --- Fin Estilos para el Grid de Testimonios --- */
     </style>
-     <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5397310873335886"
+    <script async src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-5397310873335886"
         crossorigin="anonymous"></script>
 </head>
 
@@ -129,34 +151,39 @@
                 <h1 class="text-xl font-bold font-sego lg:text-2xl">Psicología & Bienestar</h1>
             </div>
             <nav id="menu" class="hidden md:flex space-x-4 text-sm font-semibold">
-                <a href="/index.html#inicio" class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Inicio</a>
-                <a href="/index.html#nosotros" class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Sobre
+                <a href="/index.html#inicio"
+                    class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Inicio</a>
+                <a href="/index.html#nosotros"
+                    class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Sobre
                     Nosotros</a>
                 <a href="/index.html#servicios"
                     class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Servicios</a>
-                <a href="/index.html#equipo" class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Equipo</a>
+                <a href="/index.html#equipo"
+                    class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Equipo</a>
                 <a href="/index.html#contacto"
                     class="hover:bg-white/10 hover:rounded py-2 px-3 transition duration-300">Contacto</a>
             </nav>
-             <button id="menu-toggle" class="md:hidden focus:outline-none">
+            <button id="menu-toggle" class="md:hidden focus:outline-none">
                 <svg class="w-6 h-6 fill-current text-white" viewBox="0 0 24 24">
-                    <path fill-rule="evenodd" clip-rule="evenodd" d="M4 6H20V8H4V6ZM4 11H20V13H4V11ZM4 16H20V18H4V16Z" />
+                    <path fill-rule="evenodd" clip-rule="evenodd"
+                        d="M4 6H20V8H4V6ZM4 11H20V13H4V11ZM4 16H20V18H4V16Z" />
                 </svg>
-             </button>
+            </button>
         </div>
-         <div id="mobile-menu" class="md:hidden hidden bg-[#66a6da] px-4 pb-4">
-             <a href="/index.html#inicio" class="block py-2 hover:text-gray-200">Inicio</a>
-             <a href="/index.html#nosotros" class="block py-2 hover:text-gray-200">Sobre Nosotros</a>
-             <a href="/index.html#servicios" class="block py-2 hover:text-gray-200">Servicios</a>
-             <a href="/index.html#equipo" class="block py-2 hover:text-gray-200">Equipo</a>
-             <a href="/index.html#contacto" class="block py-2 hover:text-gray-200">Contacto</a>
-         </div>
+        <div id="mobile-menu" class="md:hidden hidden bg-[#66a6da] px-4 pb-4">
+            <a href="/index.html#inicio" class="block py-2 hover:text-gray-200">Inicio</a>
+            <a href="/index.html#nosotros" class="block py-2 hover:text-gray-200">Sobre Nosotros</a>
+            <a href="/index.html#servicios" class="block py-2 hover:text-gray-200">Servicios</a>
+            <a href="/index.html#equipo" class="block py-2 hover:text-gray-200">Equipo</a>
+            <a href="/index.html#contacto" class="block py-2 hover:text-gray-200">Contacto</a>
+        </div>
     </header>
-    <main class="pt-20 py-12"> <div class="container mx-auto px-4">
+    <main class="pt-20 py-12">
+        <div class="container mx-auto px-4">
             <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Todos los Testimonios</h2>
 
             <div id="grid-testimonios">
-                </div>
+            </div>
         </div>
     </main>
 
@@ -167,51 +194,51 @@
         </div>
     </footer>
     <div class="fixed top-1/3 left-0 z-40 flex flex-col space-y-3 px-2">
-         <a href="https://www.instagram.com/serviciospsicobienestar?utm_source=qr&igsh=NmtoOWFqMnZwMHY1" target="_blank"
-             class="group relative flex items-center">
-             <div class="bg-pink-500 hover:bg-pink-600 p-3 rounded-r-full shadow-lg transition duration-300">
-                 <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg" alt="Instagram"
-                     class="w-5 h-5" />
-             </div>
-             <span
-                 class="absolute left-12 bg-pink-500 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-left whitespace-nowrap">
-                 Visita nuestro Instagram
-             </span>
-         </a>
+        <a href="https://www.instagram.com/serviciospsicobienestar?utm_source=qr&igsh=NmtoOWFqMnZwMHY1" target="_blank"
+            class="group relative flex items-center">
+            <div class="bg-pink-500 hover:bg-pink-600 p-3 rounded-r-full shadow-lg transition duration-300">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg" alt="Instagram"
+                    class="w-5 h-5" />
+            </div>
+            <span
+                class="absolute left-12 bg-pink-500 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-left whitespace-nowrap">
+                Visita nuestro Instagram
+            </span>
+        </a>
 
-         <a href="https://www.facebook.com/share/1A9WZs7XCb/" target="_blank" class="group relative flex items-center">
-             <div class="bg-blue-600 hover:bg-blue-700 p-3 rounded-r-full shadow-lg transition duration-300">
-                 <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg" alt="Facebook"
-                     class="w-5 h-5" />
-             </div>
-             <span
-                 class="absolute left-12 bg-blue-600 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-left whitespace-nowrap">
-                 Visita nuestro Facebook
-             </span>
-         </a>
-     </div>
+        <a href="https://www.facebook.com/share/1A9WZs7XCb/" target="_blank" class="group relative flex items-center">
+            <div class="bg-blue-600 hover:bg-blue-700 p-3 rounded-r-full shadow-lg transition duration-300">
+                <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg" alt="Facebook"
+                    class="w-5 h-5" />
+            </div>
+            <span
+                class="absolute left-12 bg-blue-600 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-left whitespace-nowrap">
+                Visita nuestro Facebook
+            </span>
+        </a>
+    </div>
 
-     <a href="https://wa.me/573164603881" target="_blank" class="fixed bottom-6 right-6 z-50 group">
-         <div
-             class="relative flex items-center justify-center bg-[#25D366] hover:bg-green-600 w-14 h-14 rounded-full shadow-lg transition-colors duration-300">
-             <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp"
-                 class="w-7 h-7 text-white" />
-             <span
-                 class="absolute right-16 bg-[#25D366] text-white text-sm px-3 py-1 rounded-lg shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-right whitespace-nowrap">
-                 Escríbenos por WhatsApp
-             </span>
-         </a>
-     </div>
-     <script>
+    <a href="https://wa.me/573164603881" target="_blank" class="fixed bottom-6 right-6 z-50 group">
+        <div
+            class="relative flex items-center justify-center bg-[#25D366] hover:bg-green-600 w-14 h-14 rounded-full shadow-lg transition-colors duration-300">
+            <img src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg" alt="WhatsApp"
+                class="w-7 h-7 text-white" />
+            <span
+                class="absolute right-16 bg-[#25D366] text-white text-sm px-3 py-1 rounded-lg shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-right whitespace-nowrap">
+                Escríbenos por WhatsApp
+            </span>
+        </div>
+    </a>
+    <script>
         // === JavaScript para mobile menu toggle (Copiado de index.html) ===
         const menuToggle = document.getElementById("menu-toggle");
         const mobileMenu = document.getElementById("mobile-menu");
         const mobileMenuItems = document.querySelectorAll("#mobile-menu a");
 
         if (menuToggle) { // Check if menuToggle exists
-             menuToggle.addEventListener("click", () => {
-                 mobileMenu.classList.toggle("hidden");
-             });
+            menuToggle.addEventListener("click", () => {
+                mobileMenu.classList.toggle("hidden");
+            });
         }
 
 
@@ -252,12 +279,12 @@
                         char = currentRow[j];
 
                         if (char === '"') {
-                             if (inQuotes && j + 1 < currentRow.length && currentRow[j+1] === '"') {
-                                 field += '"';
-                                 j++;
-                             } else {
-                                 inQuotes = !inQuotes;
-                             }
+                            if (inQuotes && j + 1 < currentRow.length && currentRow[j + 1] === '"') {
+                                field += '"';
+                                j++;
+                            } else {
+                                inQuotes = !inQuotes;
+                            }
                         } else if (char === ',' && !inQuotes) {
                             if (headers[headerIndex]) {
                                 rowData[headers[headerIndex]] = field.trim();
@@ -269,7 +296,7 @@
                         }
                     }
                     if (headers[headerIndex]) {
-                       rowData[headers[headerIndex]] = field.trim();
+                        rowData[headers[headerIndex]] = field.trim();
                     }
                     data.push(rowData);
                 }
@@ -290,34 +317,34 @@
                     const comentarios = parsearCSV(csvText);
 
                     if (comentarios.length > 0) {
-                         // Iterar sobre *todos* los comentarios y crear sus tarjetas
-                         comentarios.forEach(comentario => {
-                             const nombre = comentario['Nombre Completo'] || 'Anónimo';
-                             const testimonioCompleto = comentario['Tu Testimonio'] || 'Sin testimonio';
-                             const calificacion = comentario['Calificación'] || 'N/A';
-                             const fecha = comentario['Fecha'] || '';
+                        // Iterar sobre *todos* los comentarios y crear sus tarjetas
+                        comentarios.forEach(comentario => {
+                            const nombre = comentario['Nombre Completo'] || 'Anónimo';
+                            const testimonioCompleto = comentario['Tu Testimonio'] || 'Sin testimonio';
+                            const calificacion = comentario['Calificación'] || 'N/A';
+                            const fecha = comentario['Fecha'] || '';
 
-                             let fechaFormateada = fecha;
-                             try {
-                                 const partesFecha = fecha.split('/');
-                                 if (partesFecha.length === 3) {
-                                     const año = partesFecha[2].length === 2 ? `20${partesFecha[2]}` : partesFecha[2];
-                                     const fechaObj = new Date(año, partesFecha[1] - 1, partesFecha[0]);
-                                     const dia = fechaObj.getDate().toString().padStart(2, '0');
-                                     const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
-                                     const añoCompleto = fechaObj.getFullYear();
-                                     fechaFormateada = `${dia}/${mes}/${añoCompleto}`;
-                                 } else {
-                                     fechaFormateada = fecha.split(' ')[0] || '';
-                                 }
-                             } catch (e) {
-                                  console.error("Error parseando fecha:", fecha, e);
-                                  fechaFormateada = fecha.split(' ')[0] || '';
-                             }
+                            let fechaFormateada = fecha;
+                            try {
+                                const partesFecha = fecha.split('/');
+                                if (partesFecha.length === 3) {
+                                    const año = partesFecha[2].length === 2 ? `20${partesFecha[2]}` : partesFecha[2];
+                                    const fechaObj = new Date(año, partesFecha[1] - 1, partesFecha[0]);
+                                    const dia = fechaObj.getDate().toString().padStart(2, '0');
+                                    const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
+                                    const añoCompleto = fechaObj.getFullYear();
+                                    fechaFormateada = `${dia}/${mes}/${añoCompleto}`;
+                                } else {
+                                    fechaFormateada = fecha.split(' ')[0] || '';
+                                }
+                            } catch (e) {
+                                console.error("Error parseando fecha:", fecha, e);
+                                fechaFormateada = fecha.split(' ')[0] || '';
+                            }
 
 
-                             // Construir la tarjeta HTML para cada testimonio (sin "Ver más/menos" aquí)
-                             const tarjetaHTML = `
+                            // Construir la tarjeta HTML para cada testimonio (sin "Ver más/menos" aquí)
+                            const tarjetaHTML = `
                                  <div class="comentario-tarjeta">
                                      <p class="testimonio">"${testimonioCompleto}"</p>
                                      <p class="nombre">${nombre}</p>
@@ -327,13 +354,13 @@
                                      </div>
                                  </div>
                              `;
-                             // Añadir la tarjeta al contenedor del grid
-                             gridTestimoniosContenedor.innerHTML += tarjetaHTML;
-                         });
+                            // Añadir la tarjeta al contenedor del grid
+                            gridTestimoniosContenedor.innerHTML += tarjetaHTML;
+                        });
 
                     } else {
-                         // Si no se cargaron comentarios
-                         gridTestimoniosContenedor.innerHTML = '<p class="text-center text-gray-600">No hay testimonios para mostrar en este momento.</p>';
+                        // Si no se cargaron comentarios
+                        gridTestimoniosContenedor.innerHTML = '<p class="text-center text-gray-600">No hay testimonios para mostrar en este momento.</p>';
                     }
 
                 })
@@ -346,18 +373,18 @@
 
         // === JavaScript para recargar links a index (Opcional, copiar si lo necesitas) ===
         const indexLinks = document.querySelectorAll('a[href^="/index.html#"]'); // Links a /index.html#...
-         indexLinks.forEach(link => {
-             link.addEventListener('click', (event) => {
-                  // Opcional: Evitar el comportamiento predeterminado y forzar recarga
-                  // event.preventDefault();
-                  // window.location.href = link.href; // Navega y luego recarga
-                  // window.location.reload(true); // Esto recargaría SIEMPRE, incluso si ya estás en index
-                  // Una mejor opción es solo navegar:
-             });
-         });
+        indexLinks.forEach(link => {
+            link.addEventListener('click', (event) => {
+                // Opcional: Evitar el comportamiento predeterminado y forzar recarga
+                // event.preventDefault();
+                // window.location.href = link.href; // Navega y luego recarga
+                // window.location.reload(true); // Esto recargaría SIEMPRE, incluso si ya estás en index
+                // Una mejor opción es solo navegar:
+            });
+        });
 
     </script>
 
-     </body>
+</body>
 
 </html>

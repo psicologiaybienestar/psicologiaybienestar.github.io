@@ -12,13 +12,18 @@
     <style>
         body {
             font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            background-image: url('assets/img_empresarial/background-empresarial.jpeg');
-            /* Usa la ruta de tu imagen */
+            background-image: url('ruta/a/tu/imagen-de-fondo.jpg');
             background-size: cover;
             background-repeat: no-repeat;
             background-attachment: fixed;
-            background-position: center top;
+            background-position: center center;
+            /* Cambiado a center center */
             color: #333;
+        }
+
+        .bg-white {
+            background-color: rgba(255, 255, 255, 0.8);
+            /* Blanco con 80% de opacidad */
         }
 
         .perspective {
@@ -124,7 +129,7 @@
         </div>
     </header>
 
-    <section class="py-20 px-6 md:px-20 bg-[#f4f9ff]" id="servicios">
+    <section class="py-20 px-6 md:px-20" id="servicios">
         <h2 class="text-3xl md:text-4xl font-bold text-center text-[#627eff] mb-6">
             Servicios Empresariales
         </h2>
@@ -208,7 +213,7 @@
     </section>
 
 
-    <div class="mt-20 max-w-2xl mx-auto bg-white shadow-lg rounded-xl p-6 scroll-mt-20" id="contacto">
+    <div class="mt-20 max-w-2xl mx-auto shadow-lg rounded-xl p-6 scroll-mt-20" id="contacto">
         <h2 class="text-2xl font-semibold text-[#627eff] mb-4 text-center">Contáctanos</h2>
 
         <div id="successMessage"

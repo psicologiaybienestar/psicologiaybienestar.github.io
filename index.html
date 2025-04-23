@@ -70,120 +70,142 @@
                 /* Un pulso más sutil */
             }
         }
-/* Estilos específicos para las tarjetas de testimonios */
-.comentario-tarjeta {
-    background-color: #fff; /* Fondo blanco para las tarjetas */
-    color: #333; /* Color base oscuro para el texto general si no se especifica */
-    border-radius: 10px;
-    padding: 20px;
-    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    height: 100%; /* Mantener para que Swiper las ajuste en altura dentro de la fila */
-    min-height: 280px; /* Altura mínima para uniformar el tamaño. Puedes ajustar este valor. */
-    box-sizing: border-box;
-    border: 1px solid #ddd; /* Añadir un borde ligero para que se destaquen sobre el fondo blanco */
-}
 
-.comentario-tarjeta .testimonio {
-    /* Color del testimonio: negro o gris oscuro (ya lo teníamos) */
-    color: #333;
-    font-style: italic;
-    margin-bottom: 15px;
-    flex-grow: 1;
-    overflow-y: auto; /* Permite scroll si el texto supera el min-height */
-    padding-right: 5px;
-}
+        /* Estilos específicos para las tarjetas de testimonios */
+        .comentario-tarjeta {
+            background-color: #fff;
+            /* Fondo blanco para las tarjetas */
+            color: #333;
+            /* Color base oscuro para el texto general si no se especifica */
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            justify-content: space-between;
+            height: 100%;
+            /* Mantener para que Swiper las ajuste en altura dentro de la fila */
+            min-height: 280px;
+            /* Altura mínima para uniformar el tamaño. Puedes ajustar este valor. */
+            box-sizing: border-box;
+            border: 1px solid #ddd;
+            /* Añadir un borde ligero para que se destaquen sobre el fondo blanco */
+        }
 
-/* Ocultar scrollbar para el testimonio (mantener) */
-.comentario-tarjeta .testimonio::-webkit-scrollbar { display: none; }
-.comentario-tarjeta .testimonio { -ms-overflow-style: none; scrollbar-width: none; }
+        .comentario-tarjeta .testimonio {
+            /* Color del testimonio: negro o gris oscuro (ya lo teníamos) */
+            color: #333;
+            font-style: italic;
+            margin-bottom: 15px;
+            flex-grow: 1;
+            overflow-y: auto;
+            /* Permite scroll si el texto supera el min-height */
+            padding-right: 5px;
+        }
+
+        /* Ocultar scrollbar para el testimonio (mantener) */
+        .comentario-tarjeta .testimonio::-webkit-scrollbar {
+            display: none;
+        }
+
+        .comentario-tarjeta .testimonio {
+            -ms-overflow-style: none;
+            scrollbar-width: none;
+        }
 
 
-.comentario-tarjeta .nombre {
-    /* Color del nombre: azul/morado (ya lo teníamos) */
-    color: #627eff;
-    font-weight: bold;
-    margin-top: 10px;
-    margin-bottom: 5px;
-    text-align: right;
-}
+        .comentario-tarjeta .nombre {
+            /* Color del nombre: azul/morado (ya lo teníamos) */
+            color: #627eff;
+            font-weight: bold;
+            margin-top: 10px;
+            margin-bottom: 5px;
+            text-align: right;
+        }
 
-.comentario-tarjeta .calificacion-fecha {
-    /* Color de calificación y fecha: azul/morado (ya lo teníamos) */
-    color: #627eff;
-    font-size: 0.9em;
-    text-align: right;
-}
+        .comentario-tarjeta .calificacion-fecha {
+            /* Color de calificación y fecha: azul/morado (ya lo teníamos) */
+            color: #627eff;
+            font-size: 0.9em;
+            text-align: right;
+        }
 
-.comentario-tarjeta .calificacion-fecha span {
-    margin-left: 15px;
-}
+        .comentario-tarjeta .calificacion-fecha span {
+            margin-left: 15px;
+        }
 
-/* Mantener o ajustar estilos de Swiper */
-.testimonios-swiper {
-    width: 100%;
-    height: auto;
-    padding-bottom: 60px; /* Aumenta el padding inferior para dar más espacio a los puntos */
-    /* Si las flechas se sienten apretadas en los lados en desktop,
+        /* Mantener o ajustar estilos de Swiper */
+        .testimonios-swiper {
+            width: 100%;
+            height: auto;
+            padding-bottom: 60px;
+            /* Aumenta el padding inferior para dar más espacio a los puntos */
+            /* Si las flechas se sienten apretadas en los lados en desktop,
        asegúrate de que el padding lateral en el media query esté aplicado
        o añádelo aquí directamente si no usas el media query específico para flechas */
-}
+        }
 
-.testimonios-swiper .swiper-slide {
-    display: flex;
-    justify-content: center;
-    align-items: stretch; /* Muy importante para que min-height funcione bien */
-    height: auto;
-}
+        .testimonios-swiper .swiper-slide {
+            display: flex;
+            justify-content: center;
+            align-items: stretch;
+            /* Muy importante para que min-height funcione bien */
+            height: auto;
+        }
 
-/* Estilos para los botones de navegación de Swiper (mantener) */
-.testimonios-swiper .swiper-button-next,
-.testimonios-swiper .swiper-button-prev {
-    color: #627eff;
-    --swiper-navigation-size: 20px;
-}
+        /* Estilos para los botones de navegación de Swiper (mantener) */
+        .testimonios-swiper .swiper-button-next,
+        .testimonios-swiper .swiper-button-prev {
+            color: #627eff;
+            --swiper-navigation-size: 20px;
+        }
 
-/* Estilos para la paginación de Swiper (mantener) */
-.testimonios-swiper .swiper-pagination-bullet {
-    background-color: #627eff;
-    opacity: 0.5;
-}
+        /* Estilos para la paginación de Swiper (mantener) */
+        .testimonios-swiper .swiper-pagination-bullet {
+            background-color: #627eff;
+            opacity: 0.5;
+        }
 
-.testimonios-swiper .swiper-pagination-bullet-active {
-    background-color: #627eff;
-    opacity: 1;
-}
+        .testimonios-swiper .swiper-pagination-bullet-active {
+            background-color: #627eff;
+            opacity: 1;
+        }
 
-/* Ajuste para que los botones de navegación estén fuera en pantallas grandes (mantener o ajustar si es necesario) */
-@media (min-width: 1024px) {
-    .testimonios-swiper {
-         padding: 0 50px 60px 50px; /* Añade padding lateral y mantiene el inferior */
-    }
-    .testimonios-swiper .swiper-button-next,
-    .testimonios-swiper .swiper-button-prev {
-        top: 50%;
-        transform: translateY(-50%);
-    }
-    .testimonios-swiper .swiper-button-prev {
-        left: 10px;
-    }
-    .testimonios-swiper .swiper-button-next {
-        right: 10px;
-    }
-}
+        /* Ajuste para que los botones de navegación estén fuera en pantallas grandes (mantener o ajustar si es necesario) */
+        @media (min-width: 1024px) {
+            .testimonios-swiper {
+                padding: 0 50px 60px 50px;
+                /* Añade padding lateral y mantiene el inferior */
+            }
 
-/* Ajuste para ocultar flechas en móviles si prefieres solo deslizar (mantener) */
-@media (max-width: 767px) {
-     .testimonios-swiper .swiper-button-next,
-     .testimonios-swiper .swiper-button-prev {
-         display: none;
-     }
-     .testimonios-swiper {
-        padding-bottom: 30px; /* Menos padding inferior en móvil si no hay flechas */
-     }
-}  
+            .testimonios-swiper .swiper-button-next,
+            .testimonios-swiper .swiper-button-prev {
+                top: 50%;
+                transform: translateY(-50%);
+            }
+
+            .testimonios-swiper .swiper-button-prev {
+                left: 10px;
+            }
+
+            .testimonios-swiper .swiper-button-next {
+                right: 10px;
+            }
+        }
+
+        /* Ajuste para ocultar flechas en móviles si prefieres solo deslizar (mantener) */
+        @media (max-width: 767px) {
+
+            .testimonios-swiper .swiper-button-next,
+            .testimonios-swiper .swiper-button-prev {
+                display: none;
+            }
+
+            .testimonios-swiper {
+                padding-bottom: 30px;
+                /* Menos padding inferior en móvil si no hay flechas */
+            }
+        }
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>
@@ -425,16 +447,16 @@
     <section id="testimonios" class="py-20 bg-[#f0f8ff] scroll-mt-20">
         <div class="max-w-6xl mx-auto px-4">
             <h2 class="text-3xl font-bold text-[#627eff] text-center mb-10">Lo que dicen nuestros clientes</h2>
-    
+
             <div class="swiper testimonios-swiper">
                 <div class="swiper-wrapper">
-                    </div>
+                </div>
                 <div class="swiper-pagination"></div>
-    
+
                 <div class="swiper-button-prev"></div>
                 <div class="swiper-button-next"></div>
             </div>
-    
+
             <div class="mt-10 text-center">
                 <a href="testimonios-completos.html" id="ver-todos-testimonios-btn"
                     class="inline-block bg-[#627eff] hover:bg-[#53c6e4] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 ease-in-out">
@@ -447,58 +469,58 @@
     <!-- Script TESTIMONIOS -->
     <script>
         document.addEventListener('DOMContentLoaded', () => {
-        
+
             const testimoniosContenedor = document.querySelector('.testimonios-swiper .swiper-wrapper');
             const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
-        
+
             // --- FUNCIÓN PARA PARSEAR CSV (mantener la que ya tienes o una más robusta) ---
             function parsearCSV(csvText) {
                 // ... (Tu implementación de parsearCSV aquí) ...
-                 const rows = csvText.split('\n').filter(row => row.trim() !== '');
-                 if (rows.length === 0) return [];
-        
-                 const headers = rows[0].split(',').map(header => header.trim().replace(/[\ufeff\r]/g, ''));
-                 const data = [];
-        
-                 for (let i = 1; i < rows.length; i++) {
-                     let currentRow = rows[i];
-                     let rowData = {};
-                     let inQuotes = false;
-                     let field = '';
-                     let headerIndex = 0;
-                     let char;
-        
-                     for (let j = 0; j < currentRow.length; j++) {
-                         char = currentRow[j];
-        
-                         if (char === '"') {
-                              if (inQuotes && j + 1 < currentRow.length && currentRow[j+1] === '"') {
-                                  field += '"';
-                                  j++;
-                              } else {
-                                  inQuotes = !inQuotes;
-                              }
-                         } else if (char === ',' && !inQuotes) {
-                             if (headers[headerIndex]) {
-                                 rowData[headers[headerIndex]] = field.trim();
-                             }
-                             field = '';
-                             headerIndex++;
-                         } else {
-                             field += char;
-                         }
-                     }
-                     if (headers[headerIndex]) {
+                const rows = csvText.split('\n').filter(row => row.trim() !== '');
+                if (rows.length === 0) return [];
+
+                const headers = rows[0].split(',').map(header => header.trim().replace(/[\ufeff\r]/g, ''));
+                const data = [];
+
+                for (let i = 1; i < rows.length; i++) {
+                    let currentRow = rows[i];
+                    let rowData = {};
+                    let inQuotes = false;
+                    let field = '';
+                    let headerIndex = 0;
+                    let char;
+
+                    for (let j = 0; j < currentRow.length; j++) {
+                        char = currentRow[j];
+
+                        if (char === '"') {
+                            if (inQuotes && j + 1 < currentRow.length && currentRow[j + 1] === '"') {
+                                field += '"';
+                                j++;
+                            } else {
+                                inQuotes = !inQuotes;
+                            }
+                        } else if (char === ',' && !inQuotes) {
+                            if (headers[headerIndex]) {
+                                rowData[headers[headerIndex]] = field.trim();
+                            }
+                            field = '';
+                            headerIndex++;
+                        } else {
+                            field += char;
+                        }
+                    }
+                    if (headers[headerIndex]) {
                         rowData[headers[headerIndex]] = field.trim();
-                     }
-                     data.push(rowData);
-                 }
-        
-                 return data.filter(item => item['Nombre Completo'] && item['Tu Testimonio'] && item['Calificación'] && item['Fecha']);
+                    }
+                    data.push(rowData);
+                }
+
+                return data.filter(item => item['Nombre Completo'] && item['Tu Testimonio'] && item['Calificación'] && item['Fecha']);
             }
             // --- FIN FUNCIÓN PARA PARSEAR CSV ---
-        
-        
+
+
             fetch(csvUrl)
                 .then(response => {
                     if (!response.ok) {
@@ -508,55 +530,55 @@
                 })
                 .then(csvText => {
                     const comentarios = parsearCSV(csvText);
-        
+
                     const comentariosAMostrar = comentarios.filter(c => c['Nombre Completo'] && c['Tu Testimonio']).slice(0, 12);
-        
+
                     // --- Límite de caracteres para "Ver más" ---
                     const limiteCaracteres = 350; // Define cuántos caracteres mostrar antes de "Ver más"
                     // ------------------------------------------
-        
+
                     if (comentariosAMostrar.length > 0) {
-                         comentariosAMostrar.forEach(comentario => {
-                             const nombre = comentario['Nombre Completo'] || 'Anónimo';
-                             const testimonioCompleto = comentario['Tu Testimonio'] || 'Sin testimonio';
-                             const calificacion = comentario['Calificación'] || 'N/A';
-                             const fecha = comentario['Fecha'] || '';
-        
-                             let fechaFormateada = fecha;
-                             try {
-                                 const partesFecha = fecha.split('/');
-                                 if (partesFecha.length === 3) {
-                                     const año = partesFecha[2].length === 2 ? `20${partesFecha[2]}` : partesFecha[2];
-                                     const fechaObj = new Date(año, partesFecha[1] - 1, partesFecha[0]);
-                                     const dia = fechaObj.getDate().toString().padStart(2, '0');
-                                     const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
-                                     const añoCompleto = fechaObj.getFullYear();
-                                     fechaFormateada = `${dia}/${mes}/${añoCompleto}`;
-                                 } else {
-                                     fechaFormateada = fecha.split(' ')[0] || '';
-                                 }
-                             } catch (e) {
-                                  console.error("Error parseando fecha:", fecha, e);
-                                  fechaFormateada = fecha.split(' ')[0] || '';
-                             }
-        
-        
-                             let testimonioContentHTML = '';
-                             if (testimonioCompleto.length > limiteCaracteres) {
-                                 const textoTruncado = testimonioCompleto.substring(0, limiteCaracteres) + '...';
-                                 // Creamos dos spans: uno con el texto truncado y otro con el completo (oculto inicialmente)
-                                 // Y un span para el enlace "Ver más"
-                                 testimonioContentHTML = `
-                                     <span class="texto-truncado">${textoTruncado}</span>
-                                     <span class="texto-completo hidden">${testimonioCompleto}</span>
-                                     <span class="ver-mas" style="cursor:pointer; color: #627eff; font-style: normal; font-weight: bold;"> Ver más</span>
-                                 `;
-                             } else {
-                                 // Si el testimonio es corto, mostramos el texto completo directamente
-                                 testimonioContentHTML = testimonioCompleto;
-                             }
-        
-                             const tarjetaHTML = `
+                        comentariosAMostrar.forEach(comentario => {
+                            const nombre = comentario['Nombre Completo'] || 'Anónimo';
+                            const testimonioCompleto = comentario['Tu Testimonio'] || 'Sin testimonio';
+                            const calificacion = comentario['Calificación'] || 'N/A';
+                            const fecha = comentario['Fecha'] || '';
+
+                            let fechaFormateada = fecha;
+                            try {
+                                const partesFecha = fecha.split('/');
+                                if (partesFecha.length === 3) {
+                                    const año = partesFecha[2].length === 2 ? `20${partesFecha[2]}` : partesFecha[2];
+                                    const fechaObj = new Date(año, partesFecha[1] - 1, partesFecha[0]);
+                                    const dia = fechaObj.getDate().toString().padStart(2, '0');
+                                    const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
+                                    const añoCompleto = fechaObj.getFullYear();
+                                    fechaFormateada = `${dia}/${mes}/${añoCompleto}`;
+                                } else {
+                                    fechaFormateada = fecha.split(' ')[0] || '';
+                                }
+                            } catch (e) {
+                                console.error("Error parseando fecha:", fecha, e);
+                                fechaFormateada = fecha.split(' ')[0] || '';
+                            }
+
+
+                            let testimonioContentHTML = '';
+                            if (testimonioCompleto.length > limiteCaracteres) {
+                                const textoTruncado = testimonioCompleto.substring(0, limiteCaracteres) + '...';
+                                // Incluimos 4 spans: truncado, completo (oculto), ver-mas, y ver-menos (oculto)
+                                testimonioContentHTML = `
+                             <span class="texto-truncado">${textoTruncado}</span>
+                             <span class="texto-completo hidden">${testimonioCompleto}</span>
+                             <span class="ver-mas" style="cursor:pointer; color: #627eff; font-style: normal; font-weight: bold;"> Ver más</span>
+                             <span class="ver-menos hidden" style="cursor:pointer; color: #627eff; font-style: normal; font-weight: bold;"> Ver menos</span>
+                         `;
+                            } else {
+                                // Si el testimonio es corto, mostramos el texto completo
+                                testimonioContentHTML = testimonioCompleto;
+                            }
+
+                            const tarjetaHTML = `
                                  <div class="swiper-slide">
                                      <div class="comentario-tarjeta">
                                          <p class="testimonio">"${testimonioContentHTML}"</p>
@@ -568,25 +590,25 @@
                                      </div>
                                  </div>
                              `;
-                             testimoniosContenedor.innerHTML += tarjetaHTML;
-                         });
-        
+                            testimoniosContenedor.innerHTML += tarjetaHTML;
+                        });
+
                         // Inicializar Swiper DESPUÉS de que los slides han sido añadidos
                         const swiper = new Swiper('.testimonios-swiper', {
                             loop: true,
                             spaceBetween: 30,
                             slidesPerView: 1,
-        
+
                             pagination: {
                                 el: '.swiper-pagination',
                                 clickable: true,
                             },
-        
+
                             navigation: {
                                 nextEl: '.swiper-button-next',
                                 prevEl: '.swiper-button-prev',
                             },
-        
+
                             breakpoints: {
                                 768: {
                                     slidesPerView: 2,
@@ -598,66 +620,78 @@
                                 }
                             },
                         });
-        
-                        // --- Event Listener para "Ver más" ---
-                        // Usamos event delegation porque los spans 'ver-mas' se crean dinámicamente
+
+                        // --- Event Listener para "Ver más" y "Ver menos" ---
+                        // Usamos event delegation en el contenedor del carrusel
                         testimoniosContenedor.addEventListener('click', (event) => {
                             const target = event.target;
-        
-                            // Verificamos si el elemento clickeado tiene la clase 'ver-mas'
-                            if (target.classList.contains('ver-mas')) {
+
+                            // Verificamos si el elemento clickeado tiene la clase 'ver-mas' o 'ver-menos'
+                            if (target.classList.contains('ver-mas') || target.classList.contains('ver-menos')) {
                                 // Encontramos el párrafo del testimonio padre
                                 const testimonioPara = target.closest('.testimonio');
+
                                 if (testimonioPara) {
+                                    // Buscamos los spans relevantes dentro de *este* párrafo de testimonio
                                     const textoTruncadoSpan = testimonioPara.querySelector('.texto-truncado');
                                     const textoCompletoSpan = testimonioPara.querySelector('.texto-completo');
-                                    const verMasSpan = target;
-        
-                                    if (textoTruncadoSpan && textoCompletoSpan && verMasSpan) {
-                                        // Ocultamos el texto truncado y mostramos el texto completo
-                                        textoTruncadoSpan.classList.add('hidden');
-                                        textoCompletoSpan.classList.remove('hidden');
-                                        // Ocultamos el propio span "Ver más"
-                                        verMasSpan.classList.add('hidden');
-        
-                                        // Opcional: Si quisieras un botón de "Ver menos",
-                                        // tendrías que crear otro span y añadirlo aquí,
-                                        // y añadir lógica similar en el event listener para 'ver-menos'.
-                                        // Por ahora, solo lo expandimos.
+                                    const verMasSpan = testimonioPara.querySelector('.ver-mas');
+                                    const verMenosSpan = testimonioPara.querySelector('.ver-menos');
+
+                                    // Nos aseguramos de que todos los spans existan (solo estarán si el texto original era largo)
+                                    if (textoTruncadoSpan && textoCompletoSpan && verMasSpan && verMenosSpan) {
+
+                                        if (target.classList.contains('ver-mas')) {
+                                            // Click en "Ver más"
+                                            textoTruncadoSpan.classList.add('hidden'); // Oculta texto truncado
+                                            textoCompletoSpan.classList.remove('hidden'); // Muestra texto completo
+                                            verMasSpan.classList.add('hidden'); // Oculta "Ver más"
+                                            verMenosSpan.classList.remove('hidden'); // Muestra "Ver menos"
+
+                                        } else if (target.classList.contains('ver-menos')) {
+                                            // Click en "Ver menos"
+                                            textoCompletoSpan.classList.add('hidden'); // Oculta texto completo
+                                            textoTruncadoSpan.classList.remove('hidden'); // Muestra texto truncado
+                                            verMenosSpan.classList.add('hidden'); // Oculta "Ver menos"
+                                            verMasSpan.classList.remove('hidden'); // Muestra "Ver más"
+                                        }
+                                        // Opcional: Si la tarjeta cambia de altura al expandir/contraer y Swiper necesita actualizarse:
+                                        // swiper.updateAutoHeight(); // Descomenta si usas autoHeight en Swiper
+                                        // swiper.update(); // Una actualización general
                                     }
                                 }
                             }
                         });
-                        // --- Fin Event Listener "Ver más" ---
-        
-        
+                        // --- Fin Event Listener "Ver más" y "Ver menos" ---
+
+
                     } else {
-                         testimoniosContenedor.innerHTML = '<div class="swiper-slide"><p class="text-center text-gray-600">No hay comentarios para mostrar en este momento.</p></div>';
-                         document.querySelector('.testimonios-swiper .swiper-button-next').style.display = 'none';
-                         document.querySelector('.testimonios-swiper .swiper-button-prev').style.display = 'none';
-                         document.querySelector('.swiper-pagination').style.display = 'none'; // Usar la clase general de Swiper para la paginación
+                        testimoniosContenedor.innerHTML = '<div class="swiper-slide"><p class="text-center text-gray-600">No hay comentarios para mostrar en este momento.</p></div>';
+                        document.querySelector('.testimonios-swiper .swiper-button-next').style.display = 'none';
+                        document.querySelector('.testimonios-swiper .swiper-button-prev').style.display = 'none';
+                        document.querySelector('.swiper-pagination').style.display = 'none'; // Usar la clase general de Swiper para la paginación
                     }
-        
+
                 })
                 .catch(error => {
                     console.error('Error al cargar los comentarios:', error);
                     testimoniosContenedor.innerHTML = '<div class="swiper-slide"><p class="text-center text-red-500">Error al cargar los comentarios.</p></div>';
-                     document.querySelector('.testimonios-swiper .swiper-button-next').style.display = 'none';
-                     document.querySelector('.testimonios-swiper .swiper-button-prev').style.display = 'none';
-                     document.querySelector('.swiper-pagination').style.display = 'none'; // Usar la clase general de Swiper para la paginación
+                    document.querySelector('.testimonios-swiper .swiper-button-next').style.display = 'none';
+                    document.querySelector('.testimonios-swiper .swiper-button-prev').style.display = 'none';
+                    document.querySelector('.swiper-pagination').style.display = 'none'; // Usar la clase general de Swiper para la paginación
                 });
-        
+
             // Lógica para el botón "Ver todos los testimonios" (mantener)
             const verTodosBtn = document.getElementById('ver-todos-testimonios-btn');
-            if(verTodosBtn){
+            if (verTodosBtn) {
                 verTodosBtn.addEventListener('click', (event) => {
                     // window.location.href = 'testimonios-completos.html';
                     // window.open('testimonios-completos.html', '_blank');
                 });
             }
         });
-    
-        </script>
+
+    </script>
     <!-- Fin -->
 
     <div class="mt-20 max-w-2xl mx-auto bg-[#53c6e4]/5 shadow-lg rounded-xl p-6 scroll-mt-20" id="contacto">

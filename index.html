@@ -73,54 +73,52 @@
 /* Estilos específicos para las tarjetas de testimonios */
 .comentario-tarjeta {
     background-color: #53c6e4; /* Tono cian/turquesa para el fondo de las tarjetas */
-    color: #fff; /* Texto blanco para contraste */
+    color: #fff; /* Color base del texto de la tarjeta (puede ser blanco o un gris claro si quieres) */
     border-radius: 10px;
     padding: 20px;
     text-align: left;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
-    justify-content: space-between; /* Distribuye el espacio entre los elementos */
-    height: 100%; /* Asegura que todas las tarjetas en una fila tengan la misma altura */
-    box-sizing: border-box; /* Incluye padding en el tamaño total */
+    justify-content: space-between;
+    height: 100%;
+    box-sizing: border-box;
 }
 
 .comentario-tarjeta .testimonio {
+    /* Color del testimonio: negro o gris oscuro */
+    color: #333; /* O #555 para un gris un poco más claro */
     font-style: italic;
     margin-bottom: 15px;
-    flex-grow: 1; /* Permite que el testimonio ocupe el espacio disponible */
-    overflow-y: auto; /* Añade scroll si el testimonio es muy largo */
-    padding-right: 5px; /* Espacio para el scrollbar */
+    flex-grow: 1;
+    overflow-y: auto;
+    padding-right: 5px;
 }
 
-/* Ocultar scrollbar para el testimonio */
-.comentario-tarjeta .testimonio::-webkit-scrollbar {
-    display: none;
-}
-
-.comentario-tarjeta .testimonio {
-    -ms-overflow-style: none; /* IE and Edge */
-    scrollbar-width: none; /* Firefox */
-}
+/* Ocultar scrollbar para el testimonio (mantener) */
+.comentario-tarjeta .testimonio::-webkit-scrollbar { display: none; }
+.comentario-tarjeta .testimonio { -ms-overflow-style: none; scrollbar-width: none; }
 
 
 .comentario-tarjeta .nombre {
+    /* Color del nombre: azul/morado */
+    color: #627eff;
     font-weight: bold;
     margin-top: 10px;
     margin-bottom: 5px;
-    text-align: right; /* Alinea el nombre a la derecha */
+    text-align: right;
 }
 
 .comentario-tarjeta .calificacion-fecha {
+    /* Color de calificación y fecha: azul/morado */
+    color: #627eff; /* Usamos el mismo color azul/morado */
     font-size: 0.9em;
-    color: rgba(255, 255, 255, 0.8); /* Color más suave para detalles */
-    text-align: right; /* Alinea calificación y fecha a la derecha */
+    text-align: right;
 }
 
 .comentario-tarjeta .calificacion-fecha span {
-    margin-left: 15px; /* Espacio entre calificación y fecha */
+    margin-left: 15px;
 }
-
 
 /* Estilos para Swiper */
 .testimonios-swiper {
@@ -599,12 +597,12 @@
                                 // cuando el ancho de la ventana sea >= 768px (md en Tailwind)
                                 768: {
                                     slidesPerView: 2,
-                                    spaceBetween: 20, // Puedes ajustar este espacio si quieres
+                                    spaceBetween: 15, // Puedes ajustar este espacio si quieres
                                 },
                                  // cuando el ancho de la ventana sea >= 1024px (lg en Tailwind)
                                 1024: {
                                     slidesPerView: 2, // Mantener 2 en pantallas lg+
-                                     spaceBetween: 30,
+                                     spaceBetween: 15,
                                 }
                             },
                             // Deshabilitar el drag en desktop si solo quieres navegar con flechas,

@@ -443,12 +443,19 @@
         let currentIndex = 0;
         let itemsPerPage = 4; // Por defecto, 4 items por página (2 filas de 2)
 
-        // Determinar itemsPerPage basado en el tamaño de la pantalla al cargar
-        if (window.innerWidth <= 480) {
-            itemsPerPage = 1; // En móviles, mostrar 1 item por página
-        } else if (window.innerWidth <= 768) {
-             itemsPerPage = 2; // En tablets, mostrar 2 items por página (si prefieres)
+        // Función para determinar itemsPerPage basado en el tamaño de la pantalla
+        function updateItemsPerPage() {
+             if (window.innerWidth <= 480) {
+                 itemsPerPage = 1; // En móviles, mostrar 1 item por página
+             } else if (window.innerWidth <= 768) {
+                  itemsPerPage = 2; // En tablets, mostrar 2 items por página (si prefieres)
+             } else {
+                 itemsPerPage = 4; // En pantallas grandes, mostrar 4 items por página
+             }
         }
+
+        // Llamar al inicio para establecer itemsPerPage inicial
+        updateItemsPerPage();
 
 
         function showTestimonials(index) {
@@ -518,9 +525,9 @@
                      rowContainer.classList.add('flex', 'gap-6', 'mb-4'); // Clases para la fila flex
 
                      for (let col = 0; col < testimonialsPerFlexRow; col++) {
-                          const currentTestimonialIndex = startIndex + row * testimonialsPerFlexRow + col;
-                          if (currentTestimonialIndex < endIndex) {
-                               const testimonioData = allTestimonials[currentTestimonialIndex];
+                          const currentTestimonioIndex = startIndex + row * testimonialsPerFlexRow + col;
+                          if (currentTestimonioIndex < endIndex) {
+                               const testimonioData = allTestimonials[currentTestimonioIndex];
 
                                const fechaStr = testimonioData["Fecha"];
                                let formattedDate = 'Fecha Inválida';
@@ -573,9 +580,6 @@
                      testimoniosContainer.appendChild(rowContainer);
                  }
                  // La lógica para eliminar la última fila vacía podría necesitar ajuste.
-                 // Si itemsPerPage > 1 y el número total de testimonios es múltiplo de itemsPerPage
-                 // pero no es un múltiplo de testimonialsPerFlexRow * 2, podría quedar una fila incompleta.
-                 // Esta parte la dejaré por ahora, pero podría ser fuente de problemas si el número de testimonios es irregular.
                 if (testimoniosContainer.lastChild && testimoniosContainer.lastChild.classList.contains('flex') && testimoniosContainer.lastChild.innerHTML.trim() === '<div class="flex-1"></div>'.repeat(testimonialsPerFlexRow).trim()) {
                     testimoniosContainer.removeChild(testimoniosContainer.lastChild);
                 }
@@ -636,18 +640,14 @@
         }
 
         document.addEventListener('DOMContentLoaded', function() {
-             // Volver a calcular itemsPerPage por si la ventana se redimensionó antes de DOMContentLoaded
-             itemsPerPage = 4; // Default for larger screens
-             if (window.innerWidth <= 480) {
-                 itemsPerPage = 1; // Show one item at a time on mobile
-             } else if (window.innerWidth <= 768) {
-                 itemsPerPage = 2; // En tablets, mostrar 2 items (si prefieres)
-             }
+             // Recalcular itemsPerPage por si la ventana se redimensionó antes de DOMContentLoaded
+             updateItemsPerPage();
 
 
             fetch(googleSheetURL)
                 .then(response => response.text())
                 .then(csvData => {
+                     // Intenta manejar comas dentro de comillas dobles y trimar encabezados/valores
                     const rows = csvData.split('\n').map(row => row.trim());
                     if (rows.length <= 1) {
                         const container = document.getElementById('carousel-wrapper');
@@ -667,6 +667,13 @@
                     const testimonioIndex = headers.indexOf('Tu Testimonio');
                     const calificacionIndex = headers.indexOf('Calificación');
                     const fechaIndex = headers.indexOf('Fecha');
+                    // Añadimos console.log para depurar los índices encontrados
+                    console.log("Encabezados detectados:", headers);
+                    console.log("Índice Nombre Completo:", nombreIndex);
+                    console.log("Índice Tu Testimonio:", testimonioIndex);
+                    console.log("Índice Calificación:", calificacionIndex);
+                    console.log("Índice Fecha:", fechaIndex);
+
 
                     if (nombreIndex === -1 || testimonioIndex === -1 || calificacionIndex === -1 || fechaIndex === -1) {
                         console.error('Las columnas necesarias ("Nombre Completo", "Tu Testimonio", "Calificación", "Fecha") no se encontraron en el CSV o tienen nombres incorrectos/espacios adicionales.');
@@ -683,26 +690,28 @@
 
                     const fetchedTestimonials = [];
                     for (let i = 1; i < rows.length; i++) {
-                         // Una forma más robusta de dividir (aunque no es un parser CSV completo)
-                         // Intenta manejar comas dentro de campos citados
+                         const row = rows[i];
+                         if (!row) continue; // Saltar filas vacías
+
+                         // Intentar parsear la fila CSV manualmente para manejar comas dentro de comillas dobles
                          const values = [];
                          let inQuotes = false;
                          let currentValue = '';
-                         for (let j = 0; j < rows[i].length; j++) {
-                             const char = rows[i][j];
-                             // Verificar si es el inicio o fin de una celda citada
-                             if (char === '"' && (j === 0 || rows[i][j-1] === ',' || /\s/.test(rows[i][j-1]))) { // Posible inicio de comillas
+                         for (let j = 0; j < row.length; j++) {
+                             const char = row[j];
+
+                             if (char === '"' && (j === 0 || row[j-1] === ',' || /\s/.test(row[j-1]))) {
                                  inQuotes = true;
                                  continue;
                              }
-                              if (char === '"' && (j === rows[i].length - 1 || rows[i][j+1] === ',' || /\s/.test(rows[i][j+1]))) { // Posible fin de comillas
+                              if (char === '"' && (j === row.length - 1 || row[j+1] === ',' || /\s/.test(row[j+1]))) {
                                  inQuotes = false;
                                  continue;
                              }
 
 
                              if (char === ',' && !inQuotes) {
-                                 values.push(currentValue.trim()); // Trim aquí también
+                                 values.push(currentValue.trim());
                                  currentValue = '';
                              } else {
                                  currentValue += char;
@@ -712,15 +721,23 @@
 
 
                          // Verificar si tenemos suficientes columnas antes de intentar acceder a ellas
-                         if (values.length > Math.max(nombreIndex, testimonioIndex, calificacionIndex, fechaIndex)) {
+                         // y que los índices encontrados son válidos
+                         if (values.length > Math.max(nombreIndex, testimonioIndex, calificacionIndex, fechaIndex) &&
+                             nombreIndex !== -1 && testimonioIndex !== -1 && calificacionIndex !== -1 && fechaIndex !== -1) {
+
                             const testimonioData = {};
                             testimonioData["Nombre Completo"] = values[nombreIndex]; // Ya trimado
                             testimonioData["Tu Testimonio"] = values[testimonioIndex]; // Ya trimado
                             testimonioData["Calificación"] = values[calificacionIndex]; // Ya trimado
                             testimonioData["Fecha"] = values[fechaIndex]; // Ya trimado
+
                             fetchedTestimonials.push(testimonioData);
+
+                            // Añadimos console.log para depurar los datos de cada testimonio
+                            console.log("Datos del testimonio (fila", i, "):", testimonioData);
+
                          } else {
-                             console.warn("Saltando fila con datos incompletos:", rows[i]);
+                             console.warn("Saltando fila con datos incompletos, índices inválidos o error de parseo:", row);
                          }
                     }
 
@@ -749,17 +766,11 @@
                     startAutoSlide(); // Iniciar el carrusel automático
 
 
-                     // Añadir listener para redimensionamiento para ajustar itemsPerPage (Opcional pero recomendado para responsividad dinámica)
+                     // Añadir listener para redimensionamiento para ajustar itemsPerPage y recargar la vista del carrusel
                      window.addEventListener('resize', () => {
-                          let newItemsPerPage = 4;
-                          if (window.innerWidth <= 480) {
-                              newItemsPerPage = 1;
-                          } else if (window.innerWidth <= 768) {
-                              newItemsPerPage = 2;
-                          }
-
-                          if (newItemsPerPage !== itemsPerPage) {
-                              itemsPerPage = newItemsPerPage;
+                          const oldItemsPerPage = itemsPerPage;
+                          updateItemsPerPage(); // Recalcular itemsPerPage
+                          if (itemsPerPage !== oldItemsPerPage) {
                               currentIndex = 0; // Reset al índice 0 al cambiar el número de items por página
                               showTestimonials(currentIndex);
                               updateNavigationButtons();

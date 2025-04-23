@@ -451,64 +451,50 @@
             const testimoniosContenedor = document.querySelector('.testimonios-swiper .swiper-wrapper');
             const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
         
-            // --- FUNCIÓN PARA PARSEAR CSV ---
-            // Esta es una implementación básica y podría necesitar ajustes
-            // si tus testimonios tienen comas, comillas o saltos de línea complejos.
-            // Considera usar una librería como 'papaparse' para CSVs más complejos.
+            // --- FUNCIÓN PARA PARSEAR CSV (mantener la que ya tienes o una más robusta) ---
             function parsearCSV(csvText) {
-                const rows = csvText.split('\n').filter(row => row.trim() !== ''); // Divide por línea y filtra líneas vacías
-                if (rows.length === 0) return [];
+                // ... (Tu implementación de parsearCSV aquí) ...
+                 const rows = csvText.split('\n').filter(row => row.trim() !== '');
+                 if (rows.length === 0) return [];
         
-                const headers = rows[0].split(',').map(header => header.trim().replace(/[\ufeff\r]/g, '')); // Elimina BOM y retornos de carro
-                const data = [];
+                 const headers = rows[0].split(',').map(header => header.trim().replace(/[\ufeff\r]/g, ''));
+                 const data = [];
         
-                // Procesa cada fila de datos (ignorando la primera que son los encabezados)
-                for (let i = 1; i < rows.length; i++) {
-                    let currentRow = rows[i];
-                    let rowData = {};
-                    let inQuotes = false;
-                    let field = '';
-                    let headerIndex = 0;
+                 for (let i = 1; i < rows.length; i++) {
+                     let currentRow = rows[i];
+                     let rowData = {};
+                     let inQuotes = false;
+                     let field = '';
+                     let headerIndex = 0;
+                     let char;
         
-                    for (let j = 0; j < currentRow.length; j++) {
-                        const char = currentRow[j];
+                     for (let j = 0; j < currentRow.length; j++) {
+                         char = currentRow[j];
         
-                        if (char === '"' && (j === 0 || currentRow[j-1] === ',' || inQuotes)) {
-                             // Alterna el estado de "dentro de comillas"
-                             // Maneja comillas escapadas ("" se convierte en ")
-                            if (inQuotes && j + 1 < currentRow.length && currentRow[j+1] === '"') {
-                                field += '"';
-                                j++; // Salta la siguiente comilla
-                            } else {
-                                inQuotes = !inQuotes;
-                            }
-                        } else if (char === ',' && !inQuotes) {
-                            // Fin del campo si no estamos dentro de comillas
-                            if (headers[headerIndex]) {
+                         if (char === '"') {
+                              if (inQuotes && j + 1 < currentRow.length && currentRow[j+1] === '"') {
+                                  field += '"';
+                                  j++;
+                              } else {
+                                  inQuotes = !inQuotes;
+                              }
+                         } else if (char === ',' && !inQuotes) {
+                             if (headers[headerIndex]) {
                                  rowData[headers[headerIndex]] = field.trim();
-                            }
-                            field = '';
-                            headerIndex++;
-                        } else {
-                            field += char;
-                        }
-                    }
-                    // Añadir el último campo de la fila
+                             }
+                             field = '';
+                             headerIndex++;
+                         } else {
+                             field += char;
+                         }
+                     }
                      if (headers[headerIndex]) {
                         rowData[headers[headerIndex]] = field.trim();
                      }
+                     data.push(rowData);
+                 }
         
-        
-                     // Opcional: Limpiar el testimonio de comillas extras si el parsing no fue perfecto
-                     if(rowData['Tu Testimonio'] && rowData['Tu Testimonio'].startsWith('"') && rowData['Tu Testimonio'].endsWith('"')) {
-                         rowData['Tu Testimonio'] = rowData['Tu Testimonio'].substring(1, rowData['Tu Testimonio'].length - 1);
-                     }
-        
-        
-                    data.push(rowData);
-                }
-                 // Filtrar filas que puedan estar vacías o mal formadas
-                return data.filter(item => item['Nombre Completo'] && item['Tu Testimonio'] && item['Calificación'] && item['Fecha']);
+                 return data.filter(item => item['Nombre Completo'] && item['Tu Testimonio'] && item['Calificación'] && item['Fecha']);
             }
             // --- FIN FUNCIÓN PARA PARSEAR CSV ---
         
@@ -518,138 +504,159 @@
                     if (!response.ok) {
                         throw new Error(`HTTP error! status: ${response.status}`);
                     }
-                    return response.text(); // Obtiene el contenido como texto
+                    return response.text();
                 })
                 .then(csvText => {
                     const comentarios = parsearCSV(csvText);
         
-                    // Tomar solo los primeros 12 comentarios si hay más y asegurarse de que existan
                     const comentariosAMostrar = comentarios.filter(c => c['Nombre Completo'] && c['Tu Testimonio']).slice(0, 12);
         
+                    // --- Límite de caracteres para "Ver más" ---
+                    const limiteCaracteres = 350; // Define cuántos caracteres mostrar antes de "Ver más"
+                    // ------------------------------------------
         
                     if (comentariosAMostrar.length > 0) {
                          comentariosAMostrar.forEach(comentario => {
-                             // Asegurarse de que los campos esperados existan para evitar errores
                              const nombre = comentario['Nombre Completo'] || 'Anónimo';
-                             const testimonio = comentario['Tu Testimonio'] || 'Sin testimonio';
+                             const testimonioCompleto = comentario['Tu Testimonio'] || 'Sin testimonio';
                              const calificacion = comentario['Calificación'] || 'N/A';
-                             const fecha = comentario['Fecha'] || ''; // La fecha puede estar en formato MM/DD/YYYY o similar
+                             const fecha = comentario['Fecha'] || '';
         
-        
-                             // Formatear la fecha si es necesario (este es un ejemplo básico)
                              let fechaFormateada = fecha;
                              try {
-                                 // Intentar parsear la fecha si está en un formato conocido (ej: MM/DD/YYYY)
                                  const partesFecha = fecha.split('/');
                                  if (partesFecha.length === 3) {
-                                     // Asegurar que el año sea de 4 dígitos si es necesario
                                      const año = partesFecha[2].length === 2 ? `20${partesFecha[2]}` : partesFecha[2];
-                                      // Crear objeto Date (Mes es 0-index)
-                                      const fechaObj = new Date(año, partesFecha[1] - 1, partesFecha[0]);
-                                     // Formatear a DD/MM/YYYY
+                                     const fechaObj = new Date(año, partesFecha[1] - 1, partesFecha[0]);
                                      const dia = fechaObj.getDate().toString().padStart(2, '0');
                                      const mes = (fechaObj.getMonth() + 1).toString().padStart(2, '0');
                                      const añoCompleto = fechaObj.getFullYear();
                                      fechaFormateada = `${dia}/${mes}/${añoCompleto}`;
                                  } else {
-                                     // Si el formato no es DD/MM/YYYY o similar, usar el texto original
-                                     fechaFormateada = fecha.split(' ')[0] || ''; // Intentar tomar solo la fecha antes de la hora
+                                     fechaFormateada = fecha.split(' ')[0] || '';
                                  }
                              } catch (e) {
                                   console.error("Error parseando fecha:", fecha, e);
-                                  fechaFormateada = fecha.split(' ')[0] || ''; // Fallback: usar el texto original o solo la parte antes del espacio
+                                  fechaFormateada = fecha.split(' ')[0] || '';
                              }
         
         
-                            const tarjetaHTML = `
-                                <div class="swiper-slide">
-                                    <div class="comentario-tarjeta">
-                                        <p class="testimonio">"${testimonio}"</p>
-                                        <p class="nombre">${nombre}</p>
-                                        <div class="calificacion-fecha">
-                                            <span class="calificacion">Calificación: ${calificacion}/5</span>
-                                            <span class="fecha">Fecha: ${fechaFormateada}</span>
-                                        </div>
-                                    </div>
-                                </div>
-                            `;
-                            testimoniosContenedor.innerHTML += tarjetaHTML; // Añade la tarjeta/slide
-                        });
+                             let testimonioContentHTML = '';
+                             if (testimonioCompleto.length > limiteCaracteres) {
+                                 const textoTruncado = testimonioCompleto.substring(0, limiteCaracteres) + '...';
+                                 // Creamos dos spans: uno con el texto truncado y otro con el completo (oculto inicialmente)
+                                 // Y un span para el enlace "Ver más"
+                                 testimonioContentHTML = `
+                                     <span class="texto-truncado">${textoTruncado}</span>
+                                     <span class="texto-completo hidden">${testimonioCompleto}</span>
+                                     <span class="ver-mas" style="cursor:pointer; color: #627eff; font-style: normal; font-weight: bold;"> Ver más</span>
+                                 `;
+                             } else {
+                                 // Si el testimonio es corto, mostramos el texto completo directamente
+                                 testimonioContentHTML = testimonioCompleto;
+                             }
+        
+                             const tarjetaHTML = `
+                                 <div class="swiper-slide">
+                                     <div class="comentario-tarjeta">
+                                         <p class="testimonio">"${testimonioContentHTML}"</p>
+                                         <p class="nombre">${nombre}</p>
+                                         <div class="calificacion-fecha">
+                                             <span class="calificacion">Calificación: ${calificacion}/5</span>
+                                             <span class="fecha">Fecha: ${fechaFormateada}</span>
+                                         </div>
+                                     </div>
+                                 </div>
+                             `;
+                             testimoniosContenedor.innerHTML += tarjetaHTML;
+                         });
         
                         // Inicializar Swiper DESPUÉS de que los slides han sido añadidos
                         const swiper = new Swiper('.testimonios-swiper', {
-                            loop: true, // Carrusel infinito
-                            spaceBetween: 30, // Espacio entre slides
-                            slidesPerView: 1, // Mostrar 1 slide en móvil por defecto
+                            loop: true,
+                            spaceBetween: 30,
+                            slidesPerView: 1,
         
-                            // Si necesitas paginación (puntos)
                             pagination: {
                                 el: '.swiper-pagination',
                                 clickable: true,
                             },
         
-                            // Si necesitas botones de navegación
                             navigation: {
                                 nextEl: '.swiper-button-next',
                                 prevEl: '.swiper-button-prev',
                             },
         
-                            // Breakpoints para hacer el carrusel responsive
                             breakpoints: {
-                                // cuando el ancho de la ventana sea >= 768px (md en Tailwind)
                                 768: {
                                     slidesPerView: 2,
-                                    spaceBetween: 15, // Puedes ajustar este espacio si quieres
+                                    spaceBetween: 15, // Ajusta este valor si quieres más o menos espacio
                                 },
-                                 // cuando el ancho de la ventana sea >= 1024px (lg en Tailwind)
                                 1024: {
-                                    slidesPerView: 2, // Mantener 2 en pantallas lg+
-                                     spaceBetween: 15,
+                                    slidesPerView: 2,
+                                    spaceBetween: 15, // Ajusta este valor
                                 }
                             },
-                            // Deshabilitar el drag en desktop si solo quieres navegar con flechas,
-                            // pero el requerimiento es carrusel, así que lo dejamos habilitado.
-                            // allowTouchMove: window.innerWidth <= 768,
                         });
         
+                        // --- Event Listener para "Ver más" ---
+                        // Usamos event delegation porque los spans 'ver-mas' se crean dinámicamente
+                        testimoniosContenedor.addEventListener('click', (event) => {
+                            const target = event.target;
+        
+                            // Verificamos si el elemento clickeado tiene la clase 'ver-mas'
+                            if (target.classList.contains('ver-mas')) {
+                                // Encontramos el párrafo del testimonio padre
+                                const testimonioPara = target.closest('.testimonio');
+                                if (testimonioPara) {
+                                    const textoTruncadoSpan = testimonioPara.querySelector('.texto-truncado');
+                                    const textoCompletoSpan = testimonioPara.querySelector('.texto-completo');
+                                    const verMasSpan = target;
+        
+                                    if (textoTruncadoSpan && textoCompletoSpan && verMasSpan) {
+                                        // Ocultamos el texto truncado y mostramos el texto completo
+                                        textoTruncadoSpan.classList.add('hidden');
+                                        textoCompletoSpan.classList.remove('hidden');
+                                        // Ocultamos el propio span "Ver más"
+                                        verMasSpan.classList.add('hidden');
+        
+                                        // Opcional: Si quisieras un botón de "Ver menos",
+                                        // tendrías que crear otro span y añadirlo aquí,
+                                        // y añadir lógica similar en el event listener para 'ver-menos'.
+                                        // Por ahora, solo lo expandimos.
+                                    }
+                                }
+                            }
+                        });
+                        // --- Fin Event Listener "Ver más" ---
+        
+        
                     } else {
-                         // Si no se cargaron comentarios
                          testimoniosContenedor.innerHTML = '<div class="swiper-slide"><p class="text-center text-gray-600">No hay comentarios para mostrar en este momento.</p></div>';
-                         // Opcional: Ocultar botones y paginación si no hay slides
                          document.querySelector('.testimonios-swiper .swiper-button-next').style.display = 'none';
                          document.querySelector('.testimonios-swiper .swiper-button-prev').style.display = 'none';
-                         document.querySelector('.testimonios-swiper .swiper-pagination').style.display = 'none';
+                         document.querySelector('.swiper-pagination').style.display = 'none'; // Usar la clase general de Swiper para la paginación
                     }
         
                 })
                 .catch(error => {
                     console.error('Error al cargar los comentarios:', error);
                     testimoniosContenedor.innerHTML = '<div class="swiper-slide"><p class="text-center text-red-500">Error al cargar los comentarios.</p></div>';
-                     // Ocultar botones y paginación si falla la carga
                      document.querySelector('.testimonios-swiper .swiper-button-next').style.display = 'none';
                      document.querySelector('.testimonios-swiper .swiper-button-prev').style.display = 'none';
-                     document.querySelector('.testimonios-swiper .swiper-pagination').style.display = 'none';
+                     document.querySelector('.swiper-pagination').style.display = 'none'; // Usar la clase general de Swiper para la paginación
                 });
         
-            // Lógica para el botón "Ver todos los testimonios"
+            // Lógica para el botón "Ver todos los testimonios" (mantener)
             const verTodosBtn = document.getElementById('ver-todos-testimonios-btn');
             if(verTodosBtn){
                 verTodosBtn.addEventListener('click', (event) => {
-                    // Opcional: Si la página testimonios-completos.html existe, navega a ella
                     // window.location.href = 'testimonios-completos.html';
-                    // Si quieres que abra en una nueva pestaña:
                     // window.open('testimonios-completos.html', '_blank');
-        
-                     // Si usaste el script de recarga al hacer clic en enlaces,
-                     // asegúrate de que no interfiera aquí o que la navegación funcione como esperas.
-                     // Si quieres que simplemente navegue sin forzar recarga:
-                     // event.preventDefault(); // Descomenta esta línea si el script de recarga causa problemas
-                     // window.location.href = event.target.href; // Navega normalmente
                 });
             }
-        
-        
         });
+    
         </script>
     <!-- Fin -->
 

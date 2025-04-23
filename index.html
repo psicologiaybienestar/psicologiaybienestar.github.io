@@ -72,26 +72,27 @@
         }
 /* Estilos específicos para las tarjetas de testimonios */
 .comentario-tarjeta {
-    background-color: #53c6e4; /* Tono cian/turquesa para el fondo de las tarjetas */
-    color: #fff; /* Color base del texto de la tarjeta (puede ser blanco o un gris claro si quieres) */
+    background-color: #fff; /* Fondo blanco para las tarjetas */
+    color: #333; /* Color base oscuro para el texto general si no se especifica */
     border-radius: 10px;
     padding: 20px;
-    text-align: left;
     box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-direction: column;
     justify-content: space-between;
-    height: 100%;
+    height: 100%; /* Mantener para que Swiper las ajuste en altura dentro de la fila */
+    min-height: 280px; /* Altura mínima para uniformar el tamaño. Puedes ajustar este valor. */
     box-sizing: border-box;
+    border: 1px solid #ddd; /* Añadir un borde ligero para que se destaquen sobre el fondo blanco */
 }
 
 .comentario-tarjeta .testimonio {
-    /* Color del testimonio: negro o gris oscuro */
-    color: #333; /* O #555 para un gris un poco más claro */
+    /* Color del testimonio: negro o gris oscuro (ya lo teníamos) */
+    color: #333;
     font-style: italic;
     margin-bottom: 15px;
     flex-grow: 1;
-    overflow-y: auto;
+    overflow-y: auto; /* Permite scroll si el texto supera el min-height */
     padding-right: 5px;
 }
 
@@ -101,7 +102,7 @@
 
 
 .comentario-tarjeta .nombre {
-    /* Color del nombre: azul/morado */
+    /* Color del nombre: azul/morado (ya lo teníamos) */
     color: #627eff;
     font-weight: bold;
     margin-top: 10px;
@@ -110,8 +111,8 @@
 }
 
 .comentario-tarjeta .calificacion-fecha {
-    /* Color de calificación y fecha: azul/morado */
-    color: #627eff; /* Usamos el mismo color azul/morado */
+    /* Color de calificación y fecha: azul/morado (ya lo teníamos) */
+    color: #627eff;
     font-size: 0.9em;
     text-align: right;
 }
@@ -120,43 +121,45 @@
     margin-left: 15px;
 }
 
-/* Estilos para Swiper */
+/* Mantener o ajustar estilos de Swiper */
 .testimonios-swiper {
     width: 100%;
-    height: auto; /* Ajusta la altura automáticamente */
-    padding-bottom: 40px; /* Espacio para la paginación si se usa */
+    height: auto;
+    padding-bottom: 60px; /* Aumenta el padding inferior para dar más espacio a los puntos */
+    /* Si las flechas se sienten apretadas en los lados en desktop,
+       asegúrate de que el padding lateral en el media query esté aplicado
+       o añádelo aquí directamente si no usas el media query específico para flechas */
 }
 
 .testimonios-swiper .swiper-slide {
-    display: flex; /* Asegura que el contenido de la slide se centre si es necesario */
+    display: flex;
     justify-content: center;
-    align-items: stretch; /* Importante para que las tarjetas llenen la altura */
-    height: auto; /* La altura la manejará la tarjeta dentro */
+    align-items: stretch; /* Muy importante para que min-height funcione bien */
+    height: auto;
 }
 
-/* Estilos para los botones de navegación de Swiper */
+/* Estilos para los botones de navegación de Swiper (mantener) */
 .testimonios-swiper .swiper-button-next,
 .testimonios-swiper .swiper-button-prev {
-    color: #627eff; /* Color azul/morado para las flechas */
-    /* Ajusta tamaño si es necesario */
+    color: #627eff;
     --swiper-navigation-size: 20px;
 }
 
-/* Estilos para la paginación de Swiper */
+/* Estilos para la paginación de Swiper (mantener) */
 .testimonios-swiper .swiper-pagination-bullet {
-    background-color: #627eff; /* Color azul/morado para los puntos inactivos */
+    background-color: #627eff;
     opacity: 0.5;
 }
 
 .testimonios-swiper .swiper-pagination-bullet-active {
-    background-color: #627eff; /* Color azul/morado para el punto activo */
+    background-color: #627eff;
     opacity: 1;
 }
 
-/* Ajuste para que los botones de navegación estén fuera en pantallas grandes */
-@media (min-width: 1024px) { /* lg breakpoint en Tailwind */
+/* Ajuste para que los botones de navegación estén fuera en pantallas grandes (mantener o ajustar si es necesario) */
+@media (min-width: 1024px) {
     .testimonios-swiper {
-         padding: 0 50px; /* Espacio para las flechas */
+         padding: 0 50px 60px 50px; /* Añade padding lateral y mantiene el inferior */
     }
     .testimonios-swiper .swiper-button-next,
     .testimonios-swiper .swiper-button-prev {
@@ -164,24 +167,23 @@
         transform: translateY(-50%);
     }
     .testimonios-swiper .swiper-button-prev {
-        left: 10px; /* Ajusta la posición */
+        left: 10px;
     }
     .testimonios-swiper .swiper-button-next {
-        right: 10px; /* Ajusta la posición */
+        right: 10px;
     }
 }
 
-/* Ajuste para ocultar flechas en móviles si prefieres solo deslizar */
-@media (max-width: 767px) { /* md breakpoint en Tailwind */
+/* Ajuste para ocultar flechas en móviles si prefieres solo deslizar (mantener) */
+@media (max-width: 767px) {
      .testimonios-swiper .swiper-button-next,
      .testimonios-swiper .swiper-button-prev {
          display: none;
      }
      .testimonios-swiper {
-        padding-bottom: 30px; /* Ajusta si quitas las flechas y dejas paginación */
+        padding-bottom: 30px; /* Menos padding inferior en móvil si no hay flechas */
      }
-}
-        
+}  
     </style>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.css" />
     <script src="https://cdn.jsdelivr.net/npm/swiper@11/swiper-bundle.min.js"></script>

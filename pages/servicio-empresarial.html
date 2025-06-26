@@ -3,8 +3,8 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-    <title>Psicología & Bienestar</title>
-    <link rel="icon" type="image/png" href="img/logo.png" />
+    <title>Psicología & Bienestar Empresarial</title>
+    <link rel="icon" type="image/png" href="../img/logo.png" />
     <!-- Tailwind CSS -->
     <script src="https://cdn.tailwindcss.com"></script>
     <!-- Swiper CSS -->
@@ -19,7 +19,65 @@
       defer
       src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
     ></script>
-    <link rel="stylesheet" href="css/styles.css" />
+    <script src="https://unpkg.com/@splidejs/splide@4.1.3/dist/js/splide.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@splidejs/splide@4.1.3/dist/css/splide.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url("../assets/img_em/background-empresarial.jpeg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+        /* Cambiado a center center */
+        color: #333;
+      }
+
+      .bg-white {
+        background-color: rgba(255, 255, 255, 0.8);
+        /* Blanco con 80% de opacidad */
+      }
+
+      .perspective {
+        perspective: 1000px;
+      }
+
+      .transform-style-preserve-3d {
+        transform-style: preserve-3d;
+      }
+
+      .backface-hidden {
+        backface-visibility: hidden;
+      }
+
+      .rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+
+      .overflow-y-auto::-webkit-scrollbar {
+        display: none;
+        /* oculta scroll en caso de desborde */
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      @font-face {
+        font-family: "Sego Serif";
+        src: url("fonts/sego-serif.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      .font-sego {
+        font-family: "Sego Serif", serif;
+      }
+    </style>
+    <link rel="stylesheet" href="../css/styleEm.css" />
     <script>
       tailwind.config = {
         theme: {
@@ -33,16 +91,9 @@
         },
       };
     </script>
-    <link
-      rel="stylesheet"
-      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.5.0/css/all.min.css"
-      integrity="sha512-..."
-      crossorigin="anonymous"
-      referrerpolicy="no-referrer"
-    />
   </head>
 
-  <body class="bg-white text-gray-800 font-sans">
+  <body class="bg-white text-gray-800">
     <!-- Navbar -->
     <header
       x-data="{ open: false, closeMenu() { this.open = false } }"
@@ -60,7 +111,7 @@
 
         <!-- Logo centrado -->
         <div class="flex items-center justify-center mx-auto">
-          <img src="img/logo.png" alt="Logo" class="h-10 w-auto" />
+          <img src="../img/logo.png" alt="Logo" class="h-10 w-auto" />
         </div>
 
         <!-- Botón de menú (solo en móvil) -->
@@ -86,16 +137,20 @@
 
         <!-- Menú desktop derecha -->
         <nav class="hidden md:flex absolute right-4 space-x-6">
-          <a href="#inicio" class="text-[#627eff] hover:text-[#53c6e4]"
+          <a href="../index.html" class="text-[#627eff] hover:text-[#53c6e4]"
             >Inicio</a
           >
-          <a href="#nosotros" class="text-[#627eff] hover:text-[#53c6e4]"
+          <a
+            href="../index.html#nosotros"
+            class="text-[#627eff] hover:text-[#53c6e4]"
             >Nosotros</a
           >
           <a href="#servicios" class="text-[#627eff] hover:text-[#53c6e4]"
             >Servicios</a
           >
-          <a href="#equipo" class="text-[#627eff] hover:text-[#53c6e4]"
+          <a
+            href="../index.html#equipo"
+            class="text-[#627eff] hover:text-[#53c6e4]"
             >Equipo</a
           >
           <a href="#contacto" class="text-[#627eff] hover:text-[#53c6e4]"
@@ -107,13 +162,13 @@
       <!-- Menú móvil -->
       <div x-show="open" x-transition class="md:hidden px-4 pb-4">
         <a
-          href="#inicio"
+          href="../index.html"
           @click="closeMenu()"
           class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
           >Inicio</a
         >
         <a
-          href="#nosotros"
+          href="../index.html#nosotros"
           @click="closeMenu()"
           class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
           >Nosotros</a
@@ -125,7 +180,7 @@
           >Servicios</a
         >
         <a
-          href="#equipo"
+          href="../index.html#equipo"
           @click="closeMenu()"
           class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
           >Equipo</a
@@ -140,277 +195,213 @@
     </header>
 
     <main class="pt-20">
-      <!-- Inicio -->
-      <section
-        id="inicio"
-        class="h-screen bg-cover bg-center text-gray flex flex-col items-center justify-center text-center px-6"
-        style="background-image: url('img/inicio-bg.png')"
-      >
-        <h1 class="text-4xl md:text-6xl font-bold mb-4">Bienvenidos</h1>
-        <p class="text-lg md:text-xl mb-6">
-          A este espacio para el equilibrio emocional, el crecimiento personal y
-          el cuidado de tu salud mental.
-        </p>
-        <a
-          href="#contacto"
-          class="bg-secondary hover:bg-accent text-white py-2 px-4 rounded"
-          >Contáctanos</a
+      <section class="py-20 px-6 md:px-20" id="servicios">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center text-[#627eff] mb-6"
         >
-      </section>
-
-      <!-- Sobre Nosotros -->
-      <section id="nosotros" class="py-20 px-6 text-center">
-        <h2 class="text-3xl font-semibold text-primary mb-6">Sobre Nosotros</h2>
-        <p class="max-w-3xl mx-auto text-lg">
-          Somos un equipo de profesionales comprometidos con tu salud mental.
-          Nuestra misión es acompañarte en el proceso de autoconocimiento y
-          bienestar, a través de un enfoque humano, empático y basado en
-          evidencia científica
-        </p>
-      </section>
-      <!-- Servicios -->
-      <section id="servicios" class="py-20 px-6 bg-gray-50 text-center">
-        <h2 class="text-3xl font-semibold text-primary mb-10">
-          Nuestros Servicios
+          Servicios Empresariales
         </h2>
-        <div class="grid md:grid-cols-3 gap-8 max-w-6xl mx-auto">
-          <div
-            class="service-card group bg-white rounded-2xl shadow-lg p-6 flex flex-col transition-all relative"
+
+        <div
+          class="max-w-3xl mx-auto text-center text-lg text-gray-700 mb-16 bg-white p-6 rounded-xl shadow-md"
+        >
+          Brindamos
+          <span class="text-[#627eff] font-semibold"
+            >talleres preventivos, pedagógicos y complementarios</span
           >
-            <div class="w-full aspect-video rounded-xl overflow-hidden mb-4">
-              <img
-                src="assets/img/terapia.jfif"
-                alt="terapias"
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-            </div>
+          diseñados según las necesidades de cada compañía. Nuestro enfoque
+          integral busca promover el bienestar físico, emocional y mental en el
+          entorno laboral.
+        </div>
 
-            <h3 class="text-xl font-bold text-gray-800 mb-2">Terapia</h3>
-            <p class="text-gray-600 mb-4 flex-grow">
-              Espacio para el bienestar emocional y psicológico.
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-8">
+          <div
+            class="bg-white shadow-xl rounded-2xl p-6 transform transition duration-500 hover:scale-105"
+          >
+            <h3 class="text-xl font-semibold text-[#627eff] mb-2">
+              1. Jornadas Complementarias de Bienestar
+            </h3>
+            <p>
+              Nuestras innovadoras alternativas lúdico-pedagógicas están
+              diseñadas especialmente para ofrecer jornadas de bienestar
+              empresarial. Combinamos actividades físicas emocionantes, como
+              escalada y boxeo, con sesiones de relajación que garantizan una
+              efectiva descarga de estrés. Nuestro enfoque integral no solo
+              promueve la salud física, sino que también revitaliza el ambiente
+              laboral, ayudando a tu equipo a recuperar su bienestar y energía,
+              previniendo el síndrome de Burnout.
             </p>
-
-            <button
-              class="toggle-btn inline-flex items-center justify-center gap-2 bg-secondary text-white px-4 py-2 rounded-full text-sm font-semibold shadow hover:bg-secondary/90 transition mt-auto"
-            >
-              <span>Ver detalles</span>
-              <i
-                class="fas fa-chevron-down transition-transform duration-300"
-              ></i>
-            </button>
-
-            <div
-              class="details max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out"
-            >
-              <ul class="space-y-2 mt-3 text-left">
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i>Terapia
-                  Individual
-                </li>
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i>Terapia
-                  de Pareja
-                </li>
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i>Terapia
-                  Familiar
-                </li>
-              </ul>
-            </div>
           </div>
 
           <div
-            class="service-card group bg-white rounded-2xl shadow-lg p-6 flex flex-col transition-all relative"
+            class="bg-white shadow-xl rounded-2xl p-6 transform transition duration-500 hover:scale-105"
           >
-            <div class="w-full aspect-video rounded-xl overflow-hidden mb-4">
-              <img
-                src="assets/img/orientacion.jpeg"
-                alt="orientacion Vocacional"
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-            </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">
-              Orientación Vocacional
+            <h3 class="text-xl font-semibold text-[#627eff] mb-2">
+              2. Terapias
             </h3>
-            <p class="text-gray-600 mb-4 flex-grow">
-              Ayuda para definir tu camino profesional con claridad.
+            <p>
+              Servicio de terapia psicológica individual, de pareja o familiar
+              para empleados con costos especiales por convenio empresarial.
+              <br /><span class="italic text-sm text-gray-600"
+                >*Aplica condiciones</span
+              >
             </p>
-
-            <button
-              class="toggle-btn inline-flex items-center justify-center gap-2 bg-secondary text-white px-4 py-2 rounded-full text-sm font-semibold shadow hover:bg-secondary/90 transition mt-auto"
-            >
-              <span>Ver detalles</span>
-              <i
-                class="fas fa-chevron-down transition-transform duration-300"
-              ></i>
-            </button>
-
-            <div
-              class="details max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out"
-            >
-              <ul class="space-y-2 mt-3 text-left">
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i
-                  >Evaluación de Habilidades
-                </li>
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i
-                  >Análisis de Intereses
-                </li>
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i
-                  >Fortalecimiento de habilidades blandas
-                </li>
-              </ul>
-              <div class="mt-3 text-left">
-                <h4 class="font-semibold text-gray-700 mb-2">Beneficios:</h4>
-                <ul class="space-y-1">
-                  <li>
-                    <i class="fas fa-arrow-right text-blue-500 mr-2"></i
-                    >Claridad sobre tu elección de carrera
-                  </li>
-                  <li>
-                    <i class="fas fa-arrow-right text-blue-500 mr-2"></i
-                    >Incremento de la satisfacción y éxito profesional
-                  </li>
-                  <li>
-                    <i class="fas fa-arrow-right text-blue-500 mr-2"></i
-                    >Estrategias para superar obstáculos
-                  </li>
-                </ul>
-              </div>
-            </div>
           </div>
 
           <div
-            class="service-card group bg-white rounded-2xl shadow-lg p-6 flex flex-col transition-all relative"
+            class="bg-white shadow-xl rounded-2xl p-6 transform transition duration-500 hover:scale-105"
           >
-            <div class="w-full aspect-video rounded-xl overflow-hidden mb-4">
-              <img
-                src="assets/img/talleres-charlas.jpeg"
-                alt="talleres"
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              />
-            </div>
-            <h3 class="text-xl font-bold text-gray-800 mb-2">
-              Talleres y Charlas
+            <h3 class="text-xl font-semibold text-[#627eff] mb-2">
+              3. Jornadas de Descarga Emocional
             </h3>
-            <p class="text-gray-600 mb-4 flex-grow">
-              Espacios interactivos de formación y crecimiento.
+            <p>
+              Servicio de jornadas de descarga emocional para empleados,
+              adaptadas a las necesidades de la compañía, donde se abordan
+              situaciones del día a día brindando herramientas de afrontamiento
+              según el caso.
+              <br /><span class="italic text-sm text-gray-600"
+                >*Aplica condiciones</span
+              >
             </p>
+          </div>
 
-            <button
-              class="toggle-btn inline-flex items-center justify-center gap-2 bg-secondary text-white px-4 py-2 rounded-full text-sm font-semibold shadow hover:bg-secondary/90 transition mt-auto"
-            >
-              <span>Ver detalles</span>
-              <i
-                class="fas fa-chevron-down transition-transform duration-300"
-              ></i>
-            </button>
-
-            <div
-              class="details max-h-0 overflow-hidden opacity-0 transition-all duration-500 ease-in-out"
-            >
-              <ul class="space-y-2 mt-3 text-left">
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i
-                  >Talleres Lúdicos Preventivos
-                </li>
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i
-                  >Talleres Pedagógicos
-                </li>
-                <li>
-                  <i class="fas fa-check-circle text-green-500 mr-2"></i>Taller
-                  de Padres
-                </li>
-              </ul>
-            </div>
+          <div
+            class="bg-white shadow-xl rounded-2xl p-6 transform transition duration-500 hover:scale-105"
+          >
+            <h3 class="text-xl font-semibold text-[#627eff] mb-2">
+              4. Orientación Vocacional
+            </h3>
+            <p>
+              Servicio de orientación vocacional dirigido a estudiantes de grado
+              noveno a once.
+              <br /><span class="italic text-sm text-gray-600"
+                >*Aplica para hijos de empleados de las empresas aliadas</span
+              >
+            </p>
           </div>
         </div>
 
-        <div class="mt-12">
+        <div class="splide my-16" id="general-empresarial-carousel">
+          <div class="splide__track">
+            <ul class="splide__list">
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_1.jpeg"
+                  alt="Imagen Empresarial 1"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_7.jpeg"
+                  alt="Imagen Empresarial 7"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_3.jpeg"
+                  alt="Imagen Empresarial 3"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_10.jpeg"
+                  alt="Imagen Empresarial 10"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_4.jpeg"
+                  alt="Imagen Empresarial 4"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_6.jpeg"
+                  alt="Imagen Empresarial 6"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_2.jpeg"
+                  alt="Imagen Empresarial 2"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_8.jpeg"
+                  alt="Imagen Empresarial 8"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_9.jpeg"
+                  alt="Imagen Empresarial 9"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_em/empresarial_5.jpeg"
+                  alt="Imagen Empresarial 5"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_galeria/galeria_em1.jpeg"
+                  alt="Imagen Empresarial 11"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_galeria/galeria_em2.jpeg"
+                  alt="Imagen Empresarial 12"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_galeria/galeria_em3.jpeg"
+                  alt="Imagen Empresarial 13"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_galeria/galeria_em4.jpeg"
+                  alt="Imagen Empresarial 14"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+              <li class="splide__slide">
+                <img
+                  src="../assets/img_galeria/galeria_em5.jpeg"
+                  alt="Imagen Empresarial 15"
+                  class="w-full h-64 object-cover rounded-xl"
+                />
+              </li>
+            </ul>
+          </div>
+        </div>
+        <div class="text-center mt-10">
           <a
-            href="pages/servicio-empresarial.html"
-            class="inline-block bg-secondary text-white px-6 py-3 rounded-full text-sm font-semibold shadow hover:bg-secondary/90 transition"
+            href="../index.html"
+            class="inline-block bg-[#627eff] text-white py-2 px-6 rounded-lg shadow hover:bg-[#53c6e4] transition"
           >
-            Conoce nuestros Servicios Empresariales
+            ← Volver a Inicio
           </a>
         </div>
       </section>
 
-      <!-- Equipo -->
-      <section id="equipo" class="py-20 px-6 text-center">
-        <h2 class="text-3xl font-semibold text-primary mb-10">
-          Nuestro Equipo
-        </h2>
-        <div
-          class="grid sm:grid-cols-2 md:grid-cols-3 gap-10 max-w-6xl mx-auto"
-        >
-          <div>
-            <img
-              src="assets/sindy_team.png"
-              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover"
-              alt="Miembro 1"
-            />
-            <h4 class="font-semibold">Sindy Margarita Garrido</h4>
-            <p class="text-sm">
-              Psicóloga Especialista en Desarrollo Integral de la Infancia y
-              Adolescencia
-            </p>
-          </div>
-          <div>
-            <img
-              src="assets/felipe_team.png"
-              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover"
-              alt="Miembro 2"
-            />
-            <h4 class="font-semibold">Manuel Felipe Ascencio Tellez</h4>
-            <p class="text-sm">
-              Psicólogo con Enfoque Social y Gestión de Proyectos
-            </p>
-          </div>
-          <div>
-            <img
-              src="assets/viviana_team.png"
-              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover"
-              alt="Miembro 3"
-            />
-            <h4 class="font-semibold">Viviana Quiroga Corredo</h4>
-            <p class="text-sm">
-              Psicóloga en Atención a Víctimas de Violencia Sexual y Diplomado
-              en Psicología Clínica
-            </p>
-          </div>
-        </div>
-      </section>
-
-      <!-- Comentarios -->
-      <section id="testimonios" class="py-20 bg-[#f0f8ff] scroll-mt-20">
-        <div class="max-w-6xl mx-auto px-4">
-          <h2
-            class="text-3xl font-semibold text-primary text-[#627eff] text-center mb-10"
-          >
-            Lo que dicen nuestros clientes
-          </h2>
-
-          <div class="swiper testimonios-swiper swiper-container">
-            <div class="swiper-wrapper"></div>
-            <div class="swiper-pagination"></div>
-            <div class="swiper-button-prev"></div>
-            <div class="swiper-button-next"></div>
-          </div>
-          <div class="mt-10 text-center">
-            <a
-              href="pages/testimonios.html"
-              id="ver-todos-testimonios-btn"
-              class="inline-block bg-[#627eff] hover:bg-[#53c6e4] text-white font-semibold py-3 px-8 rounded-full shadow-md transition duration-300 ease-in-out"
-            >
-              Ver todos los testimonios
-            </a>
-          </div>
-        </div>
-      </section>
       <!-- Contacto -->
       <section id="contacto" class="scroll-mt-20 px-4 sm:px-6 lg:px-8 py-12">
         <!-- Fondo de iconos animados -->
@@ -629,9 +620,9 @@
     </a>
 
     <!-- Scripts -->
-    <script defer src="js/scripts.js"></script>
-    <script src="js/testimonio.js"></script>
-    <script src="js/formContacto.js"></script>
-    <script src="js/animationsForm.js"></script>
+    <script defer src="../js/scripts.js"></script>
+    <script src="../js/carrouselEm.js"></script>
+    <script src="../js/formContacto.js"></script>
+    <script src="../js/animationsForm.js"></script>
   </body>
 </html>

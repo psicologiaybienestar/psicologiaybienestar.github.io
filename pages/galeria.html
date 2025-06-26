@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Psicología & Bienestar Empresarial</title>
+    <link rel="icon" type="image/png" href="../img/logo.png" />
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://unpkg.com/@splidejs/splide@4.1.3/dist/js/splide.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@splidejs/splide@4.1.3/dist/css/splide.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+        background-image: url("../assets/img_em/background-empresarial.jpeg");
+        background-size: cover;
+        background-repeat: no-repeat;
+        background-attachment: fixed;
+        background-position: center center;
+        /* Cambiado a center center */
+        color: #333;
+      }
+
+      .bg-white {
+        background-color: rgba(255, 255, 255, 0.8);
+        /* Blanco con 80% de opacidad */
+      }
+
+      .perspective {
+        perspective: 1000px;
+      }
+
+      .transform-style-preserve-3d {
+        transform-style: preserve-3d;
+      }
+
+      .backface-hidden {
+        backface-visibility: hidden;
+      }
+
+      .rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+
+      .overflow-y-auto::-webkit-scrollbar {
+        display: none;
+        /* oculta scroll en caso de desborde */
+      }
+
+      html {
+        scroll-behavior: smooth;
+      }
+
+      @font-face {
+        font-family: "Sego Serif";
+        src: url("fonts/sego-serif.ttf") format("truetype");
+        font-weight: normal;
+        font-style: normal;
+      }
+
+      .font-sego {
+        font-family: "Sego Serif", serif;
+      }
+
+      /* CSS adicional para proporciones uniformes de la galería */
+      .gallery-item {
+        position: relative;
+        width: 100%;
+        padding-bottom: 75%;
+        /* Esto crea una proporción de 4:3 (altura es 75% del ancho) */
+        /* Alternativa moderna para el padding-bottom (soporte limitado en navegadores antiguos): */
+        /* aspect-ratio: 4 / 3; */
+        /* O 1 / 1 para cuadrado, 16 / 9 para widescreen */
+        box-sizing: border-box;
+        /* Asegura que el padding se incluya en el tamaño */
+      }
+
+      .gallery-item img {
+        position: absolute;
+        /* Permite que la imagen ocupe todo el espacio del padding-bottom */
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        /* Recorta la imagen para que cubra el área sin distorsionar */
+      }
+    </style>
+    <link rel="stylesheet" href="../css/styleEm.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#627eff",
+              secondary: "#53c6e4",
+              accent: "#66a6da",
+            },
+          },
+        },
+      };
+    </script>
+  </head>
+
+  <body class="bg-white text-gray-800">
+    <header
+      x-data="{ open: false, closeMenu() { this.open = false } }"
+      class="bg-white shadow fixed top-0 left-0 w-full z-50"
+    >
+      <div
+        class="container mx-auto px-4 py-4 flex items-center justify-between md:justify-center relative"
+      >
+        <div class="hidden md:flex absolute left-4 items-center space-x-2">
+          <span class="text-[#627eff] text-lg font-semibold"
+            >Psicología & Bienestar</span
+          >
+        </div>
+
+        <div class="flex items-center justify-center mx-auto">
+          <img src="../img/logo.png" alt="Logo" class="h-10 w-auto" />
+        </div>
+
+        <button
+          @click="open = !open"
+          class="md:hidden absolute right-4 text-[#627eff] focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+
+        <nav class="hidden md:flex absolute right-4 space-x-6">
+          <a href="../index.html" class="text-[#627eff] hover:text-[#53c6e4]"
+            >Inicio</a
+          >
+          <a
+            href="../index.html#nosotros"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Nosotros</a
+          >
+          <a
+            href="../index.html#servicios"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Servicios</a
+          >
+          <a
+            href="../index.html#equipo"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Equipo</a
+          >
+          <a
+            href="../index.html#contacto"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Contacto</a
+          >
+          <a href="#" class="text-[#627eff] hover:text-[#53c6e4]">Galería</a>
+        </nav>
+      </div>
+
+      <div x-show="open" x-transition class="md:hidden px-4 pb-4">
+        <a
+          href="../index.html"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Inicio</a
+        >
+        <a
+          href="../index.html#nosotros"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Nosotros</a
+        >
+        <a
+          href="../index.html#servicios"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Servicios</a
+        >
+        <a
+          href="../index.html#equipo"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Equipo</a
+        >
+        <a
+          href="../index.html#contacto"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Contacto</a
+        >
+        <a
+          href="#"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Galería</a
+        >
+      </div>
+    </header>
+
+    <main class="pt-20">
+      <div class="container mx-auto px-4 py-8">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center text-[#627eff] mb-6"
+        >
+          Nuestra Galería
+        </h2>
+
+        <div
+          class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-4"
+          id="galeria-imagenes"
+        ></div>
+      </div>
+
+      <div
+        id="lightbox"
+        class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 z-50 hidden flex justify-center items-center"
+      >
+        <img
+          id="lightbox-imagen"
+          src=""
+          alt="Imagen en pantalla completa"
+          class="max-w-full max-h-full object-contain"
+        />
+
+        <button
+          id="lightbox-prev"
+          class="absolute left-4 text-white text-5xl p-2 bg-gray-700 bg-opacity-50 rounded-full hover:bg-opacity-75 hidden md:block select-none focus:outline-none user-select-none"
+        >
+          &lt;
+        </button>
+        <button
+          id="lightbox-next"
+          class="absolute right-4 text-white text-5xl p-2 bg-gray-700 bg-opacity-50 rounded-full hover:bg-opacity-75 hidden md:block select-none focus:outline-none user-select-none"
+        >
+          &gt;
+        </button>
+        <button
+          id="lightbox-close"
+          class="absolute top-4 right-4 text-white text-4xl p-2 bg-gray-700 bg-opacity-50 rounded-full hover:bg-opacity-75 select-none focus:outline-none user-select-none"
+        >
+          &times;
+        </button>
+      </div>
+    </main>
+    <footer class="bg-[#627eff] text-white py-6 mt-12 relative">
+      <div class="absolute -top-8 left-1/2 transform -translate-x-1/2">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3771/3771556.png"
+          alt="Icono Psicología"
+          class="w-16 h-16 bg-white p-2 rounded-full shadow-lg border-4 border-[#627eff]"
+        />
+      </div>
+
+      <div
+        class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left"
+      >
+        <div>
+          <h2 class="text-lg font-semibold">
+            Psicología & Bienestar &copy; 2025
+          </h2>
+          <p class="text-sm">serviciospsicobienestar@gmail.com</p>
+        </div>
+
+        <div class="space-y-1">
+          <p class="text-sm">
+            <span class="font-semibold">Teléfono 1:</span> +57 317 500 5472
+          </p>
+          <p class="text-sm">
+            <span class="font-semibold">Teléfono 2:</span> +57 313 206 9954
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <div class="fixed top-1/3 left-0 z-40 flex flex-col space-y-3 px-2">
+      <a
+        href="https://www.instagram.com/serviciospsicobienestar?utm_source=qr&igsh=NmtoOWFqMnZwMHY1"
+        target="_blank"
+        class="group relative flex items-center"
+      >
+        <div
+          class="bg-pink-500 hover:bg-pink-600 p-3 rounded-r-full shadow-lg transition duration-300"
+        >
+          <img
+            src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg"
+            alt="Instagram"
+            class="w-5 h-5 filter invert"
+          />
+        </div>
+        <span
+          class="absolute left-12 bg-pink-500 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-left whitespace-nowrap"
+        >
+          Visita nuestro Instagram
+        </span>
+      </a>
+
+      <a
+        href="https://www.facebook.com/share/1A9WZs7XCb/"
+        target="_blank"
+        class="group relative flex items-center"
+      >
+        <div
+          class="bg-blue-600 hover:bg-blue-700 p-3 rounded-r-full shadow-lg transition duration-300"
+        >
+          <img
+            src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg"
+            alt="Facebook"
+            class="w-5 h-5 filter invert"
+          />
+        </div>
+        <span
+          class="absolute left-12 bg-blue-600 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-left whitespace-nowrap"
+        >
+          Visita nuestro Facebook
+        </span>
+      </a>
+    </div>
+
+    <a
+      href="https://wa.me/573164603881"
+      target="_blank"
+      class="fixed bottom-6 right-6 z-50 group"
+    >
+      <div
+        class="relative flex items-center justify-center bg-[#25D366] hover:bg-green-600 w-14 h-14 rounded-full shadow-lg transition-colors duration-300"
+      >
+        <img
+          src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg"
+          alt="WhatsApp"
+          class="w-7 h-7 filter invert"
+        />
+        <span
+          class="absolute right-16 bg-[#25D366] text-white text-sm px-3 py-1 rounded-lg shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-right whitespace-nowrap"
+        >
+          Escríbenos por WhatsApp
+        </span>
+      </div>
+    </a>
+
+    <script defer src="../js/scripts.js"></script>
+
+    <script src="../js/galeria.js"></script>
+  </body>
+</html>

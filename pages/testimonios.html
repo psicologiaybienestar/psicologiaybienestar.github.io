@@ -1,0 +1,381 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Psicología & Bienestar Empresarial</title>
+    <link rel="icon" type="image/png" href="../img/logo.png" />
+    <!-- Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Swiper CSS -->
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <!-- Swiper JS -->
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://unpkg.com/@splidejs/splide@4.1.3/dist/js/splide.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@splidejs/splide@4.1.3/dist/css/splide.min.css"
+    />
+    <style>
+      body {
+        font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
+      }
+
+      /* --- Estilos de las tarjetas de testimonios (copiados de index) --- */
+      .comentario-tarjeta {
+        background-color: #fff;
+        /* Fondo blanco para las tarjetas */
+        color: #333;
+        /* Color base oscuro para el texto general */
+        border-radius: 10px;
+        padding: 20px;
+        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+        display: flex;
+        flex-direction: column;
+        justify-content: space-between;
+        /* En esta página no necesitan min-height ni overflow-y,
+               ya que queremos mostrar el texto completo */
+        /* height: auto; */
+        /* min-height: auto; */
+        /* overflow-y: visible; */
+        box-sizing: border-box;
+        border: 1px solid #ddd;
+        height: 100%;
+        /* Ayuda en el grid para que las tarjetas de la misma fila tengan la misma altura */
+      }
+
+      .comentario-tarjeta .testimonio {
+        color: #333;
+        font-style: italic;
+        margin-bottom: 15px;
+        flex-grow: 1;
+        /* Permite que el testimonio ocupe el espacio restante */
+        /* Quitar estilos de scroll si estaban */
+        overflow-y: visible;
+        padding-right: 0;
+      }
+
+      /* Asegurarse de que no tengan scrollbars ocultas */
+      .comentario-tarjeta .testimonio::-webkit-scrollbar {
+        display: auto;
+      }
+
+      .comentario-tarjeta .testimonio {
+        -ms-overflow-style: auto;
+        scrollbar-width: auto;
+      }
+
+      .comentario-tarjeta .nombre {
+        color: #627eff;
+        font-weight: bold;
+        margin-top: 10px;
+        margin-bottom: 5px;
+        text-align: right;
+      }
+
+      .comentario-tarjeta .calificacion-fecha {
+        color: #627eff;
+        font-size: 0.9em;
+        text-align: right;
+      }
+
+      .comentario-tarjeta .calificacion-fecha span {
+        margin-left: 15px;
+      }
+
+      /* --- Fin Estilos de las tarjetas de testimonios --- */
+
+      /* --- Estilos para el Grid de Testimonios --- */
+      #grid-testimonios {
+        display: grid;
+        gap: 25px;
+        /* Espacio entre las tarjetas en el grid */
+        padding: 0 20px;
+        /* Padding lateral dentro del contenedor */
+        max-width: 1200px;
+        /* Ancho máximo del grid (ajusta si es necesario) */
+        margin: 0 auto;
+        /* Centra el grid */
+      }
+
+      /* Grid responsive: 1 columna en móvil, 2 en tablet, 3 en desktop */
+      @media (min-width: 640px) {
+        /* sm breakpoint en Tailwind */
+        #grid-testimonios {
+          grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+          /* 2 columnas flexibles en pantallas pequeñas */
+          gap: 20px;
+        }
+      }
+
+      @media (min-width: 1024px) {
+        /* lg breakpoint en Tailwind */
+        #grid-testimonios {
+          grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+          /* 3 columnas flexibles en desktop */
+          gap: 25px;
+        }
+      }
+
+      /* --- Fin Estilos para el Grid de Testimonios --- */
+    </style>
+    <link rel="stylesheet" href="../css/styleEm.css" />
+    <script>
+      tailwind.config = {
+        theme: {
+          extend: {
+            colors: {
+              primary: "#627eff",
+              secondary: "#53c6e4",
+              accent: "#66a6da",
+            },
+          },
+        },
+      };
+    </script>
+    <style>
+      body {
+        display: flex;
+        flex-direction: column;
+        min-height: 100vh; /* Asegura que el body ocupe al menos el alto total de la ventana */
+      }
+
+      main {
+        flex-grow: 1; /* Permite que el main ocupe todo el espacio disponible */
+      }
+    </style>
+  </head>
+
+  <body class="bg-white text-gray-800">
+    <!-- Navbar -->
+    <header
+      x-data="{ open: false, closeMenu() { this.open = false } }"
+      class="bg-white shadow fixed top-0 left-0 w-full z-50"
+    >
+      <div
+        class="container mx-auto px-4 py-4 flex items-center justify-between md:justify-center relative"
+      >
+        <!-- Título izquierda en md+ -->
+        <div class="hidden md:flex absolute left-4 items-center space-x-2">
+          <span class="text-[#627eff] text-lg font-semibold"
+            >Psicología & Bienestar</span
+          >
+        </div>
+
+        <!-- Logo centrado -->
+        <div class="flex items-center justify-center mx-auto">
+          <img src="../img/logo.png" alt="Logo" class="h-10 w-auto" />
+        </div>
+
+        <!-- Botón de menú (solo en móvil) -->
+        <button
+          @click="open = !open"
+          class="md:hidden absolute right-4 text-[#627eff] focus:outline-none"
+        >
+          <svg
+            xmlns="http://www.w3.org/2000/svg"
+            class="h-6 w-6"
+            fill="none"
+            viewBox="0 0 24 24"
+            stroke="currentColor"
+          >
+            <path
+              stroke-linecap="round"
+              stroke-linejoin="round"
+              stroke-width="2"
+              d="M4 6h16M4 12h16M4 18h16"
+            />
+          </svg>
+        </button>
+
+        <!-- Menú desktop derecha -->
+        <nav class="hidden md:flex absolute right-4 space-x-6">
+          <a href="../index.html" class="text-[#627eff] hover:text-[#53c6e4]"
+            >Inicio</a
+          >
+          <a
+            href="../index.html#nosotros"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Nosotros</a
+          >
+          <a
+            href="../index.html#servicios"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Servicios</a
+          >
+          <a
+            href="../index.html#equipo"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Equipo</a
+          >
+          <a
+            href="../index.html#contacto"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Contacto</a
+          >
+        </nav>
+      </div>
+
+      <!-- Menú móvil -->
+      <div x-show="open" x-transition class="md:hidden px-4 pb-4">
+        <a
+          href="../index.html"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Inicio</a
+        >
+        <a
+          href="../index.html#nosotros"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Nosotros</a
+        >
+        <a
+          href="../index.html#servicios"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Servicios</a
+        >
+        <a
+          href="../index.html#equipo"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Equipo</a
+        >
+        <a
+          href="../index.html#contacto"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Contacto</a
+        >
+      </div>
+    </header>
+
+    <main class="pt-20">
+      <div class="container mx-auto px-4">
+        <h2
+          class="text-3xl md:text-4xl font-bold text-center text-[#627eff] mb-6"
+        >
+          Todos los Testimonios
+        </h2>
+
+        <div id="grid-testimonios"></div>
+      </div>
+    </main>
+
+    <!-- Footer -->
+    <footer class="bg-[#627eff] text-white py-6 mt-12 relative">
+      <!-- Ícono central decorativo -->
+      <div class="absolute -top-8 left-1/2 transform -translate-x-1/2">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3771/3771556.png"
+          alt="Icono Psicología"
+          class="w-16 h-16 bg-white p-2 rounded-full shadow-lg border-4 border-[#627eff]"
+        />
+      </div>
+
+      <div
+        class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left"
+      >
+        <!-- Nombre y correo -->
+        <div>
+          <h2 class="text-lg font-semibold">
+            Psicología & Bienestar &copy; 2025
+          </h2>
+          <p class="text-sm">serviciospsicobienestar@gmail.com</p>
+        </div>
+
+        <!-- Teléfonos -->
+        <div class="space-y-1">
+          <p class="text-sm">
+            <span class="font-semibold">Teléfono 1:</span> +57 317 500 5472
+          </p>
+          <p class="text-sm">
+            <span class="font-semibold">Teléfono 2:</span> +57 313 206 9954
+          </p>
+        </div>
+      </div>
+    </footer>
+
+    <!-- Redes sociales laterales -->
+    <div class="fixed top-1/3 left-0 z-40 flex flex-col space-y-3 px-2">
+      <!-- Instagram -->
+      <a
+        href="https://www.instagram.com/serviciospsicobienestar?utm_source=qr&igsh=NmtoOWFqMnZwMHY1"
+        target="_blank"
+        class="group relative flex items-center"
+      >
+        <div
+          class="bg-pink-500 hover:bg-pink-600 p-3 rounded-r-full shadow-lg transition duration-300"
+        >
+          <img
+            src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/instagram.svg"
+            alt="Instagram"
+            class="w-5 h-5 filter invert"
+          />
+        </div>
+        <span
+          class="absolute left-12 bg-pink-500 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-left whitespace-nowrap"
+        >
+          Visita nuestro Instagram
+        </span>
+      </a>
+
+      <!-- Facebook -->
+      <a
+        href="https://www.facebook.com/share/1A9WZs7XCb/"
+        target="_blank"
+        class="group relative flex items-center"
+      >
+        <div
+          class="bg-blue-600 hover:bg-blue-700 p-3 rounded-r-full shadow-lg transition duration-300"
+        >
+          <img
+            src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/facebook.svg"
+            alt="Facebook"
+            class="w-5 h-5 filter invert"
+          />
+        </div>
+        <span
+          class="absolute left-12 bg-blue-600 text-white text-xs px-3 py-1 rounded shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-left whitespace-nowrap"
+        >
+          Visita nuestro Facebook
+        </span>
+      </a>
+    </div>
+
+    <!-- Botón WhatsApp flotante -->
+    <a
+      href="https://wa.me/573164603881"
+      target="_blank"
+      class="fixed bottom-6 right-6 z-50 group"
+    >
+      <div
+        class="relative flex items-center justify-center bg-[#25D366] hover:bg-green-600 w-14 h-14 rounded-full shadow-lg transition-colors duration-300"
+      >
+        <img
+          src="https://cdn.jsdelivr.net/npm/simple-icons@v10/icons/whatsapp.svg"
+          alt="WhatsApp"
+          class="w-7 h-7 filter invert"
+        />
+        <span
+          class="absolute right-16 bg-[#25D366] text-white text-sm px-3 py-1 rounded-lg shadow-lg opacity-0 scale-0 group-hover:opacity-100 group-hover:scale-100 transform transition-all duration-300 origin-right whitespace-nowrap"
+        >
+          Escríbenos por WhatsApp
+        </span>
+      </div>
+    </a>
+
+    <!-- Scripts -->
+    <script defer src="../js/scripts.js"></script>
+    <script src="../js/testimoniosomp.js"></script>
+  </body>
+</html>

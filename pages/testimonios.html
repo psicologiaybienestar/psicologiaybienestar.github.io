@@ -217,6 +217,11 @@
             >Equipo</a
           >
           <a
+            href="pages/galeria.html"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            >Galería</a
+          >
+          <a
             href="../index.html#contacto"
             class="text-[#627eff] hover:text-[#53c6e4]"
             >Contacto</a
@@ -251,6 +256,12 @@
           >Equipo</a
         >
         <a
+          href="pages/galeria.html"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          >Galería</a
+        >
+        <a
           href="../index.html#contacto"
           @click="closeMenu()"
           class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
@@ -272,8 +283,7 @@
     </main>
 
     <!-- Footer -->
-    <footer class="bg-[#627eff] text-white py-6 mt-12 relative">
-      <!-- Ícono central decorativo -->
+    <footer class="bg-[#627eff] text-white py-6 relative">
       <div class="absolute -top-8 left-1/2 transform -translate-x-1/2">
         <img
           src="https://cdn-icons-png.flaticon.com/512/3771/3771556.png"
@@ -282,24 +292,38 @@
         />
       </div>
 
-      <div
-        class="max-w-6xl mx-auto px-4 flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left"
-      >
-        <!-- Nombre y correo -->
-        <div>
-          <h2 class="text-lg font-semibold">
-            Psicología & Bienestar &copy; 2025
-          </h2>
-          <p class="text-sm">serviciospsicobienestar@gmail.com</p>
+      <div class="max-w-6xl mx-auto px-4">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left pt-8"
+        >
+          <div>
+            <h2 class="text-lg font-semibold">
+              Psicología & Bienestar &copy; 2025
+            </h2>
+            <p class="text-sm">serviciospsicobienestar@gmail.com</p>
+          </div>
+
+          <div class="space-y-1">
+            <p class="text-sm">
+              <span class="font-semibold">Teléfono 1:</span> +57 317 500 5472
+            </p>
+            <p class="text-sm">
+              <span class="font-semibold">Teléfono 2:</span> +57 313 206 9954
+            </p>
+          </div>
         </div>
 
-        <!-- Teléfonos -->
-        <div class="space-y-1">
-          <p class="text-sm">
-            <span class="font-semibold">Teléfono 1:</span> +57 317 500 5472
-          </p>
-          <p class="text-sm">
-            <span class="font-semibold">Teléfono 2:</span> +57 313 206 9954
+        <div class="text-center mt-6 pt-4 border-t border-white/20">
+          <p class="text-xs">
+            Desarrollado por
+            <a
+              href="https://jgsoftworks-site.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold hover:underline"
+            >
+              JGSoftworks.dev
+            </a>
           </p>
         </div>
       </div>

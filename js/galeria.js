@@ -139,7 +139,7 @@ document.addEventListener("DOMContentLoaded", () => {
 
   // --- Generación dinámica de la galería ---
   galleryImagesData.forEach((imageData, index) => {
-    imagenesGaleria.push(imageData.src); // Guarda la ruta completa para el lightbox
+    imagenesGaleria.push(imageData.src);
 
     const divWrapper = document.createElement("div");
     divWrapper.className =

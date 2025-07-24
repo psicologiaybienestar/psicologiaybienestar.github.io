@@ -75,6 +75,23 @@ footer a {
   animation: floaty infinite ease-in-out;
 }
 
+/* Animación de pulso para el botón flotante de WhatsApp */
+@keyframes pulse {
+  0% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0.7);
+  }
+  70% {
+    box-shadow: 0 0 0 12px rgba(37, 211, 102, 0);
+  }
+  100% {
+    box-shadow: 0 0 0 0 rgba(37, 211, 102, 0);
+  }
+}
+
+.whatsapp-float-anim {
+  animation: pulse 1.5s infinite;
+}
+
 /* ==================== TARJETAS DE TESTIMONIOS ==================== */
 .comentario-tarjeta {
   background-color: #fff;
@@ -175,5 +192,10 @@ footer a {
   .testimonios-swiper .swiper-button-next,
   .testimonios-swiper .swiper-button-prev {
     display: none;
+  }
+}
+@media (max-width: 640px) {
+  .redes-laterales {
+    display: none !important;
   }
 }

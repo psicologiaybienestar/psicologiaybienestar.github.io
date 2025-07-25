@@ -32,28 +32,18 @@
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
       }
-
-      /* --- Estilos de las tarjetas de testimonios (copiados de index) --- */
       .comentario-tarjeta {
         background-color: #fff;
-        /* Fondo blanco para las tarjetas */
         color: #333;
-        /* Color base oscuro para el texto general */
         border-radius: 10px;
         padding: 20px;
         box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
         display: flex;
         flex-direction: column;
         justify-content: space-between;
-        /* En esta página no necesitan min-height ni overflow-y,
-               ya que queremos mostrar el texto completo */
-        /* height: auto; */
-        /* min-height: auto; */
-        /* overflow-y: visible; */
         box-sizing: border-box;
         border: 1px solid #ddd;
         height: 100%;
-        /* Ayuda en el grid para que las tarjetas de la misma fila tengan la misma altura */
       }
 
       .comentario-tarjeta .testimonio {
@@ -61,8 +51,6 @@
         font-style: italic;
         margin-bottom: 15px;
         flex-grow: 1;
-        /* Permite que el testimonio ocupe el espacio restante */
-        /* Quitar estilos de scroll si estaban */
         overflow-y: visible;
         padding-right: 0;
       }
@@ -95,41 +83,27 @@
         margin-left: 15px;
       }
 
-      /* --- Fin Estilos de las tarjetas de testimonios --- */
-
-      /* --- Estilos para el Grid de Testimonios --- */
       #grid-testimonios {
         display: grid;
         gap: 25px;
-        /* Espacio entre las tarjetas en el grid */
         padding: 0 20px;
-        /* Padding lateral dentro del contenedor */
         max-width: 1200px;
-        /* Ancho máximo del grid (ajusta si es necesario) */
         margin: 0 auto;
-        /* Centra el grid */
       }
 
-      /* Grid responsive: 1 columna en móvil, 2 en tablet, 3 en desktop */
       @media (min-width: 640px) {
-        /* sm breakpoint en Tailwind */
         #grid-testimonios {
           grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
-          /* 2 columnas flexibles en pantallas pequeñas */
           gap: 20px;
         }
       }
 
       @media (min-width: 1024px) {
-        /* lg breakpoint en Tailwind */
         #grid-testimonios {
           grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
-          /* 3 columnas flexibles en desktop */
           gap: 25px;
         }
       }
-
-      /* --- Fin Estilos para el Grid de Testimonios --- */
     </style>
     <link rel="stylesheet" href="../css/styleEm.css" />
     <script>
@@ -149,10 +123,11 @@
       body {
         display: flex;
         flex-direction: column;
-        min-height: 100vh; /* Asegura que el body ocupe al menos el alto total de la ventana */
+        min-height: 100vh;
       }
       main {
-        flex-grow: 1; /* Permite que el main ocupe todo el espacio disponible */
+        flex-grow: 1;
+        padding-top: var(--header-height);
       }
       :root {
         --header-height: 64px;
@@ -161,9 +136,6 @@
         :root {
           --header-height: 60px;
         }
-      }
-      main {
-        padding-top: var(--header-height);
       }
     </style>
   </head>

@@ -2,15 +2,26 @@
 html,
 body {
   scroll-behavior: smooth;
+  font-size: clamp(15px, 2vw, 18px);
+  box-sizing: border-box;
+  overflow-x: hidden;
+}
+
+img,
+video {
+  max-width: 100%;
+  height: auto;
+  display: block;
 }
 
 /* ==================== TARJETAS DE SERVICIOS ==================== */
 .service-card {
   background-color: #ffffff;
   border-radius: 1rem;
-  padding: 2rem;
+  padding: 2rem 1.5rem;
   box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
   transition: transform 0.2s ease, box-shadow 0.2s ease;
+  min-width: 0;
 }
 
 .service-card:hover {
@@ -172,30 +183,70 @@ footer a {
 }
 
 /* ==================== RESPONSIVE ==================== */
+@media (max-width: 1024px) {
+  .service-card {
+    padding: 1.5rem 1rem;
+  }
+  .testimonios-swiper {
+    padding-bottom: 30px;
+  }
+}
+
+@media (max-width: 900px) {
+  .service-card {
+    padding: 1.2rem 0.7rem;
+    font-size: 0.98em;
+  }
+}
+
 @media (max-width: 768px) {
   .comentario-tarjeta {
-    padding: 15px;
+    padding: 12px;
     min-height: auto;
-    font-size: 0.95em;
+    font-size: 0.93em;
   }
-
   .comentario-tarjeta .nombre,
   .comentario-tarjeta .calificacion-fecha {
-    font-size: 0.85em;
+    font-size: 0.82em;
     text-align: left;
   }
-
   .testimonios-swiper {
-    padding-bottom: 40px;
+    padding-bottom: 20px;
   }
-
   .testimonios-swiper .swiper-button-next,
   .testimonios-swiper .swiper-button-prev {
     display: none;
   }
+  .service-card {
+    padding: 1rem 0.5rem;
+    font-size: 0.95em;
+  }
 }
+
 @media (max-width: 640px) {
   .redes-laterales {
     display: none !important;
+  }
+  .service-card {
+    padding: 0.7rem 0.3rem;
+    font-size: 0.92em;
+  }
+  .comentario-tarjeta {
+    font-size: 0.9em;
+  }
+}
+
+@media (max-width: 480px) {
+  html,
+  body {
+    font-size: 14px;
+  }
+  .service-card {
+    padding: 0.5rem 0.1rem;
+    font-size: 0.9em;
+  }
+  .comentario-tarjeta {
+    padding: 8px;
+    font-size: 0.88em;
   }
 }

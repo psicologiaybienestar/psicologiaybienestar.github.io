@@ -40,6 +40,19 @@
       crossorigin="anonymous"
       referrerpolicy="no-referrer"
     />
+    <style>
+      :root {
+        --header-height: 64px;
+      }
+      @media (max-width: 768px) {
+        :root {
+          --header-height: 60px;
+        }
+      }
+      main {
+        padding-top: var(--header-height);
+      }
+    </style>
   </head>
 
   <body class="bg-white text-gray-800 font-sans">
@@ -60,7 +73,7 @@
 
         <!-- Logo centrado y nombre en móvil -->
         <div class="flex flex-col items-center justify-center mx-auto">
-          <img src="img/logo.png" alt="Logo" class="h-10 w-auto" />
+          <img src="img/logo.png" alt="Logo" class="h-10 w-auto max-w-full" />
           <span class="ml-2 text-[#627eff] text-lg font-semibold md:hidden"
             >Psicología & Bienestar</span
           >
@@ -102,13 +115,19 @@
             >Equipo</a
           >
           <a
-            href="pages/galeria.html"
+            href="pages/verGaleria.html"
             class="text-[#627eff] hover:text-[#53c6e4]"
             >Galería</a
           >
           <a href="#contacto" class="text-[#627eff] hover:text-[#53c6e4]"
             >Contacto</a
           >
+          <a
+            href="../pages/dashboard.html"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            title="Dashboard"
+            ><i class="fa fa-user-circle" style="font-size: 1.5rem"></i
+          ></a>
         </nav>
       </div>
 
@@ -139,7 +158,7 @@
           >Equipo</a
         >
         <a
-          href="pages/galeria.html"
+          href="pages/verGaleria.html"
           @click="closeMenu()"
           class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
           >Galería</a
@@ -150,10 +169,18 @@
           class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
           >Contacto</a
         >
+        <a
+          href="/pages/dashboard.html"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          title="Dashboard"
+          ><i class="fa fa-user-circle" style="font-size: 1.5rem"></i>
+          Dashboard</a
+        >
       </div>
     </header>
 
-    <main class="pt-20">
+    <main class="pt-20" style="padding-top: var(--header-height)">
       <!-- Inicio -->
       <section
         id="inicio"
@@ -195,7 +222,7 @@
               <img
                 src="assets/img/terapia.jfif"
                 alt="terapias"
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 max-w-full"
               />
             </div>
 
@@ -240,7 +267,7 @@
               <img
                 src="assets/img/orientacion.jpeg"
                 alt="orientacion Vocacional"
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 max-w-full"
               />
             </div>
             <h3 class="text-xl font-bold text-gray-800 mb-2">
@@ -303,7 +330,7 @@
               <img
                 src="assets/img/talleres-charlas.jpeg"
                 alt="talleres"
-                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+                class="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 max-w-full"
               />
             </div>
             <h3 class="text-xl font-bold text-gray-800 mb-2">
@@ -364,7 +391,7 @@
           <div>
             <img
               src="assets/sindy_team.png"
-              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover"
+              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover max-w-full"
               alt="Miembro 1"
             />
             <h4 class="font-semibold">Sindy Margarita Garrido</h4>
@@ -376,7 +403,7 @@
           <div>
             <img
               src="assets/felipe_team.png"
-              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover"
+              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover max-w-full"
               alt="Miembro 2"
             />
             <h4 class="font-semibold">Manuel Felipe Ascencio Tellez</h4>
@@ -387,7 +414,7 @@
           <div>
             <img
               src="assets/viviana_team.png"
-              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover"
+              class="mx-auto rounded-full mb-4 w-40 h-40 object-cover max-w-full"
               alt="Miembro 3"
             />
             <h4 class="font-semibold">Viviana Quiroga Corredo</h4>

@@ -24,6 +24,10 @@
       rel="stylesheet"
       href="https://unpkg.com/@splidejs/splide@4.1.3/dist/css/splide.min.css"
     />
+    <link
+      rel="stylesheet"
+      href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css"
+    />
     <style>
       body {
         font-family: "Segoe UI", Tahoma, Geneva, Verdana, sans-serif;
@@ -147,9 +151,19 @@
         flex-direction: column;
         min-height: 100vh; /* Asegura que el body ocupe al menos el alto total de la ventana */
       }
-
       main {
         flex-grow: 1; /* Permite que el main ocupe todo el espacio disponible */
+      }
+      :root {
+        --header-height: 64px;
+      }
+      @media (max-width: 768px) {
+        :root {
+          --header-height: 60px;
+        }
+      }
+      main {
+        padding-top: var(--header-height);
       }
     </style>
   </head>
@@ -172,7 +186,11 @@
 
         <!-- Logo centrado y nombre en móvil -->
         <div class="flex flex-col items-center justify-center mx-auto">
-          <img src="../img/logo.png" alt="Logo" class="h-10 w-auto" />
+          <img
+            src="../img/logo.png"
+            alt="Logo"
+            class="h-10 w-auto max-w-full"
+          />
           <span class="mt-2 text-[#627eff] text-lg font-semibold md:hidden">
             Psicología & Bienestar
           </span>
@@ -220,7 +238,7 @@
             >Equipo</a
           >
           <a
-            href="../pages/galeria.html"
+            href="../pages/verGaleria.html"
             class="text-[#627eff] hover:text-[#53c6e4]"
             >Galería</a
           >
@@ -229,6 +247,12 @@
             class="text-[#627eff] hover:text-[#53c6e4]"
             >Contacto</a
           >
+          <a
+            href="../pages/dashboard.html"
+            class="text-[#627eff] hover:text-[#53c6e4]"
+            title="Dashboard"
+            ><i class="fa fa-user-circle" style="font-size: 1.5rem"></i
+          ></a>
         </nav>
       </div>
 
@@ -259,7 +283,7 @@
           >Equipo</a
         >
         <a
-          href="../pages/galeria.html"
+          href="../pages/verGaleria.html"
           @click="closeMenu()"
           class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
           >Galería</a
@@ -270,11 +294,19 @@
           class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
           >Contacto</a
         >
+        <a
+          href="../pages/dashboard.html"
+          @click="closeMenu()"
+          class="block py-2 text-[#627eff] hover:text-[#53c6e4]"
+          title="Dashboard"
+          ><i class="fa fa-user-circle" style="font-size: 1.5rem"></i>
+          Dashboard</a
+        >
       </div>
     </header>
 
-    <main class="pt-20">
-      <div class="container mx-auto px-4">
+    <main class="pt-20" style="padding-top: var(--header-height)">
+      <div class="py-20 px-6 md:px-20">
         <h2
           class="text-3xl md:text-4xl font-bold text-center text-[#627eff] mb-6"
         >

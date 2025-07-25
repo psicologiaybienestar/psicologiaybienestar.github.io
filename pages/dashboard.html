@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="es">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link rel="icon" type="image/png" href="../img/logo.png" />
+    <title>Dashboard Galería</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/swiper/swiper-bundle.min.css"
+    />
+    <script src="https://unpkg.com/swiper/swiper-bundle.min.js"></script>
+    <script src="https://unpkg.com/lucide@latest"></script>
+    <script
+      defer
+      src="https://unpkg.com/alpinejs@3.x.x/dist/cdn.min.js"
+    ></script>
+    <script src="https://unpkg.com/@splidejs/splide@4.1.3/dist/js/splide.min.js"></script>
+    <link
+      rel="stylesheet"
+      href="https://unpkg.com/@splidejs/splide@4.1.3/dist/css/splide.min.css"
+    />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/dashboard.css" />
+  </head>
+  <body
+    style="
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      background: linear-gradient(135deg, #e0e7ff 0%, #f0f4ff 100%);
+    "
+  >
+    <div
+      id="login-section"
+      style="
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <form
+        class="login-form"
+        id="loginForm"
+        style="
+          background: #fff;
+          border-radius: 1.5rem;
+          box-shadow: 0 8px 32px rgba(98, 127, 255, 0.1);
+          padding: 2.5rem 2rem;
+          max-width: 350px;
+          width: 100%;
+        "
+      >
+        <div style="text-align: center; margin-bottom: 1.5rem">
+          <h1
+            style="
+              font-size: 2.1rem;
+              font-weight: 800;
+              color: #627eff;
+              margin-bottom: 0.7rem;
+              letter-spacing: 0.5px;
+            "
+          >
+            Administración
+          </h1>
+          <img
+            src="../img/logo.png"
+            alt="Logo"
+            style="
+              width: 90px;
+              height: 90px;
+              border-radius: 50%;
+              margin: 0 auto 0.5rem auto;
+              box-shadow: 0 2px 8px #627eff22;
+              display: block;
+            "
+          />
+          <h2
+            style="
+              font-size: 1.5rem;
+              font-weight: 700;
+              color: #627eff;
+              margin-bottom: 0.2rem;
+            "
+          >
+            Panel de Galería
+          </h2>
+          <p style="font-size: 1rem; color: #6b7280">
+            Inicia sesión para administrar
+          </p>
+        </div>
+        <div style="margin-bottom: 1.2rem">
+          <label style="font-weight: 600; color: #374151">Usuario</label>
+          <div class="input-group">
+            <input type="text" id="username" required placeholder="Usuario" />
+            <span class="input-icon"><i class="fa fa-user"></i></span>
+          </div>
+        </div>
+        <div style="margin-bottom: 1.2rem">
+          <label style="font-weight: 600; color: #374151">Contraseña</label>
+          <div class="input-group">
+            <input
+              type="password"
+              id="password"
+              required
+              placeholder="Contraseña"
+            />
+            <span class="input-icon"><i class="fa fa-lock"></i></span>
+          </div>
+        </div>
+        <button
+          type="submit"
+          class="w-full bg-[#627eff] text-white rounded p-2 mt-2 font-semibold shadow hover:bg-[#53c6e4] transition"
+        >
+          Entrar
+        </button>
+        <button
+          class="w-full bg-[#627eff] text-white rounded p-2 mt-2 font-semibold shadow hover:bg-[#53c6e4] transition"
+          onclick="window.location.href='../index.html'"
+        >
+          Volver al inicio
+        </button>
+      </form>
+    </div>
+    <div
+      id="dashboard-section"
+      style="display: none; min-height: 100vh; flex-direction: column"
+    >
+      <div
+        class="dashboard-container"
+        style="
+          max-width: 1100px;
+          margin: 40px auto 0 auto;
+          background: #fff;
+          border-radius: 1.5rem;
+          box-shadow: 0 4px 24px rgba(98, 127, 255, 0.1);
+          padding: 2rem;
+        "
+      >
+        <div
+          style="
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            gap: 1rem 2rem;
+          "
+        >
+          <button class="logout-btn" id="logoutBtn">
+            <i class="fa fa-sign-out-alt"></i> Cerrar sesión
+          </button>
+          <button class="logout-btn" id="recargarBtn">
+            <i class="fa fa-redo"></i> Recargar
+          </button>
+        </div>
+        <h2
+          style="
+            font-size: 2rem;
+            font-weight: 700;
+            color: #627eff;
+            text-align: center;
+            margin-bottom: 1.5rem;
+          "
+        >
+          Panel de Galería
+        </h2>
+        <form class="upload-form" id="uploadForm">
+          <div class="upload-steps">
+            <span style="font-weight: 600; color: #627eff">Paso 1:</span>
+            Selecciona uno o varios archivos de imagen.<br />
+            <span style="font-weight: 600; color: #627eff">Paso 2:</span> Haz
+            clic en <b>Subir imágenes</b> para agregarlas a la galería.
+          </div>
+          <input
+            type="file"
+            id="fileInput"
+            accept="image/*"
+            required
+            multiple
+          />
+          <button type="submit">Subir imágenes</button>
+        </form>
+        <div id="gallery" class="gallery-grid"></div>
+      </div>
+      <!-- Lightbox para ver imágenes en grande -->
+      <div
+        id="lightbox"
+        class="fixed top-0 left-0 w-full h-full bg-black bg-opacity-80 z-50 hidden flex justify-center items-center"
+      >
+        <img
+          id="lightbox-imagen"
+          src=""
+          alt="Imagen en pantalla completa"
+          class="max-w-full max-h-full object-contain"
+        />
+        <button
+          id="lightbox-prev"
+          class="lightbox-btn hidden md:flex items-center justify-center"
+          aria-label="Foto anterior"
+        >
+          <svg
+            width="32"
+            height="32"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="16" cy="16" r="15" stroke="rgba(255,255,255,0.18)" />
+            <polyline points="18 10 12 16 18 22" />
+          </svg>
+        </button>
+        <button
+          id="lightbox-next"
+          class="lightbox-btn hidden md:flex items-center justify-center"
+          aria-label="Foto siguiente"
+        >
+          <svg
+            width="32"
+            height="32"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="16" cy="16" r="15" stroke="rgba(255,255,255,0.18)" />
+            <polyline points="14 10 20 16 14 22" />
+          </svg>
+        </button>
+        <button
+          id="lightbox-close"
+          class="lightbox-btn flex items-center justify-center"
+          aria-label="Cerrar"
+        >
+          <svg
+            width="28"
+            height="28"
+            fill="none"
+            stroke="currentColor"
+            stroke-width="2.5"
+            stroke-linecap="round"
+            stroke-linejoin="round"
+          >
+            <circle cx="14" cy="14" r="13" stroke="rgba(255,255,255,0.18)" />
+            <line x1="9" y1="9" x2="19" y2="19" />
+            <line x1="19" y1="9" x2="9" y2="19" />
+          </svg>
+        </button>
+      </div>
+      <!-- Modal de alerta visual (toast/modal) -->
+      <div
+        id="alerta-toast"
+        style="
+          display: none;
+          position: fixed;
+          top: 32px;
+          left: 50%;
+          transform: translateX(-50%);
+          z-index: 2000;
+          min-width: 260px;
+          max-width: 90vw;
+          padding: 1rem 2rem;
+          background: #fff;
+          border-radius: 1rem;
+          box-shadow: 0 4px 24px #627eff22;
+          text-align: center;
+          font-size: 1.1rem;
+          font-weight: 500;
+          transition: opacity 0.3s, top 0.3s;
+          opacity: 0;
+        "
+      >
+        <span
+          id="alerta-toast-icon"
+          style="font-size: 2rem; margin-right: 0.5rem"
+        ></span>
+        <span id="alerta-toast-msg"></span>
+      </div>
+      <!-- Modal de cerrar sesión -->
+      <div
+        id="modal-logout"
+        style="
+          display: none;
+          position: fixed;
+          top: 0;
+          left: 0;
+          width: 100vw;
+          height: 100vh;
+          background: rgba(0, 0, 0, 0.35);
+          z-index: 1000;
+          align-items: center;
+          justify-content: center;
+        "
+      >
+        <div
+          style="
+            background: #fff;
+            padding: 2rem 1.5rem;
+            border-radius: 1rem;
+            box-shadow: 0 4px 24px #627eff22;
+            max-width: 350px;
+            width: 90%;
+            text-align: center;
+          "
+        >
+          <div style="font-size: 2.2rem; color: #627eff; margin-bottom: 0.5rem">
+            <i class="fa fa-sign-out-alt"></i>
+          </div>
+          <div style="font-size: 1.1rem; color: #374151; margin-bottom: 1.2rem">
+            ¿Deseas cerrar sesión?
+          </div>
+          <div
+            style="
+              display: flex;
+              flex-direction: column;
+              gap: 0.7rem;
+              align-items: center;
+            "
+          >
+            <button
+              id="logout-confirm"
+              class="bg-[#627eff] text-white rounded px-5 py-2 font-semibold shadow hover:bg-[#53c6e4] transition"
+              style="width: 90%"
+            >
+              Ir a login
+            </button>
+            <button
+              id="logout-main"
+              class="bg-gray-300 text-gray-800 rounded px-5 py-2 font-semibold shadow hover:bg-gray-400 transition"
+              style="width: 90%"
+            >
+              Ir al menú principal
+            </button>
+            <button
+              id="logout-vergaleria"
+              class="bg-[#53c6e4] text-white rounded px-5 py-2 font-semibold shadow hover:bg-[#627eff] transition"
+              style="width: 90%"
+            >
+              Ver galería
+            </button>
+            <button
+              id="logout-cancelar"
+              class="bg-[#e2e8f0] text-gray-800 rounded px-5 py-2 font-semibold shadow hover:bg-gray-300 transition"
+              style="width: 90%"
+            >
+              Cancelar
+            </button>
+          </div>
+        </div>
+      </div>
+    </div>
+    <footer
+      class="bg-[#627eff] text-white py-6 relative"
+      style="margin-top: auto"
+    >
+      <div class="absolute -top-8 left-1/2 transform -translate-x-1/2">
+        <img
+          src="https://cdn-icons-png.flaticon.com/512/3771/3771556.png"
+          alt="Icono Psicología"
+          class="w-16 h-16 bg-white p-2 rounded-full shadow-lg border-4 border-[#627eff]"
+        />
+      </div>
+      <div class="max-w-6xl mx-auto px-4">
+        <div
+          class="flex flex-col md:flex-row justify-between items-center space-y-4 md:space-y-0 text-center md:text-left pt-8"
+        >
+          <div>
+            <h2 class="text-lg font-semibold">
+              Psicología & Bienestar &copy; 2025
+            </h2>
+            <p class="text-sm">serviciospsicobienestar@gmail.com</p>
+          </div>
+          <div class="space-y-1">
+            <p class="text-sm">
+              <span class="font-semibold">Teléfono 1:</span> +57 317 500 5472
+            </p>
+            <p class="text-sm">
+              <span class="font-semibold">Teléfono 2:</span> +57 313 206 9954
+            </p>
+          </div>
+        </div>
+        <div class="text-center mt-6 pt-4 border-t border-white/20">
+          <p class="text-xs">
+            Desarrollado por
+            <a
+              href="https://jgsoftworks-site.netlify.app/"
+              target="_blank"
+              rel="noopener noreferrer"
+              class="font-semibold hover:underline"
+              >JGSoftworks.dev</a
+            >
+          </p>
+        </div>
+      </div>
+    </footer>
+    <!-- Modal de confirmación de eliminación -->
+    <div id="modal-eliminar">
+      <div class="modal-content">
+        <div class="icon"><i class="fa fa-exclamation-triangle"></i></div>
+        <div class="msg">¿Estás seguro de que deseas eliminar esta imagen?</div>
+        <button class="btn-cancelar">Cancelar</button>
+        <button class="btn-eliminar">Eliminar</button>
+      </div>
+    </div>
+    <!-- Modal de recarga/cierre de sesión -->
+    <div
+      id="modal-reload"
+      style="
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100vw;
+        height: 100vh;
+        background: rgba(0, 0, 0, 0.35);
+        z-index: 3000;
+        align-items: center;
+        justify-content: center;
+      "
+    >
+      <div
+        style="
+          background: #fff;
+          padding: 2rem 1.5rem;
+          border-radius: 1rem;
+          box-shadow: 0 4px 24px #627eff22;
+          max-width: 350px;
+          width: 90%;
+          text-align: center;
+          animation: fadeInModal 0.25s;
+        "
+      >
+        <div style="font-size: 2.2rem; color: #627eff; margin-bottom: 0.5rem">
+          <i class="fa fa-sign-out-alt"></i>
+        </div>
+        <div style="font-size: 1.1rem; color: #374151; margin-bottom: 1.2rem">
+          ¿Deseas recargar la página? Si aceptas, se cerrará la sesión
+          automáticamente.
+        </div>
+        <div
+          style="
+            display: flex;
+            flex-direction: column;
+            gap: 0.7rem;
+            align-items: center;
+          "
+        >
+          <button
+            id="reload-aceptar"
+            class="bg-[#627eff] text-white rounded px-5 py-2 font-semibold shadow hover:bg-[#53c6e4] transition"
+            style="width: 90%"
+          >
+            Aceptar y recargar
+          </button>
+          <button
+            id="reload-cancelar"
+            class="bg-[#e2e8f0] text-gray-800 rounded px-5 py-2 font-semibold shadow hover:bg-gray-300 transition"
+            style="width: 90%"
+          >
+            Cancelar
+          </button>
+        </div>
+      </div>
+    </div>
+    <script defer src="../js/scripts.js"></script>
+    <script src="../js/dashboard.js"></script>
+  </body>
+</html>

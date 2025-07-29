@@ -3,7 +3,7 @@ const CLOUD_NAME = "ddj85p2fp";
 const UPLOAD_PRESET = "galeriaPsico";
 const FOLDER = "galeria";
 
-// Login seguro usando Netlify Functions
+// Login Netlify Functions
 const loginSection = document.getElementById("login-section");
 const dashboardSection = document.getElementById("dashboard-section");
 const loginForm = document.getElementById("loginForm");

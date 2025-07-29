@@ -3,7 +3,7 @@ const CLOUD_NAME = "ddj85p2fp";
 const UPLOAD_PRESET = "galeriaPsico";
 const FOLDER = "galeria";
 
-// Login Netlify Functions
+// Login seguro usando Netlify Functions
 const loginSection = document.getElementById("login-section");
 const dashboardSection = document.getElementById("dashboard-section");
 const loginForm = document.getElementById("loginForm");
@@ -264,9 +264,12 @@ function navigateLightbox(direction) {
 }
 
 function obtenerPublicIdActual(idx) {
+  // Busca el public_id de la imagen actual usando la lista de imágenes
+  // idx es el índice de la imagen en la galería
   const gallery = document.getElementById("gallery");
   const images = gallery.querySelectorAll("img");
   if (imagenesGaleria[idx]) {
+    // Buscar el public_id en la lista de imágenes cargadas
     const url = imagenesGaleria[idx];
     const match = url.match(/upload\/([^\.]+)\./);
     if (match) return match[1];

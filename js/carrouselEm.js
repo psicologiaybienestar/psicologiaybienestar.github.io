@@ -1,4 +1,3 @@
-// Inicializar el único carrusel general de imágenes
 new Splide("#general-empresarial-carousel", {
   type: "loop",
   autoplay: true,
@@ -8,6 +7,7 @@ new Splide("#general-empresarial-carousel", {
   gap: "1rem",
   breakpoints: {
     768: {
+
       perPage: 2,
       gap: "0.75rem",
     },

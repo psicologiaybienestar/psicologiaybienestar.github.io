@@ -1,28 +1,39 @@
 // Configuración Cloudinary
-const CLOUD_NAME = "ddj85p2fp"; // <-- Cambia esto por tu cloud name
-const UPLOAD_PRESET = "galeriaPsico"; // <-- Crea un upload preset en Cloudinary y ponlo aquí
-const FOLDER = "galeria"; // Carpeta donde se guardan las imágenes
+const CLOUD_NAME = "ddj85p2fp";
+const UPLOAD_PRESET = "galeriaPsico";
+const FOLDER = "galeria";
 
-// Credenciales de acceso (puedes cambiarlas)
-const USER = "adminPsico";
-const PASS = "Psicologia&Bienestar";
-
-// Login simple
+// Login seguro usando Netlify Functions
 const loginSection = document.getElementById("login-section");
 const dashboardSection = document.getElementById("dashboard-section");
 const loginForm = document.getElementById("loginForm");
 const logoutBtn = document.getElementById("logoutBtn");
 
-loginForm.onsubmit = function (e) {
+loginForm.onsubmit = async function (e) {
   e.preventDefault();
   const user = document.getElementById("username").value;
   const pass = document.getElementById("password").value;
-  if (user === USER && pass === PASS) {
-    loginSection.style.display = "none";
-    dashboardSection.style.display = "flex";
-    cargarGaleria();
-  } else {
-    mostrarToast("Usuario o contraseña incorrectos", "error");
+
+  try {
+    const response = await fetch("/.netlify/functions/verificar-login", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json",
+      },
+      body: JSON.stringify({ username: user, password: pass }),
+    });
+
+    const result = await response.json();
+
+    if (result.success) {
+      loginSection.style.display = "none";
+      dashboardSection.style.display = "flex";
+      cargarGaleria();
+    } else {
+      mostrarToast("Usuario o contraseña incorrectos", "error");
+    }
+  } catch (error) {
+    mostrarToast("Error de conexión", "error");
   }
 };
 
@@ -253,12 +264,9 @@ function navigateLightbox(direction) {
 }
 
 function obtenerPublicIdActual(idx) {
-  // Busca el public_id de la imagen actual usando la lista de imágenes
-  // idx es el índice de la imagen en la galería
   const gallery = document.getElementById("gallery");
   const images = gallery.querySelectorAll("img");
   if (imagenesGaleria[idx]) {
-    // Buscar el public_id en la lista de imágenes cargadas
     const url = imagenesGaleria[idx];
     const match = url.match(/upload\/([^\.]+)\./);
     if (match) return match[1];

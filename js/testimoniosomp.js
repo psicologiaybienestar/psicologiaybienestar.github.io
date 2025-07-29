@@ -4,9 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const gridTestimoniosContenedor = document.getElementById('grid-testimonios');
     const csvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vQ9gc0iLBVHnuWopuxijsTupBn_tvZ-B7D3b4WBVZ-meyKF61a8o24Qy1FQ5fxUYL7DaabkkAgILjac/pub?gid=421205038&single=true&output=csv';
 
-    // --- FUNCIÓN PARA PARSEAR CSV (Copiar la misma de index.html) ---
+    // --- FUNCIÓN PARA PARSEAR CSV ---
     function parsearCSV(csvText) {
-        // ... (Tu implementación de parsearCSV aquí) ...
         const rows = csvText.split('\n').filter(row => row.trim() !== '');
         if (rows.length === 0) return [];
 
@@ -88,8 +87,6 @@ document.addEventListener('DOMContentLoaded', () => {
                         fechaFormateada = fecha.split(' ')[0] || '';
                     }
 
-
-                    // Construir la tarjeta HTML para cada testimonio (sin "Ver más/menos" aquí)
                     const tarjetaHTML = `
                                  <div class="comentario-tarjeta">
                                      <p class="testimonio">"${testimonioCompleto}"</p>
@@ -117,14 +114,13 @@ document.addEventListener('DOMContentLoaded', () => {
 });
 // === Fin JavaScript para Testimonios Completos ===
 
-// === JavaScript para recargar links a index (Opcional, copiar si lo necesitas) ===
-const indexLinks = document.querySelectorAll('a[href^="/index.html#"]'); // Links a /index.html#...
+// === JavaScript para recargar links a index ===
+const indexLinks = document.querySelectorAll('a[href^="/index.html#"]'); 
 indexLinks.forEach(link => {
     link.addEventListener('click', (event) => {
         // Opcional: Evitar el comportamiento predeterminado y forzar recarga
         // event.preventDefault();
         // window.location.href = link.href; // Navega y luego recarga
-        // window.location.reload(true); // Esto recargaría SIEMPRE, incluso si ya estás en index
-        // Una mejor opción es solo navegar:
+        // window.location.reload(true);
     });
 });

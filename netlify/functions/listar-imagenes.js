@@ -27,7 +27,6 @@ exports.handler = async function (event, context) {
       };
     }
     const data = await res.json();
-    // Solo devolvemos los datos relevantes
     const images = data.resources.map((img) => ({
       url: img.secure_url,
       public_id: img.public_id,

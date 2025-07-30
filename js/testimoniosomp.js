@@ -122,8 +122,19 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => {
       console.error("Error al cargar los testimonios:", error);
-      gridTestimoniosContenedor.innerHTML =
-        '<p class="text-center text-red-500">Error al cargar los testimonios.</p>';
+      gridTestimoniosContenedor.innerHTML = `
+        <div class="col-span-full text-center">
+          <div class="bg-white rounded-lg p-8 shadow-lg border border-gray-200 max-w-md mx-auto">
+            <p class="text-red-500 mb-4 text-lg font-semibold">Error al cargar los testimonios.</p>
+            <p class="text-gray-600 mb-6">Si el problema persiste, puedes ver los testimonios en nuestra versión principal:</p>
+            <a href="https://psicologiaybienestar.netlify.app/pages/testimonios" 
+               target="_blank" 
+               class="inline-block bg-[#627eff] text-white px-6 py-3 rounded-lg hover:bg-[#53c6e4] transition-colors duration-300 font-semibold">
+              Ver en versión principal
+            </a>
+          </div>
+        </div>
+      `;
     });
 });
 

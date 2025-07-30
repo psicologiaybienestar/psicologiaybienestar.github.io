@@ -211,8 +211,21 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => {
       console.error("Error al cargar los comentarios:", error);
-      testimoniosContenedor.innerHTML =
-        '<div class="swiper-slide"><p class="text-center text-red-500">Error al cargar los comentarios.</p></div>';
+      testimoniosContenedor.innerHTML = `
+        <div class="swiper-slide">
+          <div class="comentario-tarjeta">
+            <p class="text-center text-red-500 mb-4">Error al cargar los comentarios.</p>
+            <p class="text-center text-gray-600 mb-4">Si el problema persiste, puedes ver los testimonios en nuestra versión principal:</p>
+            <div class="text-center">
+              <a href="https://psicologiaybienestar.netlify.app/#testimonios" 
+                 target="_blank" 
+                 class="inline-block bg-[#627eff] text-white px-6 py-2 rounded-lg hover:bg-[#53c6e4] transition-colors duration-300">
+                Ver en versión principal
+              </a>
+            </div>
+          </div>
+        </div>
+      `;
       document.querySelector(
         ".testimonios-swiper .swiper-button-next"
       ).style.display = "none";

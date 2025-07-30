@@ -26,15 +26,27 @@ exports.handler = async function (event, context) {
       origin.includes("127.0.0.1")
   );
 
-  // Si no hay origin/referer o no es un dominio autorizado, bloquear acceso
-  if (!origin || !isAllowedOrigin) {
+  // Detectar si es una descarga directa (sin headers de navegador)
+  const userAgent = event.headers["user-agent"] || "";
+  const accept = event.headers["accept"] || "";
+  const isDirectDownload =
+    !userAgent ||
+    !userAgent.includes("Mozilla") ||
+    !userAgent.includes("Chrome") ||
+    !userAgent.includes("Safari") ||
+    !userAgent.includes("Firefox") ||
+    !userAgent.includes("Edge");
+
+  // Si no hay origin/referer, no es un dominio autorizado, o es una descarga directa, bloquear acceso
+  if (!origin || !isAllowedOrigin || isDirectDownload) {
     return {
       statusCode: 403,
-      body: JSON.stringify({
-        error: "Acceso denegado",
-        message:
-          "Esta función solo puede ser accedida desde dominios autorizados",
-      }),
+      headers: {
+        "Content-Type": "text/plain",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+      body: "Acceso denegado\n\nEsta función solo puede ser accedida desde dominios autorizados.\nLos datos están protegidos por motivos de seguridad.",
     };
   }
 

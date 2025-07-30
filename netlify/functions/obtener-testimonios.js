@@ -5,9 +5,7 @@ exports.handler = async function (event, context) {
   if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
-      body: JSON.stringify({
-        error: "Método no permitido o no tienes permiso",
-      }),
+      body: JSON.stringify({ error: "Método no permitido" }),
     };
   }
 
@@ -25,6 +23,51 @@ exports.handler = async function (event, context) {
 
     const csvText = await response.text();
 
+    // Filtrar y limpiar los datos antes de devolverlos
+    const rows = csvText.split("\n").filter((row) => row.trim() !== "");
+    if (rows.length === 0) {
+      return {
+        statusCode: 200,
+        headers: {
+          "Content-Type": "text/plain",
+          "Access-Control-Allow-Origin": "*",
+          "Access-Control-Allow-Headers": "Content-Type",
+        },
+        body: "",
+      };
+    }
+
+    const headers = rows[0]
+      .split(",")
+      .map((header) => header.trim().replace(/[\ufeff\r]/g, ""));
+
+    // Solo permitir campos específicos para testimonios
+    const allowedFields = [
+      "Nombre Completo",
+      "Tu Testimonio",
+      "Calificación",
+      "Fecha",
+    ];
+
+    // Filtrar solo las columnas permitidas
+    const allowedIndices = headers
+      .map((header, index) => (allowedFields.includes(header) ? index : -1))
+      .filter((index) => index !== -1);
+
+    // Reconstruir el CSV solo con los campos permitidos
+    const filteredRows = rows.map((row, rowIndex) => {
+      if (rowIndex === 0) {
+        // Headers
+        return allowedFields.join(",");
+      } else {
+        // Datos
+        const fields = row.split(",");
+        return allowedIndices.map((index) => fields[index] || "").join(",");
+      }
+    });
+
+    const filteredCsv = filteredRows.join("\n");
+
     return {
       statusCode: 200,
       headers: {
@@ -32,7 +75,7 @@ exports.handler = async function (event, context) {
         "Access-Control-Allow-Origin": "*",
         "Access-Control-Allow-Headers": "Content-Type",
       },
-      body: csvText,
+      body: filteredCsv,
     };
   } catch (error) {
     return {

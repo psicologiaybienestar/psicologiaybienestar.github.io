@@ -52,7 +52,7 @@ async function cargarGaleriaPublica() {
       <div class="col-span-full text-center">
         <div class="bg-white rounded-lg p-8 shadow-lg border border-gray-200 max-w-md mx-auto">
           <p class="text-red-500 mb-4 text-lg font-semibold">${errorMessage}</p>
-          <p class="text-gray-600 mb-6">Esto puede ocurrir en GitHub Pages. Puedes ver la galería en nuestra versión principal:</p>
+          <p class="text-gray-600 mb-6">Si el problema persiste. Puedes ver la galería en nuestra versión principal:</p>
           <a href="https://psicologiaybienestar.netlify.app/pages/verGaleria" 
              target="_blank" 
              class="inline-block bg-[#627eff] text-white px-6 py-3 rounded-lg hover:bg-[#53c6e4] transition-colors duration-300 font-semibold">

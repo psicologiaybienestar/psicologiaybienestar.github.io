@@ -214,12 +214,12 @@ document.addEventListener("DOMContentLoaded", () => {
       testimoniosContenedor.innerHTML = `
         <div class="swiper-slide">
           <div class="comentario-tarjeta">
-            <p class="text-center text-red-500 mb-4">Error al cargar los comentarios.</p>
-            <p class="text-center text-gray-600 mb-4">Si el problema persiste, puedes ver los testimonios en nuestra versión principal:</p>
+            <p class="text-center text-red-500 mb-4 text-lg font-semibold">Error al cargar los comentarios.</p>
+            <p class="text-center text-gray-600 mb-6">Si el problema persiste. Puedes ver los testimonios en nuestra versión principal:</p>
             <div class="text-center">
               <a href="https://psicologiaybienestar.netlify.app/#testimonios" 
                  target="_blank" 
-                 class="inline-block bg-[#627eff] text-white px-6 py-2 rounded-lg hover:bg-[#53c6e4] transition-colors duration-300">
+                 class="inline-block bg-[#627eff] text-white px-6 py-3 rounded-lg hover:bg-[#53c6e4] transition-colors duration-300 font-semibold">
                 Ver en versión principal
               </a>
             </div>

@@ -5,8 +5,35 @@ exports.handler = async function (event, context) {
   if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
+      body: JSON.stringify({ error: "Método no permitido" }),
+    };
+  }
+
+  // Verificar que el request venga de un dominio autorizado
+  const allowedOrigins = [
+    "https://psicologiaybienestar.netlify.app",
+    "https://tu-usuario.github.io",
+    "http://localhost:3000",
+    "http://localhost:5500",
+    "http://127.0.0.1:5500",
+  ];
+
+  const origin = event.headers.origin || event.headers.referer || "";
+  const isAllowedOrigin = allowedOrigins.some(
+    (allowedOrigin) =>
+      origin.includes(allowedOrigin) ||
+      origin.includes("localhost") ||
+      origin.includes("127.0.0.1")
+  );
+
+  // Si no hay origin/referer o no es un dominio autorizado, bloquear acceso
+  if (!origin || !isAllowedOrigin) {
+    return {
+      statusCode: 403,
       body: JSON.stringify({
-        error: "Método no permitido o no tienes permiso",
+        error: "Acceso denegado",
+        message:
+          "Esta función solo puede ser accedida desde dominios autorizados",
       }),
     };
   }

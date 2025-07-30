@@ -1,15 +1,29 @@
 let imagenesGaleria = [];
 let currentIndex = 0;
 
+// Función para fetch con timeout
+const fetchWithTimeout = (url, timeout) => {
+  return Promise.race([
+    fetch(url),
+    new Promise((_, reject) =>
+      setTimeout(() => reject(new Error("Timeout")), timeout)
+    ),
+  ]);
+};
+
 async function cargarGaleriaPublica() {
   const galeriaContenedor = document.getElementById("galeria-imagenes");
   galeriaContenedor.innerHTML = "Cargando...";
   imagenesGaleria = [];
+
   try {
     const url = "/.netlify/functions/listar-imagenes";
-    const res = await fetch(url);
+    const timeoutDuration = 5000; // 5 segundos
+
+    const res = await fetchWithTimeout(url, timeoutDuration);
     if (!res.ok) throw new Error("No se pudo cargar la galería");
     const images = await res.json();
+
     galeriaContenedor.innerHTML = "";
     images.forEach((img, index) => {
       imagenesGaleria.push(img.url);
@@ -28,7 +42,25 @@ async function cargarGaleriaPublica() {
       galeriaContenedor.appendChild(divWrapper);
     });
   } catch (e) {
-    galeriaContenedor.innerHTML = "No se pudieron cargar las imágenes.";
+    console.error("Error al cargar la galería:", e);
+    const errorMessage =
+      e.message === "Timeout"
+        ? "Tiempo de espera agotado al cargar la galería."
+        : "Error al cargar la galería.";
+
+    galeriaContenedor.innerHTML = `
+      <div class="col-span-full text-center">
+        <div class="bg-white rounded-lg p-8 shadow-lg border border-gray-200 max-w-md mx-auto">
+          <p class="text-red-500 mb-4 text-lg font-semibold">${errorMessage}</p>
+          <p class="text-gray-600 mb-6">Esto puede ocurrir en GitHub Pages. Puedes ver la galería en nuestra versión principal:</p>
+          <a href="https://psicologiaybienestar.netlify.app/pages/verGaleria" 
+             target="_blank" 
+             class="inline-block bg-[#627eff] text-white px-6 py-3 rounded-lg hover:bg-[#53c6e4] transition-colors duration-300 font-semibold">
+            Ver en versión principal
+          </a>
+        </div>
+      </div>
+    `;
   }
 }
 

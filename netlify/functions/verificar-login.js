@@ -5,7 +5,9 @@ exports.handler = async function (event, context) {
   if (event.httpMethod !== "POST") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: "Método no permitido" }),
+      body: JSON.stringify({
+        error: "Método no permitido o no tienes permiso",
+      }),
     };
   }
 

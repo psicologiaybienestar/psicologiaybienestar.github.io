@@ -61,7 +61,19 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  fetch(csvUrl)
+  // Agregar timeout para detectar errores más rápido
+  const timeoutDuration = 5000; // 5 segundos
+
+  const fetchWithTimeout = (url, timeout) => {
+    return Promise.race([
+      fetch(url),
+      new Promise((_, reject) =>
+        setTimeout(() => reject(new Error("Timeout")), timeout)
+      ),
+    ]);
+  };
+
+  fetchWithTimeout(csvUrl, timeoutDuration)
     .then((response) => {
       if (!response.ok)
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -211,11 +223,16 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => {
       console.error("Error al cargar los comentarios:", error);
+      const errorMessage =
+        error.message === "Timeout"
+          ? "Tiempo de espera agotado al cargar los testimonios."
+          : "Error al cargar los testimonios.";
+
       testimoniosContenedor.innerHTML = `
         <div class="swiper-slide">
           <div class="comentario-tarjeta">
-            <p class="text-center text-red-500 mb-4">Error al cargar los comentarios.</p>
-            <p class="text-center text-gray-600 mb-4">Si el problema persiste, puedes ver los testimonios en nuestra versión principal:</p>
+            <p class="text-center text-red-500 mb-4">${errorMessage}</p>
+            <p class="text-center text-gray-600 mb-4">Esto puede ocurrir en GitHub Pages. Puedes ver los testimonios en nuestra versión principal:</p>
             <div class="text-center">
               <a href="https://psicologiaybienestar.netlify.app/#testimonios" 
                  target="_blank" 

@@ -26,15 +26,16 @@ exports.handler = async function (event, context) {
       origin.includes("127.0.0.1")
   );
 
-  // Si no hay origin/referer o no es un dominio autorizado, bloquear acceso
+  // Si no hay origin/referer o no es un dominio autorizado, devolver mensaje de acceso denegado
   if (!origin || !isAllowedOrigin) {
     return {
-      statusCode: 403,
-      body: JSON.stringify({
-        error: "Acceso denegado",
-        message:
-          "Esta función solo puede ser accedida desde dominios autorizados",
-      }),
+      statusCode: 200, // Usar 200 para que se pueda descargar
+      headers: {
+        "Content-Type": "text/plain",
+        "Access-Control-Allow-Origin": "*",
+        "Access-Control-Allow-Headers": "Content-Type",
+      },
+      body: "Acceso denegado\n\nEsta función solo puede ser accedida desde dominios autorizados.\nLos datos están protegidos por motivos de seguridad.",
     };
   }
 

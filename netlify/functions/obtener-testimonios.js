@@ -1,11 +1,13 @@
 const fetch = require("node-fetch");
 
 exports.handler = async function (event, context) {
-  // Solo permitir POST
-  if (event.httpMethod !== "POST") {
+  // Solo permitir GET
+  if (event.httpMethod !== "GET") {
     return {
       statusCode: 405,
-      body: JSON.stringify({ error: "Método no permitido o no tienes permiso" }),
+      body: JSON.stringify({
+        error: "Método no permitido o no tienes permiso",
+      }),
     };
   }
 

@@ -60,19 +60,7 @@ document.addEventListener("DOMContentLoaded", () => {
     );
   }
 
-  // Agregar timeout para detectar errores más rápido
-  const timeoutDuration = 5000; // 5 segundos
-
-  const fetchWithTimeout = (url, timeout) => {
-    return Promise.race([
-      fetch(url),
-      new Promise((_, reject) =>
-        setTimeout(() => reject(new Error("Timeout")), timeout)
-      ),
-    ]);
-  };
-
-  fetchWithTimeout(csvUrl, timeoutDuration)
+  fetch(csvUrl)
     .then((response) => {
       if (!response.ok) {
         throw new Error(`HTTP error! status: ${response.status}`);
@@ -134,16 +122,11 @@ document.addEventListener("DOMContentLoaded", () => {
     })
     .catch((error) => {
       console.error("Error al cargar los testimonios:", error);
-      const errorMessage =
-        error.message === "Timeout"
-          ? "Tiempo de espera agotado al cargar los testimonios."
-          : "Error al cargar los testimonios.";
-
       gridTestimoniosContenedor.innerHTML = `
         <div class="col-span-full text-center">
           <div class="bg-white rounded-lg p-8 shadow-lg border border-gray-200 max-w-md mx-auto">
-            <p class="text-red-500 mb-4 text-lg font-semibold">${errorMessage}</p>
-            <p class="text-gray-600 mb-6">Esto puede ocurrir en GitHub Pages. Puedes ver los testimonios en nuestra versión principal:</p>
+            <p class="text-red-500 mb-4 text-lg font-semibold">Error al cargar los testimonios.</p>
+            <p class="text-gray-600 mb-6">Si el problema persiste, puedes ver los testimonios en nuestra versión principal:</p>
             <a href="https://psicologiaybienestar.netlify.app/pages/testimonios" 
                target="_blank" 
                class="inline-block bg-[#627eff] text-white px-6 py-3 rounded-lg hover:bg-[#53c6e4] transition-colors duration-300 font-semibold">

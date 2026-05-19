@@ -5,4 +5,3 @@ capacitor-cordova-android-plugins/
 .vscode/
 *.log
 .env
-src/environments/environment.prod.ts

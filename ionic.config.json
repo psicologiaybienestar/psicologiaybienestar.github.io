@@ -1,0 +1,7 @@
+{
+  "name": "temp-psico-bienestar",
+  "integrations": {
+    "capacitor": {}
+  },
+  "type": "angular"
+}

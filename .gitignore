@@ -3,5 +3,6 @@ node_modules/
 www/
 capacitor-cordova-android-plugins/
 .vscode/
+.idea/
 *.log
 .env

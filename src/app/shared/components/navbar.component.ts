@@ -10,8 +10,9 @@ import { IonHeader, IonToolbar, IonButtons, IonMenuButton } from '@ionic/angular
     <ion-header class="ion-no-border">
       <ion-toolbar class="px-4" style="--background: #ffffff; --border-width: 0;">
         <div class="flex items-center justify-between h-16 max-w-7xl mx-auto w-full">
-          <a routerLink="/inicio" class="flex items-center shrink-0">
+          <a routerLink="/inicio" class="flex items-center gap-3 shrink-0">
             <img src="assets/img/logo.png" alt="Psicología & Bienestar" class="h-10 w-auto" />
+            <span class="hidden sm:block text-primary font-semibold text-base lg:text-lg tracking-tight">Psicología &amp; Bienestar</span>
           </a>
 
           <nav class="hidden md:flex items-center space-x-6 lg:space-x-8">

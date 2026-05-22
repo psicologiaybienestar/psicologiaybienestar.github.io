@@ -46,6 +46,18 @@ export const routes: Routes = [
         loadComponent: () => import('./features/servicio-empresarial/servicio-empresarial.component').then(m => m.ServicioEmpresarialComponent),
       },
       {
+        path: 'emociones',
+        loadComponent: () => import('./features/android/emociones.component').then(m => m.EmocionesComponent),
+      },
+      {
+        path: 'minijuegos',
+        loadComponent: () => import('./features/android/minijuegos.component').then(m => m.MinijuegosComponent),
+      },
+      {
+        path: 'agenda',
+        loadComponent: () => import('./features/android/agenda.component').then(m => m.AgendaComponent),
+      },
+      {
         path: 'terminos',
         loadComponent: () => import('./features/legal/terminos.component').then(m => m.TerminosComponent),
       },

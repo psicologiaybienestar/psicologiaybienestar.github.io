@@ -1,4 +1,4 @@
-import { Component, OnInit, OnDestroy, AfterViewInit, ViewEncapsulation } from '@angular/core';
+import { Component, OnInit, OnDestroy, AfterViewInit, ViewEncapsulation, inject } from '@angular/core';
 import { NgClass, NgStyle, DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
@@ -7,13 +7,16 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Subscription } from 'rxjs';
 import { TestimoniosService } from '../../core/services/testimonios.service';
 import { SupabaseService } from '../../core/services/supabase.service';
+import { PlatformService } from '../../core/services/platform.service';
+import { HomeAndroidComponent } from '../android/home-android.component';
 
 @Component({
   selector: 'app-home',
   standalone: true,
-  imports: [NgClass, NgStyle, RouterLink, ReactiveFormsModule, DatePipe],
+  imports: [NgClass, NgStyle, RouterLink, ReactiveFormsModule, DatePipe, HomeAndroidComponent],
   encapsulation: ViewEncapsulation.None,
   template: `
+    @if (!platform.isAndroid) {
     <!-- Hero Section -->
     <section id="inicio" class="relative h-screen flex items-center justify-center overflow-hidden" style="background: url('assets/img/inicio-bg.png') center center/cover no-repeat;">
       <div class="absolute inset-0 bg-black/30"></div>
@@ -323,6 +326,10 @@ import { SupabaseService } from '../../core/services/supabase.service';
         </div>
       </div>
     </section>
+    }
+    @if (platform.isAndroid) {
+      <app-home-android></app-home-android>
+    }
   `,
   styles: [`
     .testimonios-swiper {
@@ -403,11 +410,12 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   rainIcons: any[] = [];
 
-  constructor(
-    private testimoniosService: TestimoniosService,
-    private fb: FormBuilder,
-    private supabaseService: SupabaseService
-  ) {
+  platform = inject(PlatformService);
+  private testimoniosService = inject(TestimoniosService);
+  private fb = inject(FormBuilder);
+  private supabaseService = inject(SupabaseService);
+
+  constructor() {
     this.contactForm = this.fb.group({
       nombre: ['', Validators.required],
       email: ['', [Validators.required, Validators.email]],

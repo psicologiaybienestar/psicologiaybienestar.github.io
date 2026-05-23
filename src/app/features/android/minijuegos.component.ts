@@ -15,6 +15,14 @@ const AFFIRMATIONS = [
   'La calma vive dentro de mí.',
   'Hoy elijo ser amable conmigo mismo.',
   'Cada respiración me renueva.',
+  'Mis pensamientos crean mi realidad. Elijo pensamientos que me fortalecen.',
+  'Acepto mis imperfecciones porque me hacen único y auténtico.',
+  'El perdón me libera. Suelto el pasado y abrazo el presente.',
+  'La paz comienza en mi interior. Hoy cultivo la serenidad.',
+  'Soy merecedor de todo lo bueno que la vida tiene para ofrecer.',
+  'Mis errores son lecciones que me ayudan a crecer y evolucionar.',
+  'Confío en el proceso de la vida. Todo llega en el momento perfecto.',
+  'Hoy elijo enfocarme en lo que tengo, no en lo que me falta.',
 ];
 
 @Component({
@@ -83,7 +91,7 @@ const AFFIRMATIONS = [
         <div class="game-card-affirm">
           <h2 class="game-title">Afirmaciones Positivas</h2>
           <p class="game-subtitle">Toca para revelar una nueva afirmación</p>
-          <div class="affirm-card" (click)="nextAffirmation()">
+          <div class="affirm-card" [class.affirm-fade]="affirmationKey > 0" (click)="nextAffirmation()">
             <div class="affirm-icon">💛</div>
             <p class="affirm-text">{{ currentAffirmation }}</p>
             <button class="affirm-btn" (click)="nextAffirmation(); $event.stopPropagation()">
@@ -105,6 +113,13 @@ const AFFIRMATIONS = [
         <div class="game-card-gratitude">
           <h2 class="game-title">Diario de Gratitud</h2>
           <p class="game-subtitle">¿Por qué estás agradecido hoy?</p>
+
+          @if (gratitudeStreak > 0) {
+            <div class="streak-badge">
+              <span class="streak-fire">🔥</span>
+              <span><strong>{{ gratitudeStreak }}</strong> día{{ gratitudeStreak > 1 ? 's' : '' }} seguido{{ gratitudeStreak > 1 ? 's' : '' }}</span>
+            </div>
+          }
 
           <div class="gratitude-list">
             @if (gratitudeItems.length === 0) {
@@ -340,6 +355,9 @@ const AFFIRMATIONS = [
     .affirm-card:active {
       transform: scale(0.97);
     }
+    .affirm-fade {
+      animation: affirmFadeIn 0.4s ease;
+    }
     .affirm-icon {
       font-size: 36px;
       margin-bottom: 12px;
@@ -468,6 +486,21 @@ const AFFIRMATIONS = [
       transform: scale(0.92);
     }
 
+    .streak-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 6px;
+      background: #FFF7ED;
+      color: #9A3412;
+      font-size: 13px;
+      padding: 6px 14px;
+      border-radius: 20px;
+      margin-bottom: 14px;
+    }
+    .streak-fire {
+      font-size: 18px;
+    }
+
     .bottom-spacer {
       height: 80px;
     }
@@ -475,6 +508,10 @@ const AFFIRMATIONS = [
     @keyframes slideIn {
       from { opacity: 0; transform: translateY(8px); }
       to { opacity: 1; transform: translateY(0); }
+    }
+    @keyframes affirmFadeIn {
+      from { opacity: 0; transform: scale(0.95); }
+      to { opacity: 1; transform: scale(1); }
     }
   `]
 })
@@ -495,18 +532,23 @@ export class MinijuegosComponent implements OnInit {
 
   // Gratitude
   gratitudeItems: string[] = [];
+  gratitudeStreak = 0;
+  affirmationKey = 0;
 
   ngOnInit() {
     this.loadGratitude();
+    this.calcStreak();
     this.currentAffirmation = this.affirmations[Math.floor(Math.random() * this.affirmations.length)];
   }
 
   nextAffirmation() {
+    this.affirmationKey++;
     let idx = Math.floor(Math.random() * this.affirmations.length);
     if (this.affirmations[idx] === this.currentAffirmation && this.affirmations.length > 1) {
       idx = (idx + 1) % this.affirmations.length;
     }
     this.currentAffirmation = this.affirmations[idx];
+    this.affirmationKey++;
   }
 
   toggleBreathing() {
@@ -571,6 +613,7 @@ export class MinijuegosComponent implements OnInit {
     this.gratitudeItems.unshift(text);
     if (this.gratitudeItems.length > 20) this.gratitudeItems.pop();
     this.saveGratitude();
+    this.updateStreak();
   }
 
   removeGratitude(index: number) {
@@ -588,6 +631,43 @@ export class MinijuegosComponent implements OnInit {
   private saveGratitude() {
     try {
       localStorage.setItem('pb_gratitude', JSON.stringify(this.gratitudeItems));
+    } catch { /* ignore */ }
+  }
+
+  private calcStreak() {
+    try {
+      const lastDate = localStorage.getItem('pb_gratitude_last');
+      if (!lastDate) return;
+      const last = new Date(lastDate);
+      const today = new Date();
+      const diff = Math.floor((today.getTime() - last.getTime()) / (1000 * 60 * 60 * 24));
+      if (diff <= 1) {
+        const stored = localStorage.getItem('pb_gratitude_streak');
+        this.gratitudeStreak = stored ? parseInt(stored, 10) : 1;
+      }
+    } catch { /* ignore */ }
+  }
+
+  private updateStreak() {
+    try {
+      const today = new Date().toDateString();
+      const lastDate = localStorage.getItem('pb_gratitude_last');
+      if (lastDate === today) return;
+
+      const last = lastDate ? new Date(lastDate) : null;
+      const now = new Date();
+      const diff = last ? Math.floor((now.getTime() - last.getTime()) / (1000 * 60 * 60 * 24)) : 99;
+
+      if (diff === 1) {
+        this.gratitudeStreak++;
+      } else if (diff > 1) {
+        this.gratitudeStreak = 1;
+      } else {
+        this.gratitudeStreak = 1;
+      }
+
+      localStorage.setItem('pb_gratitude_last', today);
+      localStorage.setItem('pb_gratitude_streak', String(this.gratitudeStreak));
     } catch { /* ignore */ }
   }
 }

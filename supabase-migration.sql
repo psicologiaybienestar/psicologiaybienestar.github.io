@@ -110,24 +110,24 @@ create policy "Comentarios aprobados lectura" on comentarios
 
 -- Políticas de administración (rol admin/editor)
 create policy "Admin full access noticias" on noticias
-  for all using (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'))
-  with check (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'));
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
 
 create policy "Admin full access eventos" on eventos
-  for all using (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'))
-  with check (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'));
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
 
 create policy "Admin full access galeria" on galeria
-  for all using (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'))
-  with check (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'));
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
 
 create policy "Admin full access testimonios" on testimonios
-  for all using (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'))
-  with check (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'));
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
 
 create policy "Admin full access comentarios" on comentarios
-  for all using (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'))
-  with check (auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor'));
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
 
 -- 5. STORAGE BUCKETS
 -- ============================================
@@ -143,37 +143,37 @@ create policy "Public read storage" on storage.objects
 create policy "Admin upload galeria" on storage.objects
   for insert with check (
     bucket_id = 'galeria'
-    and auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor')
+    and auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor')
   );
 
 create policy "Admin delete galeria" on storage.objects
   for delete using (
     bucket_id = 'galeria'
-    and auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor')
+    and auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor')
   );
 
 create policy "Admin upload noticias" on storage.objects
   for insert with check (
     bucket_id = 'noticias'
-    and auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor')
+    and auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor')
   );
 
 create policy "Admin delete noticias" on storage.objects
   for delete using (
     bucket_id = 'noticias'
-    and auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor')
+    and auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor')
   );
 
 create policy "Admin upload eventos" on storage.objects
   for insert with check (
     bucket_id = 'eventos'
-    and auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor')
+    and auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor')
   );
 
 create policy "Admin delete eventos" on storage.objects
   for delete using (
     bucket_id = 'eventos'
-    and auth.jwt() -> 'user_metadata' ->> 'role' in ('admin', 'editor')
+    and auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor')
   );
 
 -- 7. TRIGGER PARA UPDATED_AT
@@ -205,5 +205,272 @@ $$;
 -- 3. Luego ejecuta esto en SQL Editor:
 --
 --    UPDATE auth.users
---    SET raw_user_meta_data = '{"role": "admin"}'
+--    SET raw_app_meta_data = '{"role": "admin"}'
 --    WHERE email = 'admin@psicologiaybienestar.com';
+--
+-- NOTA: raw_app_meta_data se usa en lugar de raw_user_meta_data porque
+-- app_metadata es controlado por el servidor (no editable por usuarios finales),
+-- lo que evita el lint error "rls_references_user_metadata" de Supabase.
+
+-- ============================================
+-- 10. NUEVAS TABLAS ESCALABLES — MÓDULOS EXPANDIDOS
+-- ============================================
+
+-- Tabla: motivational_quotes
+create table if not exists motivational_quotes (
+  id uuid default gen_random_uuid() primary key,
+  quote text not null,
+  author text default 'Anónimo',
+  category text default 'general',
+  is_active boolean default true,
+  created_at timestamptz default now()
+);
+
+-- Tabla: emotional_tips
+create table if not exists emotional_tips (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  description text,
+  emotion_type text default 'general',
+  image_url text,
+  is_active boolean default true,
+  created_at timestamptz default now()
+);
+
+-- Tabla: mini_games
+create table if not exists mini_games (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  description text,
+  game_type text default 'affirmations' check (game_type in ('breathing','affirmations','gratitude','trivia','memory','other')),
+  difficulty text default 'facil' check (difficulty in ('facil','medio','dificil')),
+  icon text default '🎮',
+  route text,
+  is_active boolean default true,
+  created_at timestamptz default now()
+);
+
+-- Tabla: emotions
+create table if not exists emotions (
+  id uuid default gen_random_uuid() primary key,
+  emotion_name text not null,
+  description text,
+  color text default '#F9FAFB',
+  icon text default '😊',
+  recommendations jsonb default '[]'::jsonb,
+  is_active boolean default true,
+  created_at timestamptz default now()
+);
+
+-- Tabla: wellness_activities
+create table if not exists wellness_activities (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  content text,
+  activity_type text default 'mindfulness' check (activity_type in ('mindfulness','meditation','breathing','relaxation','exercise','other')),
+  duration integer, -- minutes
+  image_url text,
+  is_active boolean default true,
+  created_at timestamptz default now()
+);
+
+-- Tabla: appointments (solicitudes de citas)
+create table if not exists appointments (
+  id uuid default gen_random_uuid() primary key,
+  user_name text not null,
+  email text not null,
+  phone text,
+  requested_date date,
+  requested_time time,
+  message text,
+  status text default 'pendiente' check (status in ('pendiente','confirmada','cancelada','completada')),
+  created_at timestamptz default now()
+);
+
+-- Tabla: user_progress (progreso emocional anónimo)
+create table if not exists user_progress (
+  id uuid default gen_random_uuid() primary key,
+  user_id uuid, -- nullable para usuarios anónimos
+  completed_activity text,
+  emotional_state text,
+  score integer,
+  metadata jsonb default '{}'::jsonb,
+  created_at timestamptz default now()
+);
+
+-- Ampliar CHECK de eventos para incluir nuevos estados
+alter table eventos drop constraint if exists eventos_estado_check;
+alter table eventos add constraint eventos_estado_check
+  check (estado in ('publicado','cancelado','finalizado','pospuesto','borrador'));
+
+-- ============================================
+-- 11. ÍNDICES PARA NUEVAS TABLAS
+-- ============================================
+create index if not exists idx_quotes_category on motivational_quotes(category);
+create index if not exists idx_quotes_active on motivational_quotes(is_active);
+create index if not exists idx_tips_emotion on emotional_tips(emotion_type);
+create index if not exists idx_tips_active on emotional_tips(is_active);
+create index if not exists idx_games_type on mini_games(game_type);
+create index if not exists idx_games_active on mini_games(is_active);
+create index if not exists idx_emotions_name on emotions(emotion_name);
+create index if not exists idx_activities_type on wellness_activities(activity_type);
+create index if not exists idx_activities_active on wellness_activities(is_active);
+create index if not exists idx_appointments_status on appointments(status);
+create index if not exists idx_appointments_date on appointments(requested_date);
+create index if not exists idx_progress_user on user_progress(user_id);
+create index if not exists idx_progress_state on user_progress(emotional_state);
+
+-- ============================================
+-- 12. RLS — NUEVAS TABLAS
+-- ============================================
+alter table motivational_quotes enable row level security;
+alter table emotional_tips enable row level security;
+alter table mini_games enable row level security;
+alter table emotions enable row level security;
+alter table wellness_activities enable row level security;
+alter table appointments enable row level security;
+alter table user_progress enable row level security;
+
+-- Políticas públicas (solo activos)
+create policy "Quotes públicos activos" on motivational_quotes
+  for select using (is_active = true);
+
+create policy "Tips públicos activos" on emotional_tips
+  for select using (is_active = true);
+
+create policy "Games públicos activos" on mini_games
+  for select using (is_active = true);
+
+create policy "Emotions públicos activos" on emotions
+  for select using (is_active = true);
+
+create policy "Activities públicos activos" on wellness_activities
+  for select using (is_active = true);
+
+-- Appointments: solo el propio usuario puede ver sus citas (por email)
+create policy "Appointments propio usuario" on appointments
+  for select using (email = auth.jwt() ->> 'email');
+
+-- User progress: solo propio usuario
+create policy "Progress propio usuario" on user_progress
+  for select using (user_id = auth.uid());
+create policy "Progress insert propio" on user_progress
+  for insert with check (user_id = auth.uid());
+
+-- Políticas de administración (rol admin/editor) — todas las tablas nuevas
+create policy "Admin full access quotes" on motivational_quotes
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
+
+create policy "Admin full access tips" on emotional_tips
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
+
+create policy "Admin full access games" on mini_games
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
+
+create policy "Admin full access emotions" on emotions
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
+
+create policy "Admin full access activities" on wellness_activities
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
+
+create policy "Admin full access appointments" on appointments
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
+
+create policy "Admin full access progress" on user_progress
+  for all using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'))
+  with check (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
+
+-- ============================================
+-- 13. STORAGE BUCKET ADICIONAL
+-- ============================================
+insert into storage.buckets (id, name, public) values ('wellness', 'wellness', true) on conflict do nothing;
+
+-- Políticas para bucket wellness
+create policy "Public read wellness storage" on storage.objects
+  for select using (bucket_id = 'wellness');
+
+create policy "Admin upload wellness" on storage.objects
+  for insert with check (
+    bucket_id = 'wellness'
+    and auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor')
+  );
+
+create policy "Admin delete wellness" on storage.objects
+  for delete using (
+    bucket_id = 'wellness'
+    and auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor')
+  );
+
+-- ============================================
+-- 14. TRIGGERS PARA UPDATED_AT (nuevas tablas)
+-- ============================================
+create trigger handle_updated_at_quotes before update on motivational_quotes
+  for each row execute procedure moddatetime (updated_at);
+
+create trigger handle_updated_at_tips before update on emotional_tips
+  for each row execute procedure moddatetime (updated_at);
+
+-- Añadir columna updated_at a las tablas que lo necesiten (si no existe)
+do $$
+begin
+  if not exists (select 1 from information_schema.columns where table_name = 'motivational_quotes' and column_name = 'updated_at') then
+    alter table motivational_quotes add column updated_at timestamptz default now();
+  end if;
+  if not exists (select 1 from information_schema.columns where table_name = 'emotional_tips' and column_name = 'updated_at') then
+    alter table emotional_tips add column updated_at timestamptz default now();
+  end if;
+end;
+$$;
+
+-- ============================================
+-- 15. VISTA ADMIN — ESTADÍSTICAS PARA DASHBOARD
+-- ============================================
+create or replace view admin_stats with (security_invoker = true) as
+select
+  (select count(*) from noticias) as total_noticias,
+  (select count(*) from noticias where estado = 'publicado') as noticias_publicadas,
+  (select count(*) from noticias where estado = 'borrador') as noticias_borrador,
+  (select count(*) from eventos) as total_eventos,
+  (select count(*) from eventos where estado = 'publicado') as eventos_publicados,
+  (select count(*) from eventos where fecha_inicio >= now()) as eventos_proximos,
+  (select count(*) from galeria) as total_imagenes,
+  (select count(*) from testimonios where estado = 'aprobado') as testimonios_aprobados,
+  (select count(*) from testimonios where estado = 'pendiente') as testimonios_pendientes,
+  (select count(*) from motivational_quotes where is_active = true) as quotes_activas,
+  (select count(*) from emotional_tips where is_active = true) as tips_activos,
+  (select count(*) from mini_games where is_active = true) as juegos_activos,
+  (select count(*) from appointments where status = 'pendiente') as citas_pendientes,
+  (select count(*) from appointments where status = 'confirmada') as citas_confirmadas;
+
+-- ============================================
+-- 16. FUNCIÓN — REGISTRO DE PROGRESO EMOCIONAL
+-- ============================================
+create or replace function record_emotional_progress(
+  p_emotional_state text,
+  p_score integer default null
+)
+returns uuid
+language sql
+as $$
+  insert into user_progress (user_id, emotional_state, score)
+  values (auth.uid(), p_emotional_state, p_score)
+  returning id;
+$$;
+
+-- ============================================
+-- 17. NOTAS PARA GOOGLE PLAY CONSOLE (Data Safety)
+-- ============================================
+-- Datos recolectados por la app:
+-- · Información personal: email (solo si agenda cita)
+-- · Actividad en app: emociones registradas, minijuegos completados
+-- · Diagnósticos: crash reports (Android nativo)
+-- No se comparten datos con terceros.
+-- Cifrado en tránsito: HTTPS + Supabase TLS.
+-- El permiso POST_NOTIFICATIONS se solicita en tiempo de ejecución (Android 13+).
+-- No se recolecta ubicación, contactos, fotos ni micrófono.

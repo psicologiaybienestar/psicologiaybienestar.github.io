@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 
 
 const MOODS = [
@@ -8,6 +8,9 @@ const MOODS = [
   { emoji: '😔', label: 'Triste', color: '#FFF7ED' },
   { emoji: '😟', label: 'Preocupado', color: '#FEF2F2' },
   { emoji: '😤', label: 'Enojado', color: '#FDF2F8' },
+  { emoji: '🙏', label: 'Agradecido', color: '#F5F3FF' },
+  { emoji: '🌟', label: 'Esperanzado', color: '#FFF7ED' },
+  { emoji: '🔥', label: 'Motivado', color: '#FEF2F2' },
 ];
 
 const EMOTIONAL_TIPS = [
@@ -40,6 +43,16 @@ const EMOTIONAL_TIPS = [
     icon: '☀️',
     title: 'Cambia tu energía',
     text: 'Sal a caminar, escucha música o haz algo que te haga bien.',
+  },
+  {
+    icon: '🎵',
+    title: 'Música que sana',
+    text: 'Escucha una canción que te haga sentir bien. La música conecta con tus emociones.',
+  },
+  {
+    icon: '🤗',
+    title: 'Auto-compasión',
+    text: 'Trátate con la misma amabilidad que tratarías a un amigo querido.',
   },
 ];
 
@@ -112,6 +125,21 @@ const EMOTIONAL_TIPS = [
         <button class="breathing-toggle" (click)="toggleBreathing()">
           {{ breathingActive ? 'Detener' : 'Comenzar' }}
         </button>
+      </div>
+    </section>
+
+    <!-- Historial de ánimo -->
+    <section class="section">
+      <h2 class="section-title">Tu historial</h2>
+      <p class="section-subtitle">Últimos 7 días</p>
+      <div class="history-grid">
+        @for (day of moodHistory; track day.date) {
+          <div class="history-day" [class.history-today]="day.isToday" title="{{ day.label }}">
+            <span class="history-date">{{ day.dateNum }}</span>
+            <span class="history-mood">{{ day.emoji || '—' }}</span>
+            <span class="history-label">{{ day.dayLabel }}</span>
+          </div>
+        }
       </div>
     </section>
 
@@ -313,6 +341,42 @@ const EMOTIONAL_TIPS = [
       opacity: 0.8;
     }
 
+    .history-grid {
+      display: flex;
+      gap: 6px;
+      justify-content: space-between;
+    }
+    .history-day {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 8px 6px;
+      border-radius: 12px;
+      background: #F9FAFB;
+      flex: 1;
+      min-width: 0;
+      transition: all 0.2s;
+    }
+    .history-today {
+      background: #EEF2FF;
+      border: 1px solid #C7D2FE;
+    }
+    .history-date {
+      font-size: 11px;
+      font-weight: 700;
+      color: #4b5563;
+    }
+    .history-mood {
+      font-size: 20px;
+    }
+    .history-label {
+      font-size: 9px;
+      color: #9ca3af;
+      text-transform: uppercase;
+      letter-spacing: 0.03em;
+    }
+
     .bottom-spacer {
       height: 80px;
     }
@@ -323,18 +387,31 @@ const EMOTIONAL_TIPS = [
     }
   `]
 })
-export class EmocionesComponent {
+export class EmocionesComponent implements OnInit {
   moods = MOODS;
   emotionalTips = EMOTIONAL_TIPS;
   selectedMood: string | null = null;
+  moodHistory: { date: string; dateNum: number; dayLabel: string; emoji: string | null; isToday: boolean; label: string }[] = [];
 
   breathingActive = false;
   breathingPhase: 'inhale' | 'hold' | 'exhale' = 'inhale';
   breathingText = 'Inhalar';
   private breathingTimer: any = null;
 
+  private moodEmojiMap: Record<string, string> = {};
+  private dayLabels = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+
+  ngOnInit() {
+    this.moods.forEach(m => { this.moodEmojiMap[m.label] = m.emoji; });
+    this.loadMoodHistory();
+  }
+
   selectMood(label: string) {
     this.selectedMood = this.selectedMood === label ? null : label;
+    if (this.selectedMood) {
+      this.saveMood(this.selectedMood);
+      this.loadMoodHistory();
+    }
   }
 
   getMoodMessage(): string {
@@ -345,8 +422,37 @@ export class EmocionesComponent {
       'Triste': 'Está bien sentir tristeza. Permítete ese espacio sin juzgarte.',
       'Preocupado': 'Respira profundo. Una preocupación a la vez. Todo va a estar bien.',
       'Enojado': 'Tu enojo es válido. Respira antes de actuar. Tómate tu tiempo.',
+      'Agradecido': 'La gratitud transforma lo que tenemos en suficiente. Hermoso sentirte así.',
+      'Esperanzado': 'La esperanza es la luz que guía tu camino. Gran momento para avanzar.',
+      'Motivado': 'Esa energía es poderosa. Canalízala hacia lo que realmente importa.',
     };
     return messages[this.selectedMood!] || 'Gracias por reconocer cómo te sientes.';
+  }
+
+  private saveMood(label: string) {
+    try {
+      const today = new Date().toDateString();
+      localStorage.setItem('pb_mood_' + today, label);
+    } catch { /* ignore */ }
+  }
+
+  private loadMoodHistory() {
+    this.moodHistory = [];
+    const today = new Date();
+    for (let i = 6; i >= 0; i--) {
+      const d = new Date(today);
+      d.setDate(d.getDate() - i);
+      const key = 'pb_mood_' + d.toDateString();
+      const saved = localStorage.getItem(key);
+      this.moodHistory.push({
+        date: d.toDateString(),
+        dateNum: d.getDate(),
+        dayLabel: this.dayLabels[d.getDay()],
+        emoji: saved ? (this.moodEmojiMap[saved] || null) : null,
+        isToday: i === 0,
+        label: saved || '',
+      });
+    }
   }
 
   toggleBreathing() {

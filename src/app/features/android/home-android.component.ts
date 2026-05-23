@@ -45,7 +45,9 @@ const WELLNESS_CARDS = [
     <section class="hero-section">
       <div class="hero-bg"></div>
       <div class="hero-content">
-        <div class="hero-emoji">💛</div>
+        <div class="hero-logo">
+          <img src="assets/img/logo.png" alt="Psicología & Bienestar" class="hero-logo-img" />
+        </div>
         <h1 class="hero-title">Bienvenido</h1>
         <p class="hero-subtitle">Tu espacio seguro para el bienestar emocional</p>
       </div>
@@ -185,6 +187,28 @@ const WELLNESS_CARDS = [
       </section>
     }
 
+    <!-- Accesos Rápidos -->
+    <section class="section">
+      <h2 class="section-title">Accesos rápidos</h2>
+      <div class="quick-access-grid">
+        <button class="quick-card" (click)="openWebVersion()">
+          <svg xmlns="http://www.w3.org/2000/svg" class="quick-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="10"/><line x1="2" y1="12" x2="22" y2="12"/>
+            <path d="M12 2a15.3 15.3 0 014 10 15.3 15.3 0 01-4 10 15.3 15.3 0 01-4-10 15.3 15.3 0 014-10z"/>
+          </svg>
+          <span class="quick-label">Versión web</span>
+          <span class="quick-desc">Abrir en navegador</span>
+        </button>
+        <a routerLink="/configuracion" class="quick-card">
+          <svg xmlns="http://www.w3.org/2000/svg" class="quick-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <circle cx="12" cy="12" r="3"/><path d="M19.4 15a1.65 1.65 0 00.33 1.82l.06.06a2 2 0 010 2.83 2 2 0 01-2.83 0l-.06-.06a1.65 1.65 0 00-1.82-.33 1.65 1.65 0 00-1 1.51V21a2 2 0 01-2 2 2 2 0 01-2-2v-.09A1.65 1.65 0 009 19.4a1.65 1.65 0 00-1.82.33l-.06.06a2 2 0 01-2.83 0 2 2 0 010-2.83l.06-.06A1.65 1.65 0 004.68 15a1.65 1.65 0 00-1.51-1H3a2 2 0 01-2-2 2 2 0 012-2h.09A1.65 1.65 0 004.6 9a1.65 1.65 0 00-.33-1.82l-.06-.06a2 2 0 010-2.83 2 2 0 012.83 0l.06.06A1.65 1.65 0 009 4.68a1.65 1.65 0 001-1.51V3a2 2 0 012-2 2 2 0 012 2v.09a1.65 1.65 0 001 1.51 1.65 1.65 0 001.82-.33l.06-.06a2 2 0 012.83 0 2 2 0 010 2.83l-.06.06a1.65 1.65 0 00-.33 1.82V9a1.65 1.65 0 001.51 1H21a2 2 0 012 2 2 2 0 01-2 2h-.09a1.65 1.65 0 00-1.51 1z"/>
+          </svg>
+          <span class="quick-label">Configuración</span>
+          <span class="quick-desc">Notificaciones y preferencias</span>
+        </a>
+      </div>
+    </section>
+
     <!-- Espacio para el bottom nav -->
     <div class="bottom-spacer"></div>
   `,
@@ -210,10 +234,17 @@ const WELLNESS_CARDS = [
       position: relative;
       text-align: center;
     }
-    .hero-emoji {
-      font-size: 48px;
-      margin-bottom: 8px;
+    .hero-logo {
+      margin-bottom: 12px;
       animation: floaty 3s ease-in-out infinite;
+    }
+    .hero-logo-img {
+      width: 72px;
+      height: 72px;
+      object-fit: contain;
+      margin: 0 auto;
+      border-radius: 18px;
+      box-shadow: 0 4px 20px rgba(98, 126, 255, 0.2);
     }
     .hero-title {
       font-size: 28px;
@@ -519,6 +550,45 @@ const WELLNESS_CARDS = [
       text-transform: uppercase;
     }
 
+    /* ===== Quick Access ===== */
+    .quick-access-grid {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 10px;
+    }
+    .quick-card {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 16px 12px;
+      background: #F9FAFB;
+      border: 1px solid #F3F4F6;
+      border-radius: 16px;
+      text-decoration: none;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      font-family: inherit;
+    }
+    .quick-card:active {
+      transform: scale(0.96);
+      background: #EEF2FF;
+    }
+    .quick-icon {
+      width: 28px;
+      height: 28px;
+      color: #627eff;
+    }
+    .quick-label {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .quick-desc {
+      font-size: 11px;
+      color: #9ca3af;
+    }
+
     /* ===== Bottom spacer ===== */
     .bottom-spacer {
       height: 80px;
@@ -549,6 +619,11 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
 
   private supabaseService = inject(SupabaseService);
   private testimoniosService = inject(TestimoniosService);
+
+  openWebVersion() {
+    const url = 'https://psicologiaybienestar.netlify.app';
+    window.open(url, '_blank');
+  }
 
   ngOnInit() {
     this.loadData();

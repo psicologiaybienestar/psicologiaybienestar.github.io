@@ -58,6 +58,10 @@ export const routes: Routes = [
         loadComponent: () => import('./features/android/agenda.component').then(m => m.AgendaComponent),
       },
       {
+        path: 'configuracion',
+        loadComponent: () => import('./features/android/configuracion.component').then(m => m.ConfiguracionComponent),
+      },
+      {
         path: 'terminos',
         loadComponent: () => import('./features/legal/terminos.component').then(m => m.TerminosComponent),
       },
@@ -99,6 +103,30 @@ export const routes: Routes = [
       {
         path: 'testimonios',
         loadComponent: () => import('./features/admin/testimonios/admin-testimonios.component').then(m => m.AdminTestimoniosComponent),
+      },
+      {
+        path: 'frases',
+        loadComponent: () => import('./features/admin/frases/admin-frases.component').then(m => m.AdminFrasesComponent),
+      },
+      {
+        path: 'consejos',
+        loadComponent: () => import('./features/admin/consejos/admin-consejos.component').then(m => m.AdminConsejosComponent),
+      },
+      {
+        path: 'emociones',
+        loadComponent: () => import('./features/admin/emociones/admin-emociones.component').then(m => m.AdminEmocionesComponent),
+      },
+      {
+        path: 'actividades',
+        loadComponent: () => import('./features/admin/actividades/admin-actividades.component').then(m => m.AdminActividadesComponent),
+      },
+      {
+        path: 'minijuegos',
+        loadComponent: () => import('./features/admin/minijuegos/admin-minijuegos.component').then(m => m.AdminMinijuegosComponent),
+      },
+      {
+        path: 'citas',
+        loadComponent: () => import('./features/admin/citas/admin-citas.component').then(m => m.AdminCitasComponent),
       },
     ],
   },

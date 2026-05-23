@@ -1,5 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { RouterLink } from '@angular/router';
+import { AgendaService } from '../../core/services/agenda.service';
 
 @Component({
   selector: 'app-agenda',
@@ -14,6 +15,19 @@ import { RouterLink } from '@angular/router';
           <p class="hero-subtitle">Tu espacio para solicitar citas y acompañamiento</p>
         </div>
       </div>
+
+      <!-- Selector de semana -->
+      <section class="section">
+        <h2 class="section-title">Esta semana</h2>
+        <div class="week-days">
+          @for (day of weekDays; track day.date.toDateString(); let i = $index) {
+            <div class="week-day" [class.week-day-active]="i === 0">
+              <span class="week-day-label">{{ day.label }}</span>
+              <span class="week-day-num">{{ day.date.getDate() }}</span>
+            </div>
+          }
+        </div>
+      </section>
 
       <div class="coming-soon-card">
         <div class="soon-badge">
@@ -49,6 +63,20 @@ import { RouterLink } from '@angular/router';
               <h3 class="feature-title">Recordatorios</h3>
               <p class="feature-desc">Notificaciones de tus actividades y citas</p>
             </div>
+          </div>
+        </div>
+
+        <!-- Placeholder de formulario deshabilitado -->
+        <div class="disabled-form">
+          <div class="disabled-form-header">
+            <span class="disabled-form-icon">📝</span>
+            <span>Solicitar cita</span>
+          </div>
+          <div class="disabled-form-body">
+            <p>Selecciona un día y horario para tu acompañamiento</p>
+            <div class="disabled-input">Seleccionar fecha</div>
+            <div class="disabled-input">Seleccionar hora</div>
+            <div class="disabled-badge">En desarrollo</div>
           </div>
         </div>
 
@@ -232,7 +260,109 @@ import { RouterLink } from '@angular/router';
       0%, 100% { opacity: 1; }
       50% { opacity: 0.3; }
     }
-  `],
+    .section {
+      padding: 8px 20px 12px;
+    }
+    .section-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1f2937;
+      margin-bottom: 10px;
+    }
+
+    /* Week selector */
+    .week-days {
+      display: flex;
+      gap: 6px;
+    }
+    .week-day {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 4px;
+      padding: 10px 4px;
+      border-radius: 14px;
+      background: #F9FAFB;
+      cursor: default;
+    }
+    .week-day-active {
+      background: #EEF2FF;
+      border: 1px solid #C7D2FE;
+    }
+    .week-day-label {
+      font-size: 11px;
+      font-weight: 600;
+      color: #6b7280;
+    }
+    .week-day-num {
+      font-size: 16px;
+      font-weight: 800;
+      color: #1f2937;
+    }
+    .week-day-active .week-day-num {
+      color: #627eff;
+    }
+
+    /* Disabled form */
+    .disabled-form {
+      margin-bottom: 20px;
+      background: #F9FAFB;
+      border: 1px dashed #D1D5DB;
+      border-radius: 16px;
+      overflow: hidden;
+      text-align: left;
+    }
+    .disabled-form-header {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 12px 16px;
+      background: #F3F4F6;
+      font-size: 14px;
+      font-weight: 700;
+      color: #9ca3af;
+    }
+    .disabled-form-icon {
+      font-size: 18px;
+    }
+    .disabled-form-body {
+      padding: 16px;
+    }
+    .disabled-form-body p {
+      font-size: 13px;
+      color: #9ca3af;
+      margin-bottom: 12px;
+    }
+    .disabled-input {
+      background: #ffffff;
+      border: 1px solid #E5E7EB;
+      border-radius: 10px;
+      padding: 10px 14px;
+      font-size: 14px;
+      color: #d1d5db;
+      margin-bottom: 8px;
+    }
+    .disabled-badge {
+      display: inline-block;
+      background: #FEF3C7;
+      color: #92400E;
+      font-size: 11px;
+      font-weight: 700;
+      padding: 4px 12px;
+      border-radius: 20px;
+      margin-top: 4px;
+    }
+
+      `],
   imports: [RouterLink]
 })
-export class AgendaComponent {}
+export class AgendaComponent implements OnInit {
+  weekDays: { label: string; date: Date }[] = [];
+
+  constructor(private agendaService: AgendaService) {}
+
+  ngOnInit() {
+    this.weekDays = this.agendaService.getWeekDays();
+  }
+}

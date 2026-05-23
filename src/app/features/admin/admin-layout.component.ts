@@ -60,6 +60,12 @@ export class AdminLayoutComponent {
     { label: 'Eventos', path: '/admin/eventos' },
     { label: 'Galería', path: '/admin/galeria' },
     { label: 'Testimonios', path: '/admin/testimonios' },
+    { label: 'Frases', path: '/admin/frases' },
+    { label: 'Consejos', path: '/admin/consejos' },
+    { label: 'Emociones', path: '/admin/emociones' },
+    { label: 'Actividades', path: '/admin/actividades' },
+    { label: 'Minijuegos', path: '/admin/minijuegos' },
+    { label: 'Citas', path: '/admin/citas' },
   ];
 
   constructor(private auth: AuthService) {}

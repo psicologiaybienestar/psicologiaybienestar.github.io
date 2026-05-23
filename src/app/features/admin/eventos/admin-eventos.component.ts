@@ -9,12 +9,26 @@ import { SupabaseService } from '../../../core/services/supabase.service';
   imports: [DatePipe, ReactiveFormsModule],
   template: `
     <div>
-      <div class="flex items-center justify-between mb-6">
+      <div class="flex items-center justify-between mb-4">
         <h1 class="text-2xl font-bold text-gray-800">Gestión de Eventos</h1>
         <button (click)="toggleForm()"
           class="bg-primary text-white px-4 py-2 rounded-xl hover:bg-primary/90 transition-colors font-semibold">
           {{ showForm ? 'Cancelar' : 'Nuevo evento' }}
         </button>
+      </div>
+
+      <!-- Filtros -->
+      <div class="flex flex-wrap items-center gap-2 mb-4">
+        <span class="text-sm text-gray-500 font-medium mr-1">Filtrar:</span>
+        @for (f of filterOptions; track f.value) {
+          <button (click)="statusFilter = f.value"
+            class="px-3 py-1.5 rounded-xl text-sm font-semibold transition-colors"
+            [class]="statusFilter === f.value ? 'bg-primary text-white' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+            {{ f.label }}
+          </button>
+        }
+        <div class="flex-1"></div>
+        <input (input)="searchText = $any($event.target).value" placeholder="Buscar por título..." class="px-4 py-1.5 rounded-xl border border-gray-300 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 outline-none w-56" />
       </div>
 
       @if (showForm) {
@@ -62,6 +76,8 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                 <label class="block text-sm font-medium text-gray-700 mb-1">Estado</label>
                 <select formControlName="estado" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none">
                   <option value="publicado">Publicado</option>
+                  <option value="borrador">Borrador</option>
+                  <option value="pospuesto">Pospuesto</option>
                   <option value="cancelado">Cancelado</option>
                   <option value="finalizado">Finalizado</option>
                 </select>
@@ -117,13 +133,12 @@ import { SupabaseService } from '../../../core/services/supabase.service';
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              @for (e of eventos; track e.id) {
+              @for (e of filteredEventos; track e.id) {
                 <tr class="hover:bg-gray-50 transition-colors">
                   <td class="px-6 py-4"><p class="font-medium text-gray-800">{{ e.titulo }}</p></td>
                   <td class="px-6 py-4 text-sm text-gray-500">{{ e.fecha_inicio | date:'dd/MM/yyyy' }}</td>
                   <td class="px-6 py-4">
-                    <span class="text-xs font-semibold px-3 py-1 rounded-full"
-                      [class]="e.estado === 'publicado' ? 'bg-green-100 text-green-800' : e.estado === 'cancelado' ? 'bg-red-100 text-red-800' : 'bg-gray-100 text-gray-800'">{{ e.estado }}</span>
+                    <span class="text-xs font-semibold px-3 py-1 rounded-full" [class]="statusBadgeClass(e.estado)">{{ e.estado }}</span>
                   </td>
                   <td class="px-6 py-4">
                     <div class="flex space-x-2">
@@ -136,7 +151,7 @@ import { SupabaseService } from '../../../core/services/supabase.service';
             </tbody>
           </table>
         </div>
-        @if (eventos.length === 0 && !loading) { <p class="text-center text-gray-500 py-10">No hay eventos aún.</p> }
+        @if (filteredEventos.length === 0 && !loading) { <p class="text-center text-gray-500 py-10">No hay eventos.</p> }
       </div>
     </div>
   `,
@@ -152,6 +167,44 @@ export class AdminEventosComponent implements OnInit {
   formError = '';
   imgPreview: string | null = null;
   imgSubiendo = false;
+
+  statusFilter = '';
+  searchText = '';
+  filterOptions = [
+    { label: 'Todos', value: '' },
+    { label: 'Publicados', value: 'publicado' },
+    { label: 'Borradores', value: 'borrador' },
+    { label: 'Próximos', value: 'proximos' },
+    { label: 'Pospuestos', value: 'pospuesto' },
+    { label: 'Finalizados', value: 'finalizado' },
+    { label: 'Cancelados', value: 'cancelado' },
+  ];
+
+  get filteredEventos() {
+    let filtered = this.eventos;
+    if (this.statusFilter === 'proximos') {
+      const now = new Date().toISOString();
+      filtered = filtered.filter(e => e.fecha_inicio && e.fecha_inicio >= now);
+    } else if (this.statusFilter) {
+      filtered = filtered.filter(e => e.estado === this.statusFilter);
+    }
+    if (this.searchText) {
+      const q = this.searchText.toLowerCase();
+      filtered = filtered.filter(e => e.titulo?.toLowerCase().includes(q));
+    }
+    return filtered;
+  }
+
+  statusBadgeClass(estado: string): string {
+    const map: Record<string, string> = {
+      publicado: 'bg-green-100 text-green-800',
+      borrador: 'bg-yellow-100 text-yellow-800',
+      pospuesto: 'bg-amber-100 text-amber-800',
+      cancelado: 'bg-red-100 text-red-800',
+      finalizado: 'bg-gray-100 text-gray-800',
+    };
+    return map[estado] || 'bg-gray-100 text-gray-800';
+  }
 
   constructor(
     private fb: FormBuilder,

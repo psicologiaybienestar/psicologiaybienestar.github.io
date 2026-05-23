@@ -687,14 +687,14 @@ const ACTIVITY_ICONS: Record<string, string> = {
       bottom: 0;
       left: 0;
       right: 0;
-      max-height: 60vh;
+      max-height: 75vh;
       background: #ffffff;
       border-radius: 20px 20px 0 0;
       z-index: 99;
       overflow-y: auto;
       -webkit-overflow-scrolling: touch;
       box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
-      padding-bottom: calc(64px + env(safe-area-inset-bottom, 16px));
+      padding-bottom: calc(72px + env(safe-area-inset-bottom, 24px));
     }
     .notif-panel-header {
       display: flex;

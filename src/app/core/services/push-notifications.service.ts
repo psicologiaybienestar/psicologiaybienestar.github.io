@@ -21,48 +21,42 @@ export class PushNotificationsService {
     try {
       const { PushNotifications } = await import('@capacitor/push-notifications');
 
-      const permResult = await PushNotifications.requestPermissions();
-      if (permResult.receive !== 'granted') {
-        console.warn('❌ Push permission denied');
-        return false;
-      }
-
-      await PushNotifications.register();
-      console.log('✅ Push notifications registered');
-
+      // 1. Attach listeners BEFORE register() to avoid race condition
       const regListener = PushNotifications.addListener('registration', (token) => {
-        console.log('✅ FCM token registered:', token.value);
+        console.log('📱 FCM token recibido:', token.value);
         this.tokenSubject.next(token.value);
         this.saveToken(token.value);
       });
       this.listeners.push(regListener);
 
       const errListener = PushNotifications.addListener('registrationError', (err) => {
-        console.error('❌ FCM registration error:', err.error);
+        console.error('❌ Error registro FCM:', err.error);
       });
       this.listeners.push(errListener);
 
       const receivedListener = PushNotifications.addListener('pushNotificationReceived', (notification) => {
-        console.log('📩 Push received (foreground):', notification);
+        console.log('📩 Push recibido en foreground:', notification.title);
       });
       this.listeners.push(receivedListener);
 
       const tapListener = PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
-        console.log('👆 Push tapped:', notification);
+        console.log('👆 Push presionado:', notification.notification.data);
         this.handleNotificationTap(notification.notification.data);
       });
       this.listeners.push(tapListener);
 
-      // Re-register on token refresh
-      const refreshListener = PushNotifications.addListener('registration', (token) => {
-        if (token.value !== this.tokenSubject.value) {
-          console.log('🔄 FCM token refreshed:', token.value);
-          this.tokenSubject.next(token.value);
-          this.saveToken(token.value);
-        }
-      });
-      this.listeners.push(refreshListener);
+      // 2. Request permission
+      const permResult = await PushNotifications.requestPermissions();
+      if (permResult.receive !== 'granted') {
+        console.warn('❌ Permiso de notificaciones denegado');
+        return false;
+      }
 
+      // 3. Register with FCM
+      await PushNotifications.register();
+      console.log('✅ Push notifications registered');
+
+      // 4. Create channels
       await this.createChannels();
       return true;
     } catch (e) {

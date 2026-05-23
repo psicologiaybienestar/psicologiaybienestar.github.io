@@ -1,5 +1,6 @@
 import { Component, OnInit, OnDestroy, inject } from '@angular/core';
 import { IonApp, IonRouterOutlet } from '@ionic/angular/standalone';
+import { SwUpdate } from '@angular/service-worker';
 import { NotificationsService } from './core/services/notifications.service';
 import { UserProfileService } from './core/services/user-profile.service';
 import { PushNotificationsService } from './core/services/push-notifications.service';
@@ -20,13 +21,31 @@ export class AppComponent implements OnInit, OnDestroy {
   private userProfileService = inject(UserProfileService);
   private pushService = inject(PushNotificationsService);
   private platform = inject(PlatformService);
+  private swUpdate = inject(SwUpdate);
   private channel: any;
 
-  ngOnInit() {
-    this.userProfileService.init();
+  async ngOnInit() {
+    await this.userProfileService.init();
+
+    // Auto-update service worker (web y Android)
+    if (this.swUpdate.isEnabled) {
+      this.swUpdate.versionUpdates.subscribe(evt => {
+        if (evt.type === 'VERSION_READY') {
+          console.log('📦 Nueva versión disponible — actualizando...');
+          this.swUpdate.activateUpdate().then(() => document.location.reload());
+        }
+      });
+      this.swUpdate.checkForUpdate();
+      setInterval(() => this.swUpdate.checkForUpdate(), 30 * 60 * 1000);
+    }
 
     if (this.platform.isAndroid) {
-      setTimeout(() => this.pushService.register(), 1500);
+      setTimeout(() => {
+        this.pushService.register().then(ok => {
+          if (ok) console.log('✅ Push auto-registrado');
+          else console.warn('⚠️ Push no se pudo registrar automáticamente');
+        });
+      }, 1000);
     }
 
     this.channel = this.notificationsService.subscribeToAllChanges((table, data) => {

@@ -633,20 +633,29 @@ create policy "Notifications update own" on notifications
 create or replace function notify_on_content_insert()
 returns trigger language plpgsql as $$
 begin
-  insert into notifications (title, body, type, related_id, related_table)
-  values (
-    coalesce(
-      new.titulo, new.title, new.quote,
-      new.emotion_name, new.nombre, 'Novedad'
-    ),
-    coalesce(
-      new.resumen, new.descripcion, new.description,
-      new.content, new.body, new.texto, ''
-    ),
-    TG_TABLE_NAME,
-    new.id,
-    TG_TABLE_NAME
-  );
+  case TG_TABLE_NAME
+    when 'eventos' then
+      insert into notifications (title, body, type, related_id, related_table)
+      values (new.titulo, coalesce(new.descripcion, ''), 'eventos', new.id, 'eventos');
+    when 'noticias' then
+      insert into notifications (title, body, type, related_id, related_table)
+      values (new.titulo, coalesce(new.resumen, new.contenido, ''), 'noticias', new.id, 'noticias');
+    when 'motivational_quotes' then
+      insert into notifications (title, body, type, related_id, related_table)
+      values (new.quote, coalesce(new.author, ''), 'motivational_quotes', new.id, 'motivational_quotes');
+    when 'emotional_tips' then
+      insert into notifications (title, body, type, related_id, related_table)
+      values (new.title, coalesce(new.description, ''), 'emotional_tips', new.id, 'emotional_tips');
+    when 'wellness_activities' then
+      insert into notifications (title, body, type, related_id, related_table)
+      values (new.title, coalesce(new.content, ''), 'wellness_activities', new.id, 'wellness_activities');
+    when 'mini_games' then
+      insert into notifications (title, body, type, related_id, related_table)
+      values (new.title, coalesce(new.description, ''), 'mini_games', new.id, 'mini_games');
+    else
+      insert into notifications (title, body, type, related_id, related_table)
+      values ('Novedad', '', TG_TABLE_NAME, new.id, TG_TABLE_NAME);
+  end case;
   return new;
 end;
 $$;
@@ -663,3 +672,9 @@ create trigger trg_notify_activities after insert on wellness_activities
   for each row execute function notify_on_content_insert();
 create trigger trg_notify_games after insert on mini_games
   for each row execute function notify_on_content_insert();
+
+-- NOTA: Si aparece 504 Gateway Timeout al crear eventos desde admin:
+-- 1. Ir a Supabase Dashboard → Edge Functions → notify-event / notify-appointment
+-- 2. Settings → aumentar timeout de 60s a 120s
+-- 3. Verificar que FIREBASE_SERVICE_ACCOUNT esté configurado en Secrets
+-- 4. Si el error persiste, desconectar temporalmente el webhook en Database → Webhooks

@@ -8,11 +8,11 @@ import { AuthService } from '../../core/services/auth.service';
   imports: [RouterLink, RouterOutlet],
   template: `
     <div class="min-h-screen flex bg-gray-50">
-      <aside class="w-64 bg-white shadow-lg hidden md:flex flex-col">
-        <div class="p-6 border-b border-gray-100">
+      <aside class="w-64 bg-white shadow-lg hidden md:flex flex-col h-screen sticky top-0">
+        <div class="p-6 border-b border-gray-100 shrink-0">
           <img src="assets/img/logo.png" alt="Logo" class="h-10 w-auto" />
         </div>
-        <nav class="flex-1 p-4 space-y-1">
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
           @for (item of menuItems; track item.path) {
             <a [routerLink]="item.path" routerLinkActive="bg-primary/10 text-primary font-semibold"
               class="flex items-center space-x-3 px-4 py-3 rounded-xl text-gray-600 hover:bg-gray-50 transition-colors">
@@ -20,7 +20,7 @@ import { AuthService } from '../../core/services/auth.service';
             </a>
           }
         </nav>
-        <div class="p-4 border-t border-gray-100">
+        <div class="p-4 border-t border-gray-100 shrink-0">
           <button (click)="logout()" class="flex items-center space-x-2 text-gray-500 hover:text-red-500 transition-colors w-full px-4 py-2">
             <span>Cerrar sesión</span>
           </button>
@@ -36,11 +36,11 @@ import { AuthService } from '../../core/services/auth.service';
         </header>
 
         @if (mobileMenu) {
-          <div class="bg-white shadow-md md:hidden p-4 space-y-1">
+          <div class="bg-white shadow-md md:hidden p-4 space-y-1 max-h-60 overflow-y-auto">
             @for (item of menuItems; track item.path) {
-              <a [routerLink]="item.path" (click)="mobileMenu = false" class="block px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50">{{ item.label }}</a>
+              <a [routerLink]="item.path" (click)="mobileMenu = false" class="block px-4 py-2 rounded-lg text-gray-600 hover:bg-gray-50 text-sm">{{ item.label }}</a>
             }
-            <button (click)="logout()" class="block w-full text-left px-4 py-2 rounded-lg text-red-500 hover:bg-red-50">Cerrar sesión</button>
+            <button (click)="logout()" class="block w-full text-left px-4 py-2 rounded-lg text-red-500 hover:bg-red-50 text-sm">Cerrar sesión</button>
           </div>
         }
 

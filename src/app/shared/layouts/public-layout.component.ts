@@ -8,6 +8,7 @@ import { SideSocialComponent } from '../components/side-social.component';
 import { CookieConsentComponent } from '../components/cookie-consent.component';
 import { EventAlertComponent } from '../components/event-alert.component';
 import { AndroidBottomNavComponent } from '../components/android-bottom-nav.component';
+import { FloatingNotifComponent } from '../components/floating-notif.component';
 import { PlatformService } from '../../core/services/platform.service';
 
 @Component({
@@ -23,6 +24,7 @@ import { PlatformService } from '../../core/services/platform.service';
     CookieConsentComponent,
     EventAlertComponent,
     AndroidBottomNavComponent,
+    FloatingNotifComponent,
   ],
   template: `
     <!-- Menu lateral (solo web) -->
@@ -84,6 +86,11 @@ import { PlatformService } from '../../core/services/platform.service';
       <!-- WhatsApp (solo web) -->
       @if (!platform.isAndroid) {
         <app-whatsapp-button></app-whatsapp-button>
+      }
+
+      <!-- Floating notificaciones (solo web) -->
+      @if (!platform.isAndroid) {
+        <app-floating-notif></app-floating-notif>
       }
 
       <!-- Cookie consent (solo web) -->

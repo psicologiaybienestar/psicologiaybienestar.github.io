@@ -33,32 +33,29 @@ const ACTIVITY_ICONS: Record<string, string> = {
     <section class="hero-section">
       <div class="hero-bg"></div>
       <div class="hero-content">
+        <button class="notif-pill" (click)="toggleNotifications()" aria-label="Novedades">
+          <svg xmlns="http://www.w3.org/2000/svg" class="notif-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
+          </svg>
+          @if (unreadCount > 0) {
+            <span class="notif-pill-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+          }
+        </button>
         <div class="hero-logo">
           <img src="assets/img/logo.png" alt="Psicología & Bienestar" class="hero-logo-img" />
         </div>
         <h1 class="hero-title">Bienvenido</h1>
         <p class="hero-subtitle">Tu espacio seguro para el bienestar emocional</p>
       </div>
-    </section>
-
-    <!-- Notification Bell -->
-    <section class="section" style="padding-top:0;padding-bottom:0;">
-      <div class="notif-bar" (click)="toggleNotifications()">
-        <div class="notif-bar-left">
-          <span class="notif-bell">🔔</span>
-          <span class="notif-label">Novedades</span>
-        </div>
-        @if (unreadCount > 0) {
-          <span class="notif-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
-        }
-      </div>
       @if (showNotifications) {
+        <div class="notif-overlay" (click)="toggleNotifications()"></div>
         <div class="notif-panel">
           <div class="notif-panel-header">
             <span class="notif-panel-title">Novedades</span>
             @if (unreadCount > 0) {
-              <button class="notif-mark-read" (click)="markAllAsRead()">Marcar todo leído</button>
+              <button class="notif-mark-read" (click)="markAllAsRead(); $event.stopPropagation()">Marcar todo leído</button>
             }
+            <button class="notif-close" (click)="toggleNotifications()">✕</button>
           </div>
           @if (notificationsList.length === 0) {
             <div class="notif-empty">Sin novedades aún</div>
@@ -140,9 +137,32 @@ const ACTIVITY_ICONS: Record<string, string> = {
         <a routerLink="/minijuegos" class="section-link">Ver todos</a>
       </div>
       <div class="games-scroll">
+        <!-- Hardcoded clásicos -->
+        <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
+          <div class="game-card-icon">🧘</div>
+          <div>
+            <h3 class="game-card-title">Respiración</h3>
+            <p class="game-card-text">Guía de respiración consciente</p>
+          </div>
+        </a>
+        <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
+          <div class="game-card-icon">💭</div>
+          <div>
+            <h3 class="game-card-title">Afirmaciones</h3>
+            <p class="game-card-text">Tarjetas de pensamiento positivo</p>
+          </div>
+        </a>
+        <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
+          <div class="game-card-icon">🌟</div>
+          <div>
+            <h3 class="game-card-title">Gratitud</h3>
+            <p class="game-card-text">Tu diario de agradecimiento</p>
+          </div>
+        </a>
+        <!-- Dinámicos desde BD -->
         @for (game of dynamicGames; track game.id) {
           <a [routerLink]="game.route || '/minijuegos'" class="game-card"
-             [style.background]="'linear-gradient(135deg, ' + getGradientColor($index, 0) + ', ' + getGradientColor($index, 1) + ')'">
+             [style.background]="'linear-gradient(135deg, ' + getGradientColor($index + 3, 0) + ', ' + getGradientColor($index + 3, 1) + ')'">
             <div class="game-card-icon">{{ game.icon || '🎮' }}</div>
             <div>
               <h3 class="game-card-title">{{ game.title }}</h3>
@@ -237,6 +257,7 @@ const ACTIVITY_ICONS: Record<string, string> = {
     .hero-section {
       position: relative;
       padding: 32px 20px 28px;
+      padding-top: max(32px, env(safe-area-inset-top, 32px));
       overflow: hidden;
     }
     .hero-bg {
@@ -278,6 +299,8 @@ const ACTIVITY_ICONS: Record<string, string> = {
     /* ===== Sections ===== */
     .section {
       padding: 8px 20px 20px;
+      padding-left: max(20px, env(safe-area-inset-left, 20px));
+      padding-right: max(20px, env(safe-area-inset-right, 20px));
     }
     .section-header {
       display: flex;
@@ -604,87 +627,122 @@ const ACTIVITY_ICONS: Record<string, string> = {
       color: #9ca3af;
     }
 
-    /* ===== Notification Bar & Panel ===== */
-    .notif-bar {
-      display: flex;
-      align-items: center;
-      justify-content: space-between;
-      background: #F9FAFB;
-      border: 1px solid #F3F4F6;
-      border-radius: 14px;
-      padding: 12px 16px;
-      cursor: pointer;
-      transition: all 0.2s ease;
-    }
-    .notif-bar:active {
-      transform: scale(0.98);
-      background: #EEF2FF;
-    }
-    .notif-bar-left {
-      display: flex;
-      align-items: center;
-      gap: 10px;
-    }
-    .notif-bell {
-      font-size: 22px;
-    }
-    .notif-label {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1f2937;
-    }
-    .notif-badge {
-      background: #ef4444;
-      color: #fff;
-      font-size: 11px;
-      font-weight: 700;
-      min-width: 20px;
-      height: 20px;
-      border-radius: 10px;
+    /* ===== Notification Pill in Hero ===== */
+    .notif-pill {
+      position: absolute;
+      top: max(12px, env(safe-area-inset-top, 12px));
+      right: 16px;
+      background: rgba(255,255,255,0.9);
+      backdrop-filter: blur(8px);
+      border: 1px solid rgba(255,255,255,0.5);
+      border-radius: 24px;
+      width: 40px;
+      height: 40px;
       display: flex;
       align-items: center;
       justify-content: center;
-      padding: 0 6px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      z-index: 10;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
+    }
+    .notif-pill:active {
+      transform: scale(0.92);
+      background: rgba(255,255,255,1);
+    }
+    .notif-pill-icon {
+      width: 20px;
+      height: 20px;
+      color: #627eff;
+    }
+    .notif-pill-badge {
+      position: absolute;
+      top: -4px;
+      right: -4px;
+      background: #ef4444;
+      color: #fff;
+      font-size: 10px;
+      font-weight: 700;
+      min-width: 18px;
+      height: 18px;
+      border-radius: 9px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 4px;
+      box-shadow: 0 2px 4px rgba(239,68,68,0.3);
+    }
+    .notif-overlay {
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.3);
+      z-index: 98;
     }
     .notif-panel {
+      position: fixed;
+      bottom: 0;
+      left: 0;
+      right: 0;
+      max-height: 60vh;
       background: #ffffff;
-      border: 1px solid #F3F4F6;
-      border-radius: 14px;
-      margin-top: 8px;
-      max-height: 360px;
+      border-radius: 20px 20px 0 0;
+      z-index: 99;
       overflow-y: auto;
-      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+      box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
+      padding-bottom: env(safe-area-inset-bottom, 16px);
     }
     .notif-panel-header {
       display: flex;
       align-items: center;
-      justify-content: space-between;
-      padding: 12px 16px;
+      gap: 8px;
+      padding: 16px 20px 12px;
       border-bottom: 1px solid #F3F4F6;
+      position: sticky;
+      top: 0;
+      background: #fff;
+      z-index: 1;
     }
     .notif-panel-title {
-      font-size: 14px;
+      font-size: 16px;
       font-weight: 700;
       color: #1f2937;
+      flex: 1;
     }
     .notif-mark-read {
-      font-size: 11px;
+      font-size: 12px;
       color: #627eff;
       background: none;
       border: none;
       cursor: pointer;
       font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .notif-mark-read:active {
+      background: #EEF2FF;
+    }
+    .notif-close {
+      background: none;
+      border: none;
+      color: #9ca3af;
+      font-size: 18px;
+      cursor: pointer;
+      padding: 4px 8px;
+      border-radius: 8px;
+    }
+    .notif-close:active {
+      background: #F3F4F6;
     }
     .notif-empty {
-      padding: 24px 16px;
+      padding: 32px 20px;
       text-align: center;
       color: #9ca3af;
-      font-size: 13px;
+      font-size: 14px;
     }
     .notif-item {
       display: flex;
       gap: 12px;
-      padding: 12px 16px;
+      padding: 14px 20px;
       border-bottom: 1px solid #F9FAFB;
       cursor: pointer;
       transition: background 0.15s ease;
@@ -696,10 +754,10 @@ const ACTIVITY_ICONS: Record<string, string> = {
       background: #F9FAFB;
     }
     .notif-unread {
-      background: #EEF2FF;
+      background: #F0F4FF;
     }
     .notif-item-icon {
-      font-size: 20px;
+      font-size: 22px;
       flex-shrink: 0;
       margin-top: 2px;
     }
@@ -708,13 +766,13 @@ const ACTIVITY_ICONS: Record<string, string> = {
       min-width: 0;
     }
     .notif-item-title {
-      font-size: 13px;
+      font-size: 14px;
       font-weight: 600;
       color: #1f2937;
       margin-bottom: 2px;
     }
     .notif-item-text {
-      font-size: 12px;
+      font-size: 13px;
       color: #6b7280;
       line-height: 1.3;
       display: -webkit-box;
@@ -723,13 +781,14 @@ const ACTIVITY_ICONS: Record<string, string> = {
       overflow: hidden;
     }
     .notif-item-time {
-      font-size: 10px;
+      font-size: 11px;
       color: #9ca3af;
     }
 
     /* ===== Bottom spacer ===== */
     .bottom-spacer {
       height: 80px;
+      height: calc(80px + env(safe-area-inset-bottom, 0px));
     }
 
     /* ===== Animations ===== */

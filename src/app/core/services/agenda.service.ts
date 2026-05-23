@@ -59,16 +59,14 @@ export class AgendaService {
   async getMyAppointments(email: string): Promise<AppointmentRequest[]> {
     try {
       const { data, error } = await this.supabase
-        .from('appointments')
-        .select('*')
-        .eq('email', email)
-        .order('created_at', { ascending: false });
+        .rpc('get_my_appointments', { p_email: email });
       if (error) throw error;
       return (data || []).map((a: any) => ({
         ...a,
         status: a.status || 'pendiente',
       }));
-    } catch {
+    } catch (e) {
+      console.warn('⚠️ Error fetching appointments:', e);
       return [];
     }
   }

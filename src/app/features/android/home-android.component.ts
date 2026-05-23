@@ -5,38 +5,24 @@ import Swiper from 'swiper';
 import { Autoplay } from 'swiper/modules';
 import { Subscription } from 'rxjs';
 import { SupabaseService } from '../../core/services/supabase.service';
-import { TestimoniosService } from '../../core/services/testimonios.service';
 import { UserProfileService } from '../../core/services/user-profile.service';
 import { NotificationsService } from '../../core/services/notifications.service';
+import { QuotesService } from '../../core/services/quotes.service';
+import { EmotionalTipsService } from '../../core/services/emotional-tips.service';
+import { WellnessActivitiesService } from '../../core/services/wellness-activities.service';
+import { MiniGamesService } from '../../core/services/mini-games.service';
+import { InternalNotificationsService } from '../../core/services/internal-notifications.service';
 
-const DAILY_TIPS = [
-  { icon: '🧠', title: 'Respira profundo', text: 'Inhala 4 segundos, sostén 4, exhala 4. Calma tu mente al instante.' },
-  { icon: '💚', title: 'Practica gratitud', text: 'Escribe 3 cosas por las que estás agradecido hoy.' },
-  { icon: '🌿', title: 'Conecta con la naturaleza', text: 'Sal 10 minutos al aire libre. La naturaleza recarga.' },
-  { icon: '☀️', title: 'Despierta tu cuerpo', text: 'Estira tu cuerpo al despertar. Activa tu energía.' },
-  { icon: '📖', title: 'Lee algo inspirador', text: 'Dedica 15 minutos a leer algo que nutra tu mente.' },
-  { icon: '💧', title: 'Hidrátate', text: 'Toma un vaso de agua ahora. Tu cerebro lo agradece.' },
-  { icon: '🧘', title: 'Pausa consciente', text: 'Detente 2 minutos. Solo respira y observa tu entorno.' },
-  { icon: '💭', title: 'Suelta lo que no controlas', text: 'Enfócate en lo que depende de ti. El resto, déjalo ir.' },
-];
-
-const MOTIVATIONAL_QUOTES = [
-  { texto: 'No estás solo. Cada paso que das hacia tu bienestar es un acto de valentía.', autor: 'Psicología & Bienestar' },
-  { texto: 'La salud mental no es un destino, es un viaje. Disfruta cada paso.', autor: 'Anónimo' },
-  { texto: 'Tu mente es tu hogar. Cuídala con la misma ternura que cuidas a quienes amas.', autor: 'Psicología & Bienestar' },
-  { texto: 'Pequeños pasos construyen grandes cambios. Hoy es un buen día para empezar.', autor: 'Anónimo' },
-  { texto: 'Está bien no estar bien. Lo importante es buscar ayuda cuando la necesitas.', autor: 'Psicología & Bienestar' },
-  { texto: 'La sanación comienza cuando te permites sentir. No hay emociones incorrectas.', autor: 'Psicología & Bienestar' },
-  { texto: 'Eres más fuerte de lo que crees, más capaz de lo que imaginas.', autor: 'Anónimo' },
-  { texto: 'Cada día es una nueva oportunidad para cuidar de ti mismo.', autor: 'Psicología & Bienestar' },
-];
-
-const WELLNESS_CARDS = [
-  { icon: '🧘', title: 'Mindfulness', text: 'Vive el presente. Atención plena para reducir la ansiedad.', color: '#EEF2FF' },
-  { icon: '🌱', title: 'Autocuidado', text: 'Rituales diarios que nutren tu cuerpo, mente y espíritu.', color: '#F0FDF4' },
-  { icon: '💪', title: 'Bienestar', text: 'Hábitos saludables para una vida equilibrada y plena.', color: '#FFF7ED' },
-  { icon: '🫂', title: 'Conexión', text: 'Vínculos auténticos que fortalecen tu salud emocional.', color: '#FDF2F8' },
-];
+const WELLNESS_COLORS = ['#EEF2FF', '#F0FDF4', '#FFF7ED', '#FDF2F8', '#FEF2F2', '#F5F3FF', '#ECFDF5', '#FFF1F2'];
+const TIP_ICONS: Record<string, string> = {
+  ansiedad: '🧠', autoestima: '💚', relajación: '🧘', estrés: '💭',
+  motivación: '💪', mindfulness: '🌿', bienestar: '☀️', respiración: '🫁',
+  general: '💧',
+};
+const ACTIVITY_ICONS: Record<string, string> = {
+  mindfulness: '🧘', meditacion: '🌿', respiracion: '🫁', relajacion: '😌',
+  yoga: '🧘‍♀️', ejercicio: '💪', lectura: '📖', musica: '🎵',
+};
 
 @Component({
   selector: 'app-home-android',
@@ -55,6 +41,44 @@ const WELLNESS_CARDS = [
       </div>
     </section>
 
+    <!-- Notification Bell -->
+    <section class="section" style="padding-top:0;padding-bottom:0;">
+      <div class="notif-bar" (click)="toggleNotifications()">
+        <div class="notif-bar-left">
+          <span class="notif-bell">🔔</span>
+          <span class="notif-label">Novedades</span>
+        </div>
+        @if (unreadCount > 0) {
+          <span class="notif-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
+        }
+      </div>
+      @if (showNotifications) {
+        <div class="notif-panel">
+          <div class="notif-panel-header">
+            <span class="notif-panel-title">Novedades</span>
+            @if (unreadCount > 0) {
+              <button class="notif-mark-read" (click)="markAllAsRead()">Marcar todo leído</button>
+            }
+          </div>
+          @if (notificationsList.length === 0) {
+            <div class="notif-empty">Sin novedades aún</div>
+          }
+          @for (n of notificationsList; track n.id) {
+            <div class="notif-item" [class.notif-unread]="!n.is_read" (click)="markAsRead(n.id)">
+              <span class="notif-item-icon">{{ getNotifIcon(n.type) }}</span>
+              <div class="notif-item-body">
+                <p class="notif-item-title">{{ n.title }}</p>
+                @if (n.body) {
+                  <p class="notif-item-text">{{ n.body }}</p>
+                }
+                <span class="notif-item-time">{{ n.created_at | date:'dd MMM HH:mm' }}</span>
+              </div>
+            </div>
+          }
+        </div>
+      }
+    </section>
+
     <!-- Consejos diarios -->
     <section class="section">
       <div class="section-header">
@@ -63,7 +87,7 @@ const WELLNESS_CARDS = [
       </div>
       <div class="swiper tips-swiper">
         <div class="swiper-wrapper">
-          @for (tip of dailyTips; track tip.title; let i = $index) {
+          @for (tip of dynamicTips; track tip.title; let i = $index) {
             <div class="swiper-slide">
               <div class="tip-card" [style.animationDelay]="i * 0.05 + 's'">
                 <span class="tip-icon">{{ tip.icon }}</span>
@@ -99,7 +123,7 @@ const WELLNESS_CARDS = [
     <section class="section">
       <h2 class="section-title">Tu bienestar</h2>
       <div class="wellness-grid">
-        @for (card of wellnessCards; track card.title) {
+        @for (card of dynamicWellness; track card.title) {
           <div class="wellness-card" [style.background]="card.color">
             <span class="wellness-icon">{{ card.icon }}</span>
             <h3 class="wellness-title">{{ card.title }}</h3>
@@ -116,27 +140,16 @@ const WELLNESS_CARDS = [
         <a routerLink="/minijuegos" class="section-link">Ver todos</a>
       </div>
       <div class="games-scroll">
-        <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-          <div class="game-card-icon">🧘</div>
-          <div>
-            <h3 class="game-card-title">Respiración</h3>
-            <p class="game-card-text">Guía de respiración consciente</p>
-          </div>
-        </a>
-        <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-          <div class="game-card-icon">💭</div>
-          <div>
-            <h3 class="game-card-title">Afirmaciones</h3>
-            <p class="game-card-text">Tarjetas de pensamiento positivo</p>
-          </div>
-        </a>
-        <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-          <div class="game-card-icon">🌟</div>
-          <div>
-            <h3 class="game-card-title">Gratitud</h3>
-            <p class="game-card-text">Tu diario de agradecimiento</p>
-          </div>
-        </a>
+        @for (game of dynamicGames; track game.id) {
+          <a [routerLink]="game.route || '/minijuegos'" class="game-card"
+             [style.background]="'linear-gradient(135deg, ' + getGradientColor($index, 0) + ', ' + getGradientColor($index, 1) + ')'">
+            <div class="game-card-icon">{{ game.icon || '🎮' }}</div>
+            <div>
+              <h3 class="game-card-title">{{ game.title }}</h3>
+              <p class="game-card-text">{{ (game.description || '').substring(0, 40) }}</p>
+            </div>
+          </a>
+        }
       </div>
     </section>
 
@@ -150,9 +163,9 @@ const WELLNESS_CARDS = [
         <div class="horizontal-scroll">
           @for (noticia of latestNoticias; track noticia.id) {
             <a [routerLink]="'/noticia/' + noticia.slug" class="scroll-card">
-              @if (noticia.imagen_destacada) {
+              @if (noticia.imagen) {
                 <div class="scroll-card-img">
-                  <img [src]="noticia.imagen_destacada" [alt]="noticia.titulo" loading="lazy" />
+                  <img [src]="noticia.imagen" [alt]="noticia.titulo" loading="lazy" />
                 </div>
               }
               <div class="scroll-card-body">
@@ -591,6 +604,129 @@ const WELLNESS_CARDS = [
       color: #9ca3af;
     }
 
+    /* ===== Notification Bar & Panel ===== */
+    .notif-bar {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      background: #F9FAFB;
+      border: 1px solid #F3F4F6;
+      border-radius: 14px;
+      padding: 12px 16px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .notif-bar:active {
+      transform: scale(0.98);
+      background: #EEF2FF;
+    }
+    .notif-bar-left {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .notif-bell {
+      font-size: 22px;
+    }
+    .notif-label {
+      font-size: 14px;
+      font-weight: 600;
+      color: #1f2937;
+    }
+    .notif-badge {
+      background: #ef4444;
+      color: #fff;
+      font-size: 11px;
+      font-weight: 700;
+      min-width: 20px;
+      height: 20px;
+      border-radius: 10px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 0 6px;
+    }
+    .notif-panel {
+      background: #ffffff;
+      border: 1px solid #F3F4F6;
+      border-radius: 14px;
+      margin-top: 8px;
+      max-height: 360px;
+      overflow-y: auto;
+      box-shadow: 0 8px 24px rgba(0,0,0,0.08);
+    }
+    .notif-panel-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      padding: 12px 16px;
+      border-bottom: 1px solid #F3F4F6;
+    }
+    .notif-panel-title {
+      font-size: 14px;
+      font-weight: 700;
+      color: #1f2937;
+    }
+    .notif-mark-read {
+      font-size: 11px;
+      color: #627eff;
+      background: none;
+      border: none;
+      cursor: pointer;
+      font-weight: 600;
+    }
+    .notif-empty {
+      padding: 24px 16px;
+      text-align: center;
+      color: #9ca3af;
+      font-size: 13px;
+    }
+    .notif-item {
+      display: flex;
+      gap: 12px;
+      padding: 12px 16px;
+      border-bottom: 1px solid #F9FAFB;
+      cursor: pointer;
+      transition: background 0.15s ease;
+    }
+    .notif-item:last-child {
+      border-bottom: none;
+    }
+    .notif-item:active {
+      background: #F9FAFB;
+    }
+    .notif-unread {
+      background: #EEF2FF;
+    }
+    .notif-item-icon {
+      font-size: 20px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .notif-item-body {
+      flex: 1;
+      min-width: 0;
+    }
+    .notif-item-title {
+      font-size: 13px;
+      font-weight: 600;
+      color: #1f2937;
+      margin-bottom: 2px;
+    }
+    .notif-item-text {
+      font-size: 12px;
+      color: #6b7280;
+      line-height: 1.3;
+      display: -webkit-box;
+      -webkit-line-clamp: 2;
+      -webkit-box-orient: vertical;
+      overflow: hidden;
+    }
+    .notif-item-time {
+      font-size: 10px;
+      color: #9ca3af;
+    }
+
     /* ===== Bottom spacer ===== */
     .bottom-spacer {
       height: 80px;
@@ -611,19 +747,27 @@ const WELLNESS_CARDS = [
 export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
   private subscriptions: Subscription[] = [];
 
-  dailyTips = DAILY_TIPS;
-  wellnessCards = WELLNESS_CARDS;
-  quotes = MOTIVATIONAL_QUOTES;
-  currentQuote = MOTIVATIONAL_QUOTES[0];
-
+  dynamicTips: any[] = [];
+  currentQuote: any = { texto: 'Cargando...', autor: '' };
+  dynamicWellness: any[] = [];
+  dynamicGames: any[] = [];
   latestNoticias: any[] = [];
   proximosEventos: any[] = [];
+  unreadCount = 0;
+  notificationsList: any[] = [];
+  showNotifications = false;
 
   private supabaseService = inject(SupabaseService);
-  private testimoniosService = inject(TestimoniosService);
   private userProfileService = inject(UserProfileService);
   private notificationsService = inject(NotificationsService);
+  private quotesService = inject(QuotesService);
+  private tipsService = inject(EmotionalTipsService);
+  private wellnessService = inject(WellnessActivitiesService);
+  private gamesService = inject(MiniGamesService);
+  private internalNotificationsService = inject(InternalNotificationsService);
   private homeRealtimeChannel: any;
+  private notifRealtimeChannel: any;
+  private realtimeChannels: any[] = [];
 
   openWebVersion() {
     const url = 'https://psicologiaybienestar.netlify.app';
@@ -631,13 +775,20 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
   }
 
   ngOnInit() {
-    this.userProfileService.init();
     this.loadData();
+    this.loadDynamicContent();
+
     this.homeRealtimeChannel = this.notificationsService.subscribeToAllChanges((table) => {
       if (table === 'eventos' || table === 'noticias') {
         this.loadData();
       }
+      this.loadDynamicContent();
     });
+
+    this.notifRealtimeChannel = this.internalNotificationsService.subscribeToNew(() => {
+      this.loadUnreadCount();
+    });
+    this.loadUnreadCount();
   }
 
   ngAfterViewInit() {
@@ -647,14 +798,52 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe());
     this.homeRealtimeChannel?.unsubscribe();
+    this.notifRealtimeChannel?.unsubscribe();
+    this.realtimeChannels.forEach(ch => ch?.unsubscribe());
   }
 
   nextQuote() {
-    let idx = Math.floor(Math.random() * this.quotes.length);
-    if (this.quotes[idx] === this.currentQuote && this.quotes.length > 1) {
-      idx = (idx + 1) % this.quotes.length;
+    const quotes = this.quotesService['quotesSubject'].value;
+    if (quotes.length === 0) return;
+    let idx = Math.floor(Math.random() * quotes.length);
+    if (quotes[idx].quote === this.currentQuote.texto && quotes.length > 1) {
+      idx = (idx + 1) % quotes.length;
     }
-    this.currentQuote = this.quotes[idx];
+    this.currentQuote = { texto: quotes[idx].quote, autor: quotes[idx].author || 'Anónimo' };
+  }
+
+  private async loadDynamicContent() {
+    try {
+      const [quotes, tips, wellness, games] = await Promise.all([
+        this.quotesService.getActivas(8),
+        this.tipsService.getActivos(8),
+        this.wellnessService.getActivas(8),
+        this.gamesService.getActivos(6),
+      ]);
+
+      this.dynamicTips = tips.map(t => ({
+        icon: TIP_ICONS[t.emotion_type] || '💡',
+        title: t.title,
+        text: t.description || t.title,
+      }));
+
+      if (quotes.length > 0) {
+        this.currentQuote = { texto: quotes[0].quote, autor: quotes[0].author || 'Anónimo' };
+      }
+
+      this.dynamicWellness = wellness.slice(0, 4).map((a, i) => ({
+        icon: ACTIVITY_ICONS[a.activity_type] || '🌟',
+        title: a.title,
+        text: (a.content || '').substring(0, 60),
+        color: WELLNESS_COLORS[i % WELLNESS_COLORS.length],
+      }));
+
+      this.dynamicGames = games;
+
+      this.initTipSwiper();
+    } catch {
+      // silent
+    }
   }
 
   private async loadData() {
@@ -668,6 +857,44 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
     } catch {
       // silent
     }
+  }
+
+  private async loadUnreadCount() {
+    try {
+      this.unreadCount = await this.internalNotificationsService.getUnreadCount();
+      this.notificationsList = await this.internalNotificationsService.getLatest(10);
+    } catch { /* ignore */ }
+  }
+
+  toggleNotifications() {
+    this.showNotifications = !this.showNotifications;
+  }
+
+  async markAsRead(id: string) {
+    await this.internalNotificationsService.markAsRead(id);
+    this.loadUnreadCount();
+  }
+
+  async markAllAsRead() {
+    await this.internalNotificationsService.markAllAsRead();
+    this.loadUnreadCount();
+  }
+
+  getNotifIcon(type: string): string {
+    const icons: Record<string, string> = {
+      eventos: '📅', noticias: '📰', motivational_quotes: '💬',
+      emotional_tips: '💡', wellness_activities: '🧘', mini_games: '🎮',
+    };
+    return icons[type] || '🔔';
+  }
+
+  private gradients = [
+    ['#667eea', '#764ba2'], ['#f093fb', '#f5576c'], ['#4facfe', '#00f2fe'],
+    ['#43e97b', '#38f9d7'], ['#fa709a', '#fee140'], ['#a18cd1', '#fbc2eb'],
+  ];
+
+  getGradientColor(index: number, pos: number): string {
+    return this.gradients[index % this.gradients.length][pos];
   }
 
   private initTipSwiper() {

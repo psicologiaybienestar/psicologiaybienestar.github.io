@@ -62,7 +62,16 @@ const TABLE_CONFIGS: Record<string, ImportTableConfig> = {
       { key: 'description', label: 'description', required: false },
       { key: 'color', label: 'color', required: false },
       { key: 'icon', label: 'icon', required: false },
-      { key: 'recommendations', label: 'recommendations', required: false },
+      { key: 'recommendation_title_1', label: 'recommendation_title_1', required: false },
+      { key: 'recommendation_text_1', label: 'recommendation_text_1', required: false },
+      { key: 'recommendation_title_2', label: 'recommendation_title_2', required: false },
+      { key: 'recommendation_text_2', label: 'recommendation_text_2', required: false },
+      { key: 'recommendation_title_3', label: 'recommendation_title_3', required: false },
+      { key: 'recommendation_text_3', label: 'recommendation_text_3', required: false },
+      { key: 'recommendation_title_4', label: 'recommendation_title_4', required: false },
+      { key: 'recommendation_text_4', label: 'recommendation_text_4', required: false },
+      { key: 'recommendation_title_5', label: 'recommendation_title_5', required: false },
+      { key: 'recommendation_text_5', label: 'recommendation_text_5', required: false },
       { key: 'is_active', label: 'active', required: false, type: 'boolean' },
     ],
     uniqueKey: 'emotion_name',
@@ -122,7 +131,16 @@ export class BulkImportService {
       if (c.type === 'number') return '0';
       if (c.key === 'image_url') return 'https://example.com/image.jpg';
       if (c.key === 'duration') return '10';
-      if (c.key === 'recommendations') return '[{"title":"Recomendación","text":"Texto aquí"}]';
+      if (c.key === 'recommendation_title_1') return 'Respira';
+      if (c.key === 'recommendation_text_1') return 'Inhala profundo y exhala lentamente 3 veces';
+      if (c.key === 'recommendation_title_2') return 'Camina';
+      if (c.key === 'recommendation_text_2') return 'Da una caminata corta para despejar la mente';
+      if (c.key === 'recommendation_title_3') return 'Escribe';
+      if (c.key === 'recommendation_text_3') return '3 cosas por las que estás agradecido hoy';
+      if (c.key === 'recommendation_title_4') return '';
+      if (c.key === 'recommendation_text_4') return '';
+      if (c.key === 'recommendation_title_5') return '';
+      if (c.key === 'recommendation_text_5') return '';
       if (c.key === 'route') return '/ruta-ejemplo';
       if (c.key === 'icon') return '🎮';
       if (c.key === 'color') return '#627eff';
@@ -176,14 +194,22 @@ export class BulkImportService {
     if (!config || records.length === 0) return;
 
     const headerRow = config.columns.map(c => c.label);
-    const dataRows = records.map(record =>
-      config.columns.map(c => {
-        const val = record[c.key];
+    const dataRows = records.map(record => {
+      const expanded = { ...record };
+      if (table === 'emotions' && Array.isArray(expanded.recommendations)) {
+        for (let r = 1; r <= 5; r++) {
+          const rec = expanded.recommendations[r - 1];
+          expanded[`recommendation_title_${r}`] = rec?.title || '';
+          expanded[`recommendation_text_${r}`] = rec?.text || '';
+        }
+        delete expanded.recommendations;
+      }
+      return config.columns.map(c => {
+        const val = expanded[c.key];
         if (c.type === 'boolean') return val ? 'true' : 'false';
-        if (c.key === 'recommendations' && typeof val === 'object') return JSON.stringify(val);
         return val !== null && val !== undefined ? String(val) : '';
-      })
-    );
+      });
+    });
 
     const ws = XLSX.utils.aoa_to_sheet([headerRow, ...dataRows]);
     const colWidths = config.columns.map(c => ({
@@ -260,6 +286,20 @@ export class BulkImportService {
       if (rowError) {
         result.errors.push({ row: i + 2, message: rowError });
         continue;
+      }
+
+      if (table === 'emotions') {
+        const recs: { title: string; text: string }[] = [];
+        for (let r = 1; r <= 5; r++) {
+          const title = record[`recommendation_title_${r}`] || '';
+          const text = record[`recommendation_text_${r}`] || '';
+          if (title || text) {
+            recs.push({ title: String(title), text: String(text) });
+          }
+          delete record[`recommendation_title_${r}`];
+          delete record[`recommendation_text_${r}`];
+        }
+        record['recommendations'] = recs;
       }
 
       if (skipDuplicates && config.uniqueKey && record[config.uniqueKey]) {

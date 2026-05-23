@@ -89,7 +89,7 @@ export class NotificationsService {
   }
 
   subscribeToAllChanges(callback: (table: string, data: any) => void) {
-    const tables = ['eventos', 'noticias', 'motivational_quotes', 'emotional_tips', 'mini_games', 'wellness_activities'];
+    const tables = ['eventos', 'noticias', 'motivational_quotes', 'emotional_tips', 'mini_games', 'wellness_activities', 'emotions'];
     const channel = this.supabase.channel('all-content-changes');
     for (const table of tables) {
       channel.on(

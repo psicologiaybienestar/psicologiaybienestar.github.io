@@ -1,13 +1,16 @@
 import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
 import { SupabaseService } from './supabase.service';
+import { UserProfileService } from './user-profile.service';
 
 const TOKEN_KEY = 'pb_fcm_token';
 
 @Injectable({ providedIn: 'root' })
 export class PushNotificationsService {
   private supabaseService = inject(SupabaseService);
+  private userProfileService = inject(UserProfileService);
   private tokenSubject = new BehaviorSubject<string | null>(null);
+  private listeners: any[] = [];
   fcmToken$ = this.tokenSubject.asObservable();
 
   get fcmToken(): string | null {
@@ -27,24 +30,38 @@ export class PushNotificationsService {
       await PushNotifications.register();
       console.log('✅ Push notifications registered');
 
-      PushNotifications.addListener('registration', (token) => {
+      const regListener = PushNotifications.addListener('registration', (token) => {
         console.log('✅ FCM token registered:', token.value);
         this.tokenSubject.next(token.value);
         this.saveToken(token.value);
       });
+      this.listeners.push(regListener);
 
-      PushNotifications.addListener('registrationError', (err) => {
+      const errListener = PushNotifications.addListener('registrationError', (err) => {
         console.error('❌ FCM registration error:', err.error);
       });
+      this.listeners.push(errListener);
 
-      PushNotifications.addListener('pushNotificationReceived', (notification) => {
+      const receivedListener = PushNotifications.addListener('pushNotificationReceived', (notification) => {
         console.log('📩 Push received (foreground):', notification);
       });
+      this.listeners.push(receivedListener);
 
-      PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
+      const tapListener = PushNotifications.addListener('pushNotificationActionPerformed', (notification) => {
         console.log('👆 Push tapped:', notification);
         this.handleNotificationTap(notification.notification.data);
       });
+      this.listeners.push(tapListener);
+
+      // Re-register on token refresh
+      const refreshListener = PushNotifications.addListener('registration', (token) => {
+        if (token.value !== this.tokenSubject.value) {
+          console.log('🔄 FCM token refreshed:', token.value);
+          this.tokenSubject.next(token.value);
+          this.saveToken(token.value);
+        }
+      });
+      this.listeners.push(refreshListener);
 
       await this.createChannels();
       return true;
@@ -52,6 +69,27 @@ export class PushNotificationsService {
       console.warn('❌ Push registration failed:', e);
       return false;
     }
+  }
+
+  async unregister(): Promise<void> {
+    try {
+      const token = this.tokenSubject.value;
+      if (token) {
+        await this.supabaseService.client
+          .from('push_tokens')
+          .update({ is_active: false })
+          .eq('token', token);
+      }
+      const { PushNotifications } = await import('@capacitor/push-notifications');
+      await PushNotifications.unregister();
+      for (const l of this.listeners) {
+        try { l.remove(); } catch { /* ignore */ }
+      }
+      this.listeners = [];
+      this.tokenSubject.next(null);
+      localStorage.removeItem(TOKEN_KEY);
+      console.log('✅ Push unregistered');
+    } catch { /* ignore */ }
   }
 
   private async createChannels(): Promise<void> {
@@ -76,10 +114,17 @@ export class PushNotificationsService {
       localStorage.setItem(TOKEN_KEY, token);
     } catch { /* ignore */ }
 
+    const userId = this.userProfileService.currentUserId;
+
     try {
       await this.supabaseService.client
         .from('push_tokens')
-        .upsert({ token, device: 'android', is_active: true }, { onConflict: 'token' });
+        .upsert({
+          token,
+          device: 'android',
+          user_id: userId || undefined,
+          is_active: true,
+        }, { onConflict: 'token' });
       console.log('✅ FCM token saved to Supabase push_tokens');
     } catch (e) {
       console.warn('⚠️ Could not save token to Supabase:', e);

@@ -75,8 +75,22 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
               </div>
             </div>
             <div>
-              <label class="block text-sm font-medium text-gray-700 mb-1">Recomendaciones (JSON)</label>
-              <textarea formControlName="recommendations" rows="4" class="w-full px-4 py-2.5 rounded-xl border border-gray-300 font-mono text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none" placeholder='[{"title": "Respira", "text": "Inhala profundo..."}]'></textarea>
+              <label class="block text-sm font-medium text-gray-700 mb-2">Recomendaciones</label>
+              @for (rec of recommendationsList; track idx; let idx = $index) {
+                <div class="flex gap-2 mb-2 items-start">
+                  <div class="flex-1 space-y-1">
+                    <input [(ngModel)]="rec.title" [ngModelOptions]="{standalone: true}" type="text" placeholder="Título" class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none" />
+                    <textarea [(ngModel)]="rec.text" [ngModelOptions]="{standalone: true}" rows="2" placeholder="Texto de la recomendación" class="w-full px-3 py-2 rounded-lg border border-gray-300 text-sm focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none"></textarea>
+                  </div>
+                  <button type="button" (click)="removeRecommendation(idx)" class="text-red-400 hover:text-red-600 p-1 mt-1" title="Eliminar">
+                    <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"/></svg>
+                  </button>
+                </div>
+              }
+              <button type="button" (click)="addRecommendation()" class="text-primary text-sm font-semibold hover:text-accent flex items-center gap-1 mt-1">
+                <svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"/></svg>
+                Agregar recomendación
+              </button>
             </div>
             <div class="flex items-center space-x-2">
               <label class="flex items-center space-x-2">
@@ -131,6 +145,7 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
 export class AdminEmocionesComponent implements OnInit {
   items: any[] = [];
   form: FormGroup;
+  recommendationsList: { title: string; text: string }[] = [];
   showForm = false;
   editando = false;
   editandoId: string | null = null;
@@ -168,7 +183,6 @@ export class AdminEmocionesComponent implements OnInit {
       description: [''],
       color: ['#F9FAFB'],
       icon: ['😊'],
-      recommendations: [[]],
       is_active: [true],
     });
   }
@@ -189,7 +203,8 @@ export class AdminEmocionesComponent implements OnInit {
   toggleForm() { this.showForm = !this.showForm; if (this.showForm) this.resetForm(); }
 
   resetForm() {
-    this.form.reset({ color: '#F9FAFB', icon: '😊', recommendations: [], is_active: true });
+    this.form.reset({ color: '#F9FAFB', icon: '😊', is_active: true });
+    this.recommendationsList = [];
     this.editando = false;
     this.editandoId = null;
     this.formError = '';
@@ -199,9 +214,16 @@ export class AdminEmocionesComponent implements OnInit {
     this.editando = true;
     this.editandoId = item.id;
     this.showForm = true;
+    const recs = typeof item.recommendations === 'string'
+      ? JSON.parse(item.recommendations)
+      : (item.recommendations || []);
+    this.recommendationsList = recs.map((r: any) => ({ title: r.title || '', text: r.text || '' }));
     this.form.patchValue({
-      ...item,
-      recommendations: JSON.stringify(item.recommendations, null, 2),
+      emotion_name: item.emotion_name,
+      description: item.description,
+      color: item.color || '#F9FAFB',
+      icon: item.icon || '😊',
+      is_active: item.is_active ?? true,
     });
   }
 
@@ -209,11 +231,20 @@ export class AdminEmocionesComponent implements OnInit {
     if (this.form.invalid) return;
     this.guardando = true;
     this.formError = '';
+
+    const validRecs = this.recommendationsList
+      .filter(r => r.title.trim() || r.text.trim());
+    const recommendations = validRecs.map(r => ({
+      title: r.title.trim(),
+      text: r.text.trim(),
+    }));
+
+    const data = {
+      ...this.form.value,
+      recommendations,
+    };
+
     try {
-      let data = { ...this.form.value };
-      if (typeof data.recommendations === 'string') {
-        try { data.recommendations = JSON.parse(data.recommendations); } catch { data.recommendations = []; }
-      }
       if (this.editandoId) {
         const { error } = await this.supabase.client.from('emotions').update(data).eq('id', this.editandoId);
         if (error) throw error;
@@ -224,6 +255,14 @@ export class AdminEmocionesComponent implements OnInit {
       this.showForm = false;
       await this.cargar();
     } catch (e: any) { this.formError = e.message || 'Error al guardar'; } finally { this.guardando = false; }
+  }
+
+  addRecommendation() {
+    this.recommendationsList.push({ title: '', text: '' });
+  }
+
+  removeRecommendation(index: number) {
+    this.recommendationsList.splice(index, 1);
   }
 
   async exportF() {

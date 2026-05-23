@@ -583,3 +583,83 @@ group by status;
 --      → URL: {project-ref}.functions.supabase.co/notify-appointment
 -- 5. Las Edge Functions deben usar firebase-admin SDK para enviar
 --    notificaciones a los tokens registrados en push_tokens
+
+-- ============================================
+-- 23. POLÍTICA INSERT PÚBLICO — APPOINTMENTS
+-- ============================================
+create policy "Appointments insert public" on appointments
+  for insert with check (true);
+
+-- ============================================
+-- 24. RPC — VER CITAS PROPIAS (SIN AUTH)
+-- ============================================
+-- Permite que usuarios anónimos (sin JWT) vean sus citas por email
+-- usando security definer para bypassear RLS
+create or replace function get_my_appointments(p_email text)
+returns setof appointments
+language sql
+security definer
+as $$
+  select * from appointments where email = p_email order by created_at desc;
+$$;
+
+-- ============================================
+-- 25. TABLA — NOTIFICACIONES INTERNAS
+-- ============================================
+create table if not exists notifications (
+  id uuid default gen_random_uuid() primary key,
+  title text not null,
+  body text,
+  type text not null,
+  image_url text,
+  related_id uuid,
+  related_table text,
+  is_read boolean default false,
+  created_at timestamptz default now()
+);
+
+alter table notifications enable row level security;
+
+create policy "Notifications read all" on notifications
+  for select using (true);
+
+create policy "Notifications insert trigger" on notifications
+  for insert with check (true);
+
+create policy "Notifications update own" on notifications
+  for update using (true) with check (true);
+
+-- Triggers: insertar notificación automática cuando se crea contenido nuevo
+create or replace function notify_on_content_insert()
+returns trigger language plpgsql as $$
+begin
+  insert into notifications (title, body, type, related_id, related_table)
+  values (
+    coalesce(
+      new.titulo, new.title, new.quote,
+      new.emotion_name, new.nombre, 'Novedad'
+    ),
+    coalesce(
+      new.resumen, new.descripcion, new.description,
+      new.content, new.body, new.texto, ''
+    ),
+    TG_TABLE_NAME,
+    new.id,
+    TG_TABLE_NAME
+  );
+  return new;
+end;
+$$;
+
+create trigger trg_notify_eventos after insert on eventos
+  for each row execute function notify_on_content_insert();
+create trigger trg_notify_noticias after insert on noticias
+  for each row execute function notify_on_content_insert();
+create trigger trg_notify_quotes after insert on motivational_quotes
+  for each row execute function notify_on_content_insert();
+create trigger trg_notify_tips after insert on emotional_tips
+  for each row execute function notify_on_content_insert();
+create trigger trg_notify_activities after insert on wellness_activities
+  for each row execute function notify_on_content_insert();
+create trigger trg_notify_games after insert on mini_games
+  for each row execute function notify_on_content_insert();

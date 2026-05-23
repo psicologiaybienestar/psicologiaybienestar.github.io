@@ -1,10 +1,12 @@
-import { Injectable } from '@angular/core';
+import { Injectable, inject } from '@angular/core';
 import { BehaviorSubject } from 'rxjs';
+import { SupabaseService } from './supabase.service';
 
 const TOKEN_KEY = 'pb_fcm_token';
 
 @Injectable({ providedIn: 'root' })
 export class PushNotificationsService {
+  private supabaseService = inject(SupabaseService);
   private tokenSubject = new BehaviorSubject<string | null>(null);
   fcmToken$ = this.tokenSubject.asObservable();
 
@@ -73,6 +75,15 @@ export class PushNotificationsService {
     try {
       localStorage.setItem(TOKEN_KEY, token);
     } catch { /* ignore */ }
+
+    try {
+      await this.supabaseService.client
+        .from('push_tokens')
+        .upsert({ token, device: 'android', is_active: true }, { onConflict: 'token' });
+      console.log('✅ FCM token saved to Supabase push_tokens');
+    } catch (e) {
+      console.warn('⚠️ Could not save token to Supabase:', e);
+    }
   }
 
   getSavedToken(): string | null {

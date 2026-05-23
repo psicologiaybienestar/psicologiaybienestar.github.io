@@ -7,6 +7,7 @@ import { Navigation, Pagination } from 'swiper/modules';
 import { Subscription } from 'rxjs';
 import { TestimoniosService } from '../../core/services/testimonios.service';
 import { SupabaseService } from '../../core/services/supabase.service';
+import { NotificationsService } from '../../core/services/notifications.service';
 import { PlatformService } from '../../core/services/platform.service';
 import { HomeAndroidComponent } from '../android/home-android.component';
 
@@ -414,6 +415,8 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
   private testimoniosService = inject(TestimoniosService);
   private fb = inject(FormBuilder);
   private supabaseService = inject(SupabaseService);
+  private notificationsService = inject(NotificationsService);
+  private homeRealtimeChannel: any;
 
   constructor() {
     this.contactForm = this.fb.group({
@@ -428,6 +431,11 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     this.loadTestimonios();
     this.loadNoticiasEventos();
     this.generateRainIcons();
+    this.homeRealtimeChannel = this.notificationsService.subscribeToAllChanges((table) => {
+      if (table === 'eventos' || table === 'noticias') {
+        this.loadNoticiasEventos();
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -527,11 +535,15 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
       fd.append('telefono', this.contactForm.value.telefono);
       fd.append('mensaje', this.contactForm.value.mensaje);
 
+      const controller = new AbortController();
+      const timeoutId = setTimeout(() => controller.abort(), 10000);
       const res = await fetch('https://formspree.io/f/mblgpnvb', {
         method: 'POST',
         body: fd,
         headers: { Accept: 'application/json' },
+        signal: controller.signal,
       });
+      clearTimeout(timeoutId);
 
       if (res.ok) {
         this.successMessage = '¡Mensaje enviado con éxito! Te contactaremos pronto.';
@@ -549,5 +561,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach((s) => s.unsubscribe());
+    this.homeRealtimeChannel?.unsubscribe();
   }
 }

@@ -7,6 +7,7 @@ import { Subscription } from 'rxjs';
 import { SupabaseService } from '../../core/services/supabase.service';
 import { TestimoniosService } from '../../core/services/testimonios.service';
 import { UserProfileService } from '../../core/services/user-profile.service';
+import { NotificationsService } from '../../core/services/notifications.service';
 
 const DAILY_TIPS = [
   { icon: '🧠', title: 'Respira profundo', text: 'Inhala 4 segundos, sostén 4, exhala 4. Calma tu mente al instante.' },
@@ -621,6 +622,8 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
   private supabaseService = inject(SupabaseService);
   private testimoniosService = inject(TestimoniosService);
   private userProfileService = inject(UserProfileService);
+  private notificationsService = inject(NotificationsService);
+  private homeRealtimeChannel: any;
 
   openWebVersion() {
     const url = 'https://psicologiaybienestar.netlify.app';
@@ -630,6 +633,11 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnInit() {
     this.userProfileService.init();
     this.loadData();
+    this.homeRealtimeChannel = this.notificationsService.subscribeToAllChanges((table) => {
+      if (table === 'eventos' || table === 'noticias') {
+        this.loadData();
+      }
+    });
   }
 
   ngAfterViewInit() {
@@ -638,6 +646,7 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
 
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe());
+    this.homeRealtimeChannel?.unsubscribe();
   }
 
   nextQuote() {

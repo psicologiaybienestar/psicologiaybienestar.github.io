@@ -552,6 +552,9 @@ create policy "Insert propio tokens" on push_tokens
 create policy "Select admin tokens" on push_tokens
   for select using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
 
+create policy "Update propio tokens" on push_tokens
+  for update using (true) with check (true);
+
 -- ============================================
 -- 21. VISTA — ESTADÍSTICAS DE CITAS
 -- ============================================

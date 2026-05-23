@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1779510048619,
+  "timestamp": 1779512757523,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -36,14 +36,14 @@
         "/56.683c25645977e727.js",
         "/580.0fe09f5aec9080e5.js",
         "/584.e4526a7efce4f67c.js",
-        "/599.00b6fec54a26c62e.js",
+        "/599.c4fc3958d27ae991.js",
         "/610.9a0e8a80791de1ed.js",
         "/615.e9523bc739bcaa3f.js",
         "/632.97d93afdbe3fb8cd.js",
         "/645.1973c5760d48a45a.js",
         "/648.dfe2665692bfa615.js",
         "/75.93c045f842ef4a42.js",
-        "/750.6e16c99941614d52.js",
+        "/750.180ad4edd270c873.js",
         "/764.f5877e59df573b67.js",
         "/778.c1460c8a439fcb95.js",
         "/80.94d2d8ca1d382b07.js",
@@ -56,11 +56,11 @@
         "/963.bfab231d4df8a070.js",
         "/common.0b96da490f32a1bb.js",
         "/index.html",
-        "/main.d3dcf8ef2ce60b99.js",
+        "/main.0dc26b2e64fba102.js",
         "/manifest.webmanifest",
         "/polyfills.7760dfe95f3f2037.js",
-        "/runtime.0d1219a43bff3f44.js",
-        "/styles.447603cca95ec26b.css"
+        "/runtime.d5d517b16e8417da.js",
+        "/styles.7334bcb666d0c509.css"
       ],
       "patterns": []
     },
@@ -125,14 +125,14 @@
     "/56.683c25645977e727.js": "765d7854ecde5b9f65de6594bb8de542d19eef96",
     "/580.0fe09f5aec9080e5.js": "1658f75047030be263664cb4381575162f5b68ad",
     "/584.e4526a7efce4f67c.js": "1f7b9fec83644477b2b8fe0831f65ff7f6c1bbb9",
-    "/599.00b6fec54a26c62e.js": "bbf97e218f60c90d4f63e33f1f4eb0e0fc717656",
+    "/599.c4fc3958d27ae991.js": "cfc1cef2712eeaccee76919950a21b5188a83c48",
     "/610.9a0e8a80791de1ed.js": "3b0d2fef03f5e581534a099ff4e1312f251bc55d",
     "/615.e9523bc739bcaa3f.js": "aadb1dd6b55bf9823f1aaee4ef732a6f8ecd8741",
     "/632.97d93afdbe3fb8cd.js": "96dd1168d8342c8020b032b65279ab9ab1d22f00",
     "/645.1973c5760d48a45a.js": "e7cf9455a62d685a04e85bd61bb4c980fd4a29f6",
     "/648.dfe2665692bfa615.js": "ac2183079766b4e784591faedbc5a0218ea810ae",
     "/75.93c045f842ef4a42.js": "87f8944076263b157adb06df337fceec365e68fe",
-    "/750.6e16c99941614d52.js": "92b38d5eae2cdb9cd73aca4d406860193757b7d8",
+    "/750.180ad4edd270c873.js": "9a6b349c55873806650bae16444cffabd8414e51",
     "/764.f5877e59df573b67.js": "92d5b4cca8dbefdaf8815245d7f1a686b38accbb",
     "/778.c1460c8a439fcb95.js": "2a4565a81f75733229b90541c98583b12579122c",
     "/80.94d2d8ca1d382b07.js": "7207150da843f62ef2c4292c09d11665583d5699",
@@ -166,12 +166,12 @@
     "/assets/team/sindy_team.png": "069a472024b60b408c3a26f159f0922d2a9227db",
     "/assets/team/viviana_team.png": "3b4f727073b4fd04ad5aaea5a964a7c3e3556080",
     "/common.0b96da490f32a1bb.js": "48e1fc8cd47775d21daed0baf642896156477dc7",
-    "/index.html": "55375df8a2682a9bee07e1900b748c9998213dbd",
-    "/main.d3dcf8ef2ce60b99.js": "724f262e8398922a1d4eebcb911c3d4c18388317",
+    "/index.html": "127dafac6db9b3915bdd0d94edd2c411b9070e99",
+    "/main.0dc26b2e64fba102.js": "4c81f393da0e8bfc43460cc9b0f6d3acb11093d3",
     "/manifest.webmanifest": "6577c79e94818cfe9ac0d555b6cee44f2e1bc1b8",
     "/polyfills.7760dfe95f3f2037.js": "b959f2903f6de1c1bd04ad5a4a83cc86c54d824f",
-    "/runtime.0d1219a43bff3f44.js": "ef8293349494f639a2ddd162cfa88baf73a7d285",
-    "/styles.447603cca95ec26b.css": "b5bbd718fef6626b906297c7ef05dcf3752eb666"
+    "/runtime.d5d517b16e8417da.js": "9e6aefb135817afed35d598ea0226080fe5ad5e3",
+    "/styles.7334bcb666d0c509.css": "a98045ca3e6296bd53d9238e81de9bc2269861b9"
   },
   "navigationUrls": [
     {

@@ -22,25 +22,32 @@ import { InternalNotificationsService } from '../../core/services/internal-notif
 
       @if (open) {
         <div class="absolute bottom-16 right-0 w-80 bg-white rounded-xl shadow-xl border border-gray-200 max-h-96 overflow-y-auto">
-          <div class="p-3 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white rounded-t-xl">
+          <div class="p-3 border-b border-gray-100 flex items-center justify-between sticky top-0 bg-white rounded-t-xl z-10">
             <span class="text-sm font-semibold text-gray-800">Novedades</span>
-            @if (unreadCount > 0) {
-              <button (click)="markAll(); $event.stopPropagation()" class="text-xs text-primary font-semibold hover:underline">Marcar todo leído</button>
-            }
+            <div class="flex items-center gap-1">
+              @if (unreadCount > 0) {
+                <button (click)="markAll(); $event.stopPropagation()" class="text-xs text-primary font-semibold hover:underline whitespace-nowrap">Leer todo</button>
+              }
+              @if (list.length > 0) {
+                <button (click)="deleteAllRead(); $event.stopPropagation()" class="text-xs text-gray-400 hover:text-red-500 ml-1" title="Vaciar leídas">🗑️</button>
+              }
+              <button (click)="open = false" class="text-gray-400 hover:text-gray-600 ml-1 text-sm">✕</button>
+            </div>
           </div>
           @if (list.length === 0) {
             <div class="p-6 text-center text-sm text-gray-400">Sin novedades</div>
           }
           @for (n of list; track n.id) {
-            <div class="flex gap-3 p-3 border-b border-gray-50 cursor-pointer hover:bg-gray-50 transition-colors" [class.bg-blue-50]="!n.is_read" (click)="markRead(n.id)">
-              <span class="text-lg shrink-0">{{ icon(n.type) }}</span>
-              <div class="min-w-0 flex-1">
-                <p class="text-sm font-medium text-gray-800 truncate">{{ n.title }}</p>
+            <div class="flex gap-3 p-3 border-b border-gray-50 hover:bg-gray-50 transition-colors" [class.bg-blue-50]="!n.is_read">
+              <div class="flex-1 min-w-0 cursor-pointer" (click)="markRead(n.id)">
+                <span class="text-lg shrink-0 mr-2">{{ icon(n.type) }}</span>
+                <span class="text-sm font-medium text-gray-800">{{ n.title }}</span>
                 @if (n.body) {
-                  <p class="text-xs text-gray-500 truncate">{{ n.body }}</p>
+                  <p class="text-xs text-gray-500 truncate mt-0.5">{{ n.body }}</p>
                 }
                 <p class="text-[10px] text-gray-400 mt-0.5">{{ n.created_at | date:'dd MMM HH:mm' }}</p>
               </div>
+              <button (click)="deleteOne(n.id); $event.stopPropagation()" class="text-gray-300 hover:text-red-500 text-xs shrink-0 self-start mt-1" title="Eliminar">✕</button>
             </div>
           }
         </div>
@@ -80,6 +87,16 @@ export class FloatingNotifComponent implements OnInit, OnDestroy {
 
   async markAll() {
     await this.notifService.markAllAsRead();
+    this.load();
+  }
+
+  async deleteOne(id: string) {
+    await this.notifService.deleteNotification(id);
+    this.load();
+  }
+
+  async deleteAllRead() {
+    await this.notifService.deleteAllRead();
     this.load();
   }
 

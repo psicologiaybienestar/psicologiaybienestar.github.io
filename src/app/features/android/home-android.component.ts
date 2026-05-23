@@ -53,7 +53,10 @@ const ACTIVITY_ICONS: Record<string, string> = {
           <div class="notif-panel-header">
             <span class="notif-panel-title">Novedades</span>
             @if (unreadCount > 0) {
-              <button class="notif-mark-read" (click)="markAllAsRead(); $event.stopPropagation()">Marcar todo leído</button>
+              <button class="notif-mark-read" (click)="markAllAsRead(); $event.stopPropagation()">Leer todo</button>
+            }
+            @if (notificationsList.length > 0) {
+              <button class="notif-delete-all" (click)="deleteAllRead(); $event.stopPropagation()">🗑️</button>
             }
             <button class="notif-close" (click)="toggleNotifications()">✕</button>
           </div>
@@ -61,15 +64,16 @@ const ACTIVITY_ICONS: Record<string, string> = {
             <div class="notif-empty">Sin novedades aún</div>
           }
           @for (n of notificationsList; track n.id) {
-            <div class="notif-item" [class.notif-unread]="!n.is_read" (click)="markAsRead(n.id)">
+            <div class="notif-item" [class.notif-unread]="!n.is_read">
               <span class="notif-item-icon">{{ getNotifIcon(n.type) }}</span>
-              <div class="notif-item-body">
+              <div class="notif-item-body" (click)="markAsRead(n.id)">
                 <p class="notif-item-title">{{ n.title }}</p>
                 @if (n.body) {
                   <p class="notif-item-text">{{ n.body }}</p>
                 }
                 <span class="notif-item-time">{{ n.created_at | date:'dd MMM HH:mm' }}</span>
               </div>
+              <button class="notif-delete-one" (click)="deleteOne(n.id); $event.stopPropagation()">✕</button>
             </div>
           }
         </div>
@@ -688,8 +692,9 @@ const ACTIVITY_ICONS: Record<string, string> = {
       border-radius: 20px 20px 0 0;
       z-index: 99;
       overflow-y: auto;
+      -webkit-overflow-scrolling: touch;
       box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
-      padding-bottom: env(safe-area-inset-bottom, 16px);
+      padding-bottom: calc(64px + env(safe-area-inset-bottom, 16px));
     }
     .notif-panel-header {
       display: flex;
@@ -732,6 +737,35 @@ const ACTIVITY_ICONS: Record<string, string> = {
     }
     .notif-close:active {
       background: #F3F4F6;
+    }
+    .notif-delete-all {
+      background: none;
+      border: none;
+      font-size: 14px;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 8px;
+      opacity: 0.6;
+    }
+    .notif-delete-all:active {
+      opacity: 1;
+      background: #FEF2F2;
+    }
+    .notif-delete-one {
+      background: none;
+      border: none;
+      color: #d1d5db;
+      font-size: 12px;
+      cursor: pointer;
+      padding: 4px 6px;
+      border-radius: 8px;
+      flex-shrink: 0;
+      align-self: flex-start;
+      margin-top: 2px;
+    }
+    .notif-delete-one:active {
+      color: #ef4444;
+      background: #FEF2F2;
     }
     .notif-empty {
       padding: 32px 20px;
@@ -936,6 +970,16 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
 
   async markAllAsRead() {
     await this.internalNotificationsService.markAllAsRead();
+    this.loadUnreadCount();
+  }
+
+  async deleteOne(id: string) {
+    await this.internalNotificationsService.deleteNotification(id);
+    this.loadUnreadCount();
+  }
+
+  async deleteAllRead() {
+    await this.internalNotificationsService.deleteAllRead();
     this.loadUnreadCount();
   }
 

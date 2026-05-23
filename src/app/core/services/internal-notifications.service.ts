@@ -54,6 +54,20 @@ export class InternalNotificationsService {
       .eq('is_read', false);
   }
 
+  async deleteNotification(id: string): Promise<void> {
+    await this.supabase
+      .from('notifications')
+      .delete()
+      .eq('id', id);
+  }
+
+  async deleteAllRead(): Promise<void> {
+    await this.supabase
+      .from('notifications')
+      .delete()
+      .eq('is_read', true);
+  }
+
   subscribeToNew(callback: () => void): any {
     return this.supabase
       .channel('notifications-realtime')

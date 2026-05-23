@@ -16,13 +16,8 @@ if (firebaseServiceAccount && !admin.apps.length) {
 const supabaseUrl = Deno.env.get('SUPABASE_URL')!
 const supabaseServiceKey = Deno.env.get('SUPABASE_SERVICE_ROLE_KEY')!
 
-serve(async (req) => {
+async function sendNotifications(type: string, table: string, record: any) {
   try {
-    const body = await req.json()
-    const { type, table, record } = body
-
-    console.log(`📩 Webhook citas: ${type} en ${table}`)
-
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
     const { data: tokens } = await supabase
       .from('push_tokens')
@@ -30,7 +25,8 @@ serve(async (req) => {
       .eq('is_active', true)
 
     if (!tokens || tokens.length === 0) {
-      return new Response(JSON.stringify({ sent: 0 }), { headers: { 'Content-Type': 'application/json' } })
+      console.log('⚠️ No hay tokens registrados')
+      return
     }
 
     let title = ''
@@ -81,11 +77,23 @@ serve(async (req) => {
     const failed = sendResults.filter(r => r.status === 'rejected').length
 
     console.log(`✅ Notificaciones de cita: ${sent} enviadas, ${failed} fallidas`)
-    return new Response(JSON.stringify({ sent, failed }), {
-      headers: { 'Content-Type': 'application/json' },
-    })
   } catch (error) {
-    console.error('❌ Error:', error.message)
+    console.error('❌ Error en background:', error.message)
+  }
+}
+
+serve(async (req) => {
+  try {
+    const body = await req.json()
+    const { type, table, record } = body
+
+    console.log(`📩 Webhook citas: ${type} en ${table}`)
+
+    sendNotifications(type, table, record)
+
+    return new Response(null, { status: 202 })
+  } catch (error) {
+    console.error('❌ Error en handler:', error.message)
     return new Response(JSON.stringify({ error: error.message }), {
       status: 500,
       headers: { 'Content-Type': 'application/json' },

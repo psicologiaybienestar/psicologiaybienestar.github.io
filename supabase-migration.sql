@@ -629,6 +629,9 @@ create policy "Notifications insert trigger" on notifications
 create policy "Notifications update own" on notifications
   for update using (true) with check (true);
 
+create policy "Notifications delete all" on notifications
+  for delete using (true);
+
 -- Triggers: insertar notificación automática cuando se crea contenido nuevo
 create or replace function notify_on_content_insert()
 returns trigger language plpgsql as $$

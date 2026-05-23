@@ -88,9 +88,12 @@ export class NotificationsService {
       .subscribe();
   }
 
+  private channelCounter = 0;
+
   subscribeToAllChanges(callback: (table: string, data: any) => void) {
     const tables = ['eventos', 'noticias', 'motivational_quotes', 'emotional_tips', 'mini_games', 'wellness_activities', 'emotions'];
-    const channel = this.supabase.channel('all-content-changes');
+    const id = `all-content-changes-${++this.channelCounter}`;
+    const channel = this.supabase.channel(id);
     for (const table of tables) {
       channel.on(
         'postgres_changes',

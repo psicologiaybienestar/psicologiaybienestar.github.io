@@ -676,6 +676,24 @@ create trigger trg_notify_activities after insert on wellness_activities
 create trigger trg_notify_games after insert on mini_games
   for each row execute function notify_on_content_insert();
 
+-- ============================================
+-- 26. TABLA — ACUSE DE LECTURA POR DISPOSITIVO
+-- ============================================
+create table if not exists notification_ack (
+  notification_id uuid not null references notifications(id) on delete cascade,
+  device_id uuid not null,
+  is_read boolean default false,
+  dismissed boolean default false,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  primary key (notification_id, device_id)
+);
+
+alter table notification_ack enable row level security;
+
+create policy "Notification ack all" on notification_ack
+  for all using (true) with check (true);
+
 -- NOTA: Si aparece 504 Gateway Timeout al crear eventos desde admin:
 -- 1. Ir a Supabase Dashboard → Edge Functions → notify-event / notify-appointment
 -- 2. Settings → aumentar timeout de 60s a 120s

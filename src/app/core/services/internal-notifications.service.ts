@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+import { UserProfileService } from './user-profile.service';
 
 export interface InternalNotification {
   id: string;
@@ -16,56 +17,141 @@ export interface InternalNotification {
 @Injectable({ providedIn: 'root' })
 export class InternalNotificationsService {
   private supabaseService = inject(SupabaseService);
+  private userProfile = inject(UserProfileService);
 
   private get supabase() {
     return this.supabaseService.client;
   }
 
+  private get deviceId(): string | null {
+    return this.userProfile.currentUserId;
+  }
+
   async getLatest(limit = 20): Promise<InternalNotification[]> {
+    const did = this.deviceId;
+    if (!did) return [];
+
     const { data, error } = await this.supabase
       .from('notifications')
       .select('*')
       .order('created_at', { ascending: false })
       .limit(limit);
     if (error) throw error;
-    return (data || []).map(n => ({ ...n, is_read: n.is_read || false }));
+    if (!data || data.length === 0) return [];
+
+    const ids = data.map(n => n.id);
+    const { data: acks } = await this.supabase
+      .from('notification_ack')
+      .select('*')
+      .eq('device_id', did)
+      .in('notification_id', ids);
+
+    const ackMap = new Map((acks || []).map(a => [a.notification_id, a]));
+
+    return data
+      .filter(n => !ackMap.get(n.id)?.dismissed)
+      .map(n => ({ ...n, is_read: ackMap.get(n.id)?.is_read || false }));
   }
 
   async getUnreadCount(): Promise<number> {
+    const did = this.deviceId;
+    if (!did) return 0;
+
     const { data, error } = await this.supabase
       .from('notifications')
-      .select('id', { count: 'exact', head: true })
-      .eq('is_read', false);
-    if (error) return 0;
-    return data?.length || 0;
+      .select('id');
+    if (error || !data || data.length === 0) return 0;
+
+    const ids = data.map(n => n.id);
+    const { data: acks } = await this.supabase
+      .from('notification_ack')
+      .select('notification_id,is_read,dismissed')
+      .eq('device_id', did)
+      .in('notification_id', ids);
+
+    const ackMap = new Map((acks || []).map(a => [a.notification_id, a]));
+    return data.filter(n => {
+      const ack = ackMap.get(n.id);
+      return !ack?.dismissed && !ack?.is_read;
+    }).length;
   }
 
   async markAsRead(id: string): Promise<void> {
+    const did = this.deviceId;
+    if (!did) return;
     await this.supabase
-      .from('notifications')
-      .update({ is_read: true })
-      .eq('id', id);
+      .from('notification_ack')
+      .upsert({
+        notification_id: id,
+        device_id: did,
+        is_read: true,
+        dismissed: false,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'notification_id,device_id' });
   }
 
   async markAllAsRead(): Promise<void> {
-    await this.supabase
+    const did = this.deviceId;
+    if (!did) return;
+
+    const { data } = await this.supabase
       .from('notifications')
-      .update({ is_read: true })
-      .eq('is_read', false);
+      .select('id');
+    if (!data || data.length === 0) return;
+
+    const ids = data.map(n => n.id);
+    const { data: acks } = await this.supabase
+      .from('notification_ack')
+      .select('notification_id')
+      .eq('device_id', did)
+      .in('notification_id', ids);
+
+    const ackedIds = new Set((acks || []).map(a => a.notification_id));
+    const unackedIds = ids.filter(id => !ackedIds.has(id));
+    if (unackedIds.length === 0) return;
+
+    const rows = unackedIds.map(id => ({
+      notification_id: id,
+      device_id: did,
+      is_read: true,
+      dismissed: false,
+    }));
+    await this.supabase.from('notification_ack').upsert(rows, { onConflict: 'notification_id,device_id' });
   }
 
   async deleteNotification(id: string): Promise<void> {
+    const did = this.deviceId;
+    if (!did) return;
     await this.supabase
-      .from('notifications')
-      .delete()
-      .eq('id', id);
+      .from('notification_ack')
+      .upsert({
+        notification_id: id,
+        device_id: did,
+        dismissed: true,
+        is_read: true,
+        updated_at: new Date().toISOString(),
+      }, { onConflict: 'notification_id,device_id' });
   }
 
   async deleteAllRead(): Promise<void> {
+    const did = this.deviceId;
+    if (!did) return;
+
+    const { data: ackRows } = await this.supabase
+      .from('notification_ack')
+      .select('notification_id')
+      .eq('device_id', did)
+      .eq('is_read', true)
+      .eq('dismissed', false);
+
+    if (!ackRows || ackRows.length === 0) return;
+
     await this.supabase
-      .from('notifications')
-      .delete()
-      .eq('is_read', true);
+      .from('notification_ack')
+      .update({ dismissed: true, updated_at: new Date().toISOString() })
+      .eq('device_id', did)
+      .eq('is_read', true)
+      .eq('dismissed', false);
   }
 
   subscribeToNew(callback: () => void): any {

@@ -1,5 +1,6 @@
-import { ApplicationConfig, provideZoneChangeDetection } from '@angular/core';
+import { ApplicationConfig, provideZoneChangeDetection, isDevMode } from '@angular/core';
 import { provideRouter, withPreloading, PreloadAllModules } from '@angular/router';
+import { provideServiceWorker } from '@angular/service-worker';
 import { provideIonicAngular } from '@ionic/angular/standalone';
 import { provideHttpClient } from '@angular/common/http';
 import { provideAnimations } from '@angular/platform-browser/animations';
@@ -14,5 +15,9 @@ export const appConfig: ApplicationConfig = {
     }),
     provideHttpClient(),
     provideAnimations(),
+    provideServiceWorker('ngsw-worker.js', {
+      enabled: !isDevMode(),
+      registrationStrategy: 'registerWhenStable:3000',
+    }),
   ],
 };

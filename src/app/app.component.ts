@@ -21,22 +21,23 @@ export class AppComponent implements OnInit, OnDestroy {
   private userProfileService = inject(UserProfileService);
   private pushService = inject(PushNotificationsService);
   private platform = inject(PlatformService);
-  private swUpdate = inject(SwUpdate);
+  private swUpdate = inject(SwUpdate, { optional: true });
   private channel: any;
 
   async ngOnInit() {
     await this.userProfileService.init();
 
     // Auto-update service worker (web y Android)
-    if (this.swUpdate.isEnabled) {
-      this.swUpdate.versionUpdates.subscribe(evt => {
+    const sw = this.swUpdate;
+    if (sw?.isEnabled) {
+      sw.versionUpdates.subscribe(evt => {
         if (evt.type === 'VERSION_READY') {
           console.log('📦 Nueva versión disponible — actualizando...');
-          this.swUpdate.activateUpdate().then(() => document.location.reload());
+          sw.activateUpdate().then(() => document.location.reload());
         }
       });
-      this.swUpdate.checkForUpdate();
-      setInterval(() => this.swUpdate.checkForUpdate(), 30 * 60 * 1000);
+      sw.checkForUpdate();
+      setInterval(() => sw.checkForUpdate(), 30 * 60 * 1000);
     }
 
     if (this.platform.isAndroid) {

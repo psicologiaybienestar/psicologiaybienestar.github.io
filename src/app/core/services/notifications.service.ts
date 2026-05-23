@@ -87,4 +87,28 @@ export class NotificationsService {
       )
       .subscribe();
   }
+
+  subscribeToAllChanges(callback: (table: string, data: any) => void) {
+    const tables = ['eventos', 'noticias', 'motivational_quotes', 'emotional_tips', 'mini_games', 'wellness_activities'];
+    const channel = this.supabase.channel('all-content-changes');
+    for (const table of tables) {
+      channel.on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table },
+        (payload) => callback(table, payload.new)
+      );
+    }
+    return channel.subscribe();
+  }
+
+  subscribeToAppointmentChanges(email: string, callback: (data: any) => void) {
+    return this.supabase
+      .channel('appointments-changes')
+      .on(
+        'postgres_changes',
+        { event: '*', schema: 'public', table: 'appointments', filter: `email=eq.${email}` },
+        (payload) => callback(payload.new)
+      )
+      .subscribe();
+  }
 }

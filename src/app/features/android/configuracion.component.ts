@@ -1,5 +1,8 @@
 import { Component, OnInit, inject } from '@angular/core';
+import { SlicePipe } from '@angular/common';
 import { NotificationsService, NotificationPreferences } from '../../core/services/notifications.service';
+import { PushNotificationsService } from '../../core/services/push-notifications.service';
+import { UserProfileService } from '../../core/services/user-profile.service';
 
 interface ToggleItem {
   key: keyof NotificationPreferences;
@@ -11,7 +14,7 @@ interface ToggleItem {
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [],
+  imports: [SlicePipe],
   template: `
     <div class="page">
       <!-- Header -->
@@ -23,6 +26,29 @@ interface ToggleItem {
           <p class="hero-subtitle">Personaliza tu experiencia en la app</p>
         </div>
       </section>
+
+      <!-- Perfil -->
+      @if (userId) {
+        <section class="section">
+          <h2 class="section-title">Mi perfil</h2>
+          <div class="info-card">
+            <div class="info-row">
+              <span class="info-label">ID</span>
+              <span class="info-value info-mono">{{ userId | slice:0:8 }}...</span>
+            </div>
+            @if (profile) {
+              <div class="info-row">
+                <span class="info-label">Puntos</span>
+                <span class="info-value">{{ profile.emotional_points || 0 }} ⭐</span>
+              </div>
+              <div class="info-row">
+                <span class="info-label">Racha</span>
+                <span class="info-value">{{ profile.streak || 0 }} días 🔥</span>
+              </div>
+            }
+          </div>
+        </section>
+      }
 
       <!-- Notificaciones -->
       <section class="section">
@@ -48,8 +74,12 @@ interface ToggleItem {
           <svg xmlns="http://www.w3.org/2000/svg" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
           </svg>
-          Solicitar permisos de notificación
+          {{ pushEnabled ? '✅ Notificaciones activas' : 'Activar notificaciones push' }}
         </button>
+
+        @if (fcmToken) {
+          <p class="text-xs text-gray-400 mt-2 text-center truncate">Token: {{ fcmToken | slice:0:20 }}...</p>
+        }
       </section>
 
       <!-- Versión web -->
@@ -268,8 +298,14 @@ interface ToggleItem {
 })
 export class ConfiguracionComponent implements OnInit {
   private notificationsService = inject(NotificationsService);
+  private pushNotificationsService = inject(PushNotificationsService);
+  private userProfileService = inject(UserProfileService);
 
   prefs: NotificationPreferences = {} as NotificationPreferences;
+  pushEnabled = false;
+  fcmToken: string | null = null;
+  userId: string | null = null;
+  profile: any = null;
 
   toggles: ToggleItem[] = [
     { key: 'eventos', icon: '📅', label: 'Eventos', desc: 'Nuevos eventos y cambios' },
@@ -281,6 +317,21 @@ export class ConfiguracionComponent implements OnInit {
 
   ngOnInit() {
     this.prefs = this.notificationsService.getPreferences();
+    this.fcmToken = this.pushNotificationsService.getSavedToken();
+    this.pushEnabled = !!this.fcmToken;
+    this.userId = this.userProfileService.currentUserId;
+    this.profile = this.userProfileService.currentProfile;
+
+    this.userProfileService.currentUserId$.subscribe(id => {
+      this.userId = id;
+    });
+    this.userProfileService.currentProfile$.subscribe(p => {
+      this.profile = p;
+    });
+    this.pushNotificationsService.fcmToken$.subscribe(token => {
+      this.fcmToken = token;
+      this.pushEnabled = !!token;
+    });
   }
 
   toggle(key: keyof NotificationPreferences) {
@@ -289,10 +340,11 @@ export class ConfiguracionComponent implements OnInit {
   }
 
   async requestNotificationPermission() {
-    const granted = await this.notificationsService.requestPermission();
-    if (granted) {
-      this.prefs = { ...this.prefs };
-      this.notificationsService.savePreferences(this.prefs);
+    if (this.pushEnabled) return;
+    const ok = await this.pushNotificationsService.register();
+    if (ok) {
+      this.pushEnabled = true;
+      this.fcmToken = this.pushNotificationsService.fcmToken;
     }
   }
 

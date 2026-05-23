@@ -1,29 +1,55 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { BulkImportService } from '../../../core/services/bulk-import.service';
 
 @Component({
   selector: 'app-admin-frases',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule],
+  imports: [DatePipe, ReactiveFormsModule, FormsModule],
   template: `
     <div>
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Frases Motivacionales</h1>
         <div class="flex space-x-2">
-          <button (click)="downloadTemplate()" class="bg-gray-100 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-200 transition-colors font-semibold text-sm">
+          <button (click)="exportF()" class="bg-green-600 text-white px-3 py-2 rounded-xl hover:bg-green-700 transition-colors font-semibold text-sm">
+            Exportar
+          </button>
+          <button (click)="downloadTemplate()" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-xl hover:bg-gray-200 transition-colors font-semibold text-sm">
             Plantilla
           </button>
-          <label class="bg-white border border-gray-300 text-gray-700 px-4 py-2 rounded-xl hover:bg-gray-50 transition-colors font-semibold text-sm cursor-pointer">
-            Importar XLSX
+          <label class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors font-semibold text-sm cursor-pointer">
+            Importar
             <input type="file" accept=".xlsx,.xls" (change)="onImportFile($event)" class="hidden" />
           </label>
           <button (click)="toggleForm()" class="bg-primary text-white px-4 py-2 rounded-xl hover:bg-primary/90 transition-colors font-semibold">
             {{ showForm ? 'Cancelar' : 'Nueva frase' }}
           </button>
         </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="flex flex-wrap gap-3 mb-6">
+        <select [(ngModel)]="categoryFilter" (change)="applyFilter()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-sm">
+          <option value="">Todas las categorías</option>
+          <option value="general">General</option>
+          <option value="motivacion">Motivación</option>
+          <option value="autoestima">Autoestima</option>
+          <option value="ansiedad">Ansiedad</option>
+          <option value="superacion">Superación</option>
+          <option value="gratitud">Gratitud</option>
+        </select>
+        <select [(ngModel)]="activeFilter" (change)="applyFilter()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-sm">
+          <option value="all">Todas</option>
+          <option value="active">Activas</option>
+          <option value="inactive">Inactivas</option>
+        </select>
+        <select [(ngModel)]="dateFilter" (change)="applyFilter()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-sm">
+          <option value="all">Todas las fechas</option>
+          <option value="recent">Últimos 30 días</option>
+        </select>
       </div>
 
       @if (importResult) {
@@ -97,7 +123,7 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              @for (item of items; track item.id) {
+              @for (item of filteredItems; track item.id) {
                 <tr class="hover:bg-gray-50 transition-colors">
                   <td class="px-6 py-4 max-w-xs"><p class="font-medium text-gray-800 truncate">{{ item.quote }}</p></td>
                   <td class="px-6 py-4 text-sm text-gray-500">{{ item.author }}</td>
@@ -119,7 +145,7 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
             </tbody>
           </table>
         </div>
-        @if (items.length === 0 && !loading) { <p class="text-center text-gray-500 py-10">No hay frases aún.</p> }
+        @if (filteredItems.length === 0 && !loading) { <p class="text-center text-gray-500 py-10">No hay frases aún.</p> }
       </div>
     </div>
   `,
@@ -134,6 +160,35 @@ export class AdminFrasesComponent implements OnInit {
   guardando = false;
   formError = '';
   importResult: { success: number; errors: { row: number; message: string }[] } | null = null;
+
+  // Filters
+  categoryFilter = '';
+  activeFilter: 'all' | 'active' | 'inactive' = 'all';
+  dateFilter: 'all' | 'recent' = 'all';
+
+  get filteredItems() {
+    let result = [...this.items];
+    if (this.categoryFilter) {
+      result = result.filter(i => i.category === this.categoryFilter);
+    }
+    if (this.activeFilter === 'active') {
+      result = result.filter(i => i.is_active);
+    } else if (this.activeFilter === 'inactive') {
+      result = result.filter(i => !i.is_active);
+    }
+    if (this.dateFilter === 'recent') {
+      const cutoff = new Date();
+      cutoff.setDate(cutoff.getDate() - 30);
+      result = result.filter(i => new Date(i.created_at) >= cutoff);
+    }
+    return result;
+  }
+
+  applyFilter() {}
+
+  async exportF() {
+    await this.bulkImport.exportToFile('motivational_quotes', this.filteredItems);
+  }
 
   constructor(
     private fb: FormBuilder,

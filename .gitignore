@@ -6,3 +6,5 @@ capacitor-cordova-android-plugins/
 .idea/
 *.log
 .env
+service-account-key.json
+supabase/functions/node_modules/

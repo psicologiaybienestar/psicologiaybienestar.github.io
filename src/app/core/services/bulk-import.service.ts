@@ -13,6 +13,7 @@ export interface ImportColumn {
 export interface ImportTableConfig {
   table: string;
   columns: ImportColumn[];
+  uniqueKey?: string;
 }
 
 export interface ImportResult {
@@ -29,6 +30,7 @@ const TABLE_CONFIGS: Record<string, ImportTableConfig> = {
       { key: 'category', label: 'category', required: false },
       { key: 'is_active', label: 'active', required: false, type: 'boolean' },
     ],
+    uniqueKey: 'quote',
   },
   emotional_tips: {
     table: 'emotional_tips',
@@ -39,6 +41,7 @@ const TABLE_CONFIGS: Record<string, ImportTableConfig> = {
       { key: 'image_url', label: 'image_url', required: false },
       { key: 'is_active', label: 'active', required: false, type: 'boolean' },
     ],
+    uniqueKey: 'title',
   },
   wellness_activities: {
     table: 'wellness_activities',
@@ -50,6 +53,45 @@ const TABLE_CONFIGS: Record<string, ImportTableConfig> = {
       { key: 'image_url', label: 'image_url', required: false },
       { key: 'is_active', label: 'active', required: false, type: 'boolean' },
     ],
+    uniqueKey: 'title',
+  },
+  emotions: {
+    table: 'emotions',
+    columns: [
+      { key: 'emotion_name', label: 'emotion_name', required: true },
+      { key: 'description', label: 'description', required: false },
+      { key: 'color', label: 'color', required: false },
+      { key: 'icon', label: 'icon', required: false },
+      { key: 'recommendations', label: 'recommendations', required: false },
+      { key: 'is_active', label: 'active', required: false, type: 'boolean' },
+    ],
+    uniqueKey: 'emotion_name',
+  },
+  mini_games: {
+    table: 'mini_games',
+    columns: [
+      { key: 'title', label: 'title', required: true },
+      { key: 'description', label: 'description', required: false },
+      { key: 'game_type', label: 'game_type', required: false, allowedValues: ['affirmations', 'breathing', 'gratitude', 'trivia', 'memory', 'other'] },
+      { key: 'difficulty', label: 'difficulty', required: false, allowedValues: ['facil', 'medio', 'dificil'] },
+      { key: 'icon', label: 'icon', required: false },
+      { key: 'route', label: 'route', required: false },
+      { key: 'is_active', label: 'active', required: false, type: 'boolean' },
+    ],
+    uniqueKey: 'title',
+  },
+  eventos: {
+    table: 'eventos',
+    columns: [
+      { key: 'titulo', label: 'titulo', required: true },
+      { key: 'descripcion', label: 'descripcion', required: false },
+      { key: 'fecha_inicio', label: 'fecha_inicio', required: false, type: 'date' },
+      { key: 'fecha_fin', label: 'fecha_fin', required: false, type: 'date' },
+      { key: 'ubicacion', label: 'ubicacion', required: false },
+      { key: 'modalidad', label: 'modalidad', required: false, allowedValues: ['Presencial', 'Virtual', 'Híbrido'] },
+      { key: 'estado', label: 'estado', required: false, allowedValues: ['publicado', 'borrador', 'cancelado', 'finalizado', 'pospuesto'] },
+    ],
+    uniqueKey: 'titulo',
   },
 };
 
@@ -80,14 +122,39 @@ export class BulkImportService {
       if (c.type === 'number') return '0';
       if (c.key === 'image_url') return 'https://example.com/image.jpg';
       if (c.key === 'duration') return '10';
+      if (c.key === 'recommendations') return '[{"title":"Recomendación","text":"Texto aquí"}]';
+      if (c.key === 'route') return '/ruta-ejemplo';
+      if (c.key === 'icon') return '🎮';
+      if (c.key === 'color') return '#627eff';
       return c.label === 'quote' ? 'Escribe aquí la frase...' :
              c.label === 'title' ? 'Título de ejemplo' :
              c.label === 'description' || c.label === 'content' ? 'Descripción de ejemplo' :
+             c.label === 'descripcion' ? 'Descripción del evento' :
              c.label === 'author' ? 'Anónimo' :
              c.label === 'category' ? 'general' :
              c.label === 'emotion_type' ? 'general' :
-             c.label === 'activity_type' ? 'mindfulness' : '';
+             c.label === 'emotion_name' ? 'Alegría' :
+             c.label === 'activity_type' ? 'mindfulness' :
+             c.label === 'game_type' ? 'affirmations' :
+             c.label === 'difficulty' ? 'facil' :
+             c.label === 'titulo' ? 'Título del evento' :
+             c.label === 'fecha_inicio' ? '2026-06-01T10:00:00Z' :
+             c.label === 'fecha_fin' ? '2026-06-01T12:00:00Z' :
+             c.label === 'ubicacion' ? 'Online' :
+             c.label === 'modalidad' ? 'Virtual' :
+             c.label === 'estado' ? 'publicado' : '';
     });
+
+    const instructions = [
+      ['INSTRUCCIONES'],
+      [''],
+      ['Columnas requeridas: ' + config.columns.filter(c => c.required).map(c => c.label).join(', ')],
+      ...(config.columns.filter(c => c.allowedValues).map(c => [`Columna "${c.label}" valores permitidos: ${c.allowedValues!.join(', ')}`])),
+      [''],
+      ['No incluir: id, created_at, updated_at (se generan automáticamente)'],
+      ['La primera fila son los encabezados (no modificarlos)'],
+      ['La segunda fila es un ejemplo (reemplazar o eliminar)'],
+    ];
 
     const ws = XLSX.utils.aoa_to_sheet([headerRow, exampleRow]);
     const colWidths = config.columns.map(c => ({
@@ -95,12 +162,41 @@ export class BulkImportService {
     }));
     ws['!cols'] = colWidths;
 
+    const instructionsWs = XLSX.utils.aoa_to_sheet(instructions);
+    instructionsWs['!cols'] = [{ wch: 60 }];
+
     const wb = XLSX.utils.book_new();
-    XLSX.utils.book_append_sheet(wb, ws, table);
+    XLSX.utils.book_append_sheet(wb, ws, 'Datos');
+    XLSX.utils.book_append_sheet(wb, instructionsWs, 'Instrucciones');
     XLSX.writeFile(wb, `${table}_template.xlsx`);
   }
 
-  async importFromFile(file: File, table: string): Promise<ImportResult> {
+  async exportToFile(table: string, records: any[]): Promise<void> {
+    const config = this.getConfig(table);
+    if (!config || records.length === 0) return;
+
+    const headerRow = config.columns.map(c => c.label);
+    const dataRows = records.map(record =>
+      config.columns.map(c => {
+        const val = record[c.key];
+        if (c.type === 'boolean') return val ? 'true' : 'false';
+        if (c.key === 'recommendations' && typeof val === 'object') return JSON.stringify(val);
+        return val !== null && val !== undefined ? String(val) : '';
+      })
+    );
+
+    const ws = XLSX.utils.aoa_to_sheet([headerRow, ...dataRows]);
+    const colWidths = config.columns.map(c => ({
+      wch: Math.max(c.label.length + 4, 20),
+    }));
+    ws['!cols'] = colWidths;
+
+    const wb = XLSX.utils.book_new();
+    XLSX.utils.book_append_sheet(wb, ws, table);
+    XLSX.writeFile(wb, `${table}_export_${Date.now()}.xlsx`);
+  }
+
+  async importFromFile(file: File, table: string, skipDuplicates = true): Promise<ImportResult> {
     const config = this.getConfig(table);
     if (!config) {
       return { success: 0, errors: [{ row: 0, message: `Tabla "${table}" no soportada` }] };
@@ -116,6 +212,18 @@ export class BulkImportService {
     if (rows.length === 0) {
       result.errors.push({ row: 0, message: 'El archivo está vacío' });
       return result;
+    }
+
+    let existingKeys: Set<string> = new Set();
+    if (skipDuplicates && config.uniqueKey) {
+      try {
+        const { data: existing } = await this.supabase
+          .from(config.table)
+          .select(config.uniqueKey);
+        if (existing) {
+          existingKeys = new Set(existing.map((e: any) => String(e[config.uniqueKey!]).toLowerCase().trim()));
+        }
+      } catch { /* ignore */ }
     }
 
     for (let i = 0; i < rows.length; i++) {
@@ -141,7 +249,11 @@ export class BulkImportService {
             record[col.key] = String(value);
           }
         } else {
-          record[col.key] = null;
+          if (col.key === 'recommendations') {
+            record[col.key] = '[]';
+          } else {
+            record[col.key] = null;
+          }
         }
       }
 
@@ -150,8 +262,17 @@ export class BulkImportService {
         continue;
       }
 
+      if (skipDuplicates && config.uniqueKey && record[config.uniqueKey]) {
+        const key = String(record[config.uniqueKey]).toLowerCase().trim();
+        if (existingKeys.has(key)) {
+          result.errors.push({ row: i + 2, message: `Registro duplicado: ${config.uniqueKey}="${record[config.uniqueKey]}"` });
+          continue;
+        }
+        existingKeys.add(key);
+      }
+
       try {
-        const { error } = await this.supabase.from(table).insert(record);
+        const { error } = await this.supabase.from(config.table).insert(record);
         if (error) {
           result.errors.push({ row: i + 2, message: error.message });
         } else {

@@ -1,11 +1,12 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
+import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
 
 @Component({
   selector: 'app-admin-citas',
   standalone: true,
-  imports: [DatePipe],
+  imports: [DatePipe, FormsModule],
   template: `
     <div>
       <div class="flex items-center justify-between mb-6">
@@ -21,6 +22,27 @@ import { SupabaseService } from '../../../core/services/supabase.service';
         </div>
       </div>
 
+      <!-- Filtros adicionales -->
+      <div class="flex flex-wrap gap-3 mb-6">
+        <div class="flex-1 min-w-[200px]">
+          <input [(ngModel)]="searchTerm" (input)="applyFilter()" type="text" placeholder="Buscar por nombre o correo..."
+            class="w-full px-4 py-2.5 rounded-xl border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none text-sm" />
+        </div>
+        <div>
+          <input [(ngModel)]="dateFrom" (change)="applyFilter()" type="date" placeholder="Desde"
+            class="px-4 py-2.5 rounded-xl border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none text-sm" />
+        </div>
+        <div>
+          <input [(ngModel)]="dateTo" (change)="applyFilter()" type="date" placeholder="Hasta"
+            class="px-4 py-2.5 rounded-xl border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none text-sm" />
+        </div>
+        <select [(ngModel)]="sortOrder" (change)="applyFilter()"
+          class="px-4 py-2.5 rounded-xl border border-gray-300 focus:border-primary focus:ring-4 focus:ring-primary/20 transition-all outline-none text-sm">
+          <option value="desc">Más recientes</option>
+          <option value="asc">Más antiguos</option>
+        </select>
+      </div>
+
       @if (loading) { <p class="text-gray-500 text-center py-10">Cargando...</p> }
 
       <div class="bg-white rounded-2xl shadow-sm border border-gray-100 overflow-hidden">
@@ -30,7 +52,8 @@ import { SupabaseService } from '../../../core/services/supabase.service';
               <tr class="bg-gray-50 text-left">
                 <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Nombre</th>
                 <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Contacto</th>
-                <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Fecha</th>
+                <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Fecha/Hora</th>
+                <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Estado emocional</th>
                 <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Estado</th>
                 <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Creada</th>
                 <th class="px-6 py-3 text-xs font-semibold text-gray-500 uppercase">Acciones</th>
@@ -46,8 +69,9 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                   </td>
                   <td class="px-6 py-4 text-sm text-gray-500">
                     {{ item.requested_date ? (item.requested_date | date:'dd/MM/yyyy') : '—' }}
-                    @if (item.requested_time) { <span class="text-xs">{{ item.requested_time }}</span> }
+                    @if (item.requested_time) { <span class="text-xs ml-1">{{ item.requested_time }}</span> }
                   </td>
+                  <td class="px-6 py-4 text-sm text-gray-500">{{ item.emotional_state || '—' }}</td>
                   <td class="px-6 py-4">
                     <span class="text-xs font-semibold px-3 py-1 rounded-full"
                       [class]="statusClass(item.status)">
@@ -63,11 +87,29 @@ import { SupabaseService } from '../../../core/services/supabase.service';
                       }
                       @if (item.status === 'confirmada') {
                         <button (click)="cambiarStatus(item.id, 'completada')" class="text-blue-600 hover:text-blue-800 text-sm font-semibold">Completada</button>
+                        <button (click)="abrirReagendar(item)" class="text-amber-600 hover:text-amber-800 text-sm font-semibold">Reagendar</button>
+                      }
+                      @if (item.status === 'reagendada') {
+                        <button (click)="cambiarStatus(item.id, 'confirmada')" class="text-green-600 hover:text-green-800 text-sm font-semibold">Re-confirmar</button>
+                        <button (click)="abrirReagendar(item)" class="text-amber-600 hover:text-amber-800 text-sm font-semibold">Reagendar</button>
                       }
                       <button (click)="eliminar(item.id)" class="text-gray-500 hover:text-gray-700 text-sm">Eliminar</button>
                     </div>
                   </td>
                 </tr>
+                @if (reagendandoId === item.id) {
+                  <tr class="bg-amber-50">
+                    <td colspan="7" class="px-6 py-4">
+                      <div class="flex items-center gap-3">
+                        <span class="text-sm font-semibold text-gray-700">Nueva fecha:</span>
+                        <input [(ngModel)]="reagendarDate" type="date" class="px-3 py-1.5 rounded-lg border border-gray-300 text-sm" />
+                        <input [(ngModel)]="reagendarTime" type="time" class="px-3 py-1.5 rounded-lg border border-gray-300 text-sm" />
+                        <button (click)="reagendar(item.id)" class="bg-amber-600 text-white px-4 py-1.5 rounded-lg text-sm font-semibold hover:bg-amber-700">Guardar</button>
+                        <button (click)="reagendandoId = null" class="text-gray-500 text-sm">Cancelar</button>
+                      </div>
+                    </td>
+                  </tr>
+                }
               }
             </tbody>
           </table>
@@ -81,17 +123,53 @@ export class AdminCitasComponent implements OnInit {
   items: any[] = [];
   loading = true;
   statusFilter = '';
+  searchTerm = '';
+  dateFrom = '';
+  dateTo = '';
+  sortOrder = 'desc';
+  reagendandoId: string | null = null;
+  reagendarDate = '';
+  reagendarTime = '';
+
   filters = [
     { label: 'Todas', value: '' },
     { label: 'Pendientes', value: 'pendiente' },
     { label: 'Confirmadas', value: 'confirmada' },
     { label: 'Completadas', value: 'completada' },
+    { label: 'Reagendadas', value: 'reagendada' },
     { label: 'Canceladas', value: 'cancelada' },
   ];
 
   get filteredItems() {
-    if (!this.statusFilter) return this.items;
-    return this.items.filter(i => i.status === this.statusFilter);
+    let result = [...this.items];
+
+    if (this.statusFilter) {
+      result = result.filter(i => i.status === this.statusFilter);
+    }
+
+    if (this.searchTerm) {
+      const s = this.searchTerm.toLowerCase();
+      result = result.filter(i =>
+        (i.user_name || '').toLowerCase().includes(s) ||
+        (i.email || '').toLowerCase().includes(s)
+      );
+    }
+
+    if (this.dateFrom) {
+      result = result.filter(i => !i.requested_date || i.requested_date >= this.dateFrom);
+    }
+
+    if (this.dateTo) {
+      result = result.filter(i => !i.requested_date || i.requested_date <= this.dateTo);
+    }
+
+    result.sort((a, b) => {
+      const da = new Date(a.created_at || 0).getTime();
+      const db = new Date(b.created_at || 0).getTime();
+      return this.sortOrder === 'desc' ? db - da : da - db;
+    });
+
+    return result;
   }
 
   constructor(private supabase: SupabaseService) {}
@@ -114,6 +192,7 @@ export class AdminCitasComponent implements OnInit {
       confirmada: 'bg-green-100 text-green-800',
       completada: 'bg-blue-100 text-blue-800',
       cancelada: 'bg-red-100 text-red-800',
+      reagendada: 'bg-amber-100 text-amber-800',
     };
     return map[status] || 'bg-gray-100 text-gray-800';
   }
@@ -121,6 +200,26 @@ export class AdminCitasComponent implements OnInit {
   async cambiarStatus(id: string, status: string) {
     try {
       await this.supabase.client.from('appointments').update({ status }).eq('id', id);
+      await this.cargar();
+    } catch (e: any) { console.error(e); }
+  }
+
+  abrirReagendar(item: any) {
+    this.reagendandoId = item.id;
+    this.reagendarDate = item.requested_date || '';
+    this.reagendarTime = item.requested_time || '';
+  }
+
+  async reagendar(id: string) {
+    if (!this.reagendarDate || !this.reagendarTime) return;
+    try {
+      await this.supabase.client.from('appointments').update({
+        requested_date: this.reagendarDate,
+        requested_time: this.reagendarTime,
+        status: 'reagendada',
+        reagendada_date: new Date().toISOString(),
+      }).eq('id', id);
+      this.reagendandoId = null;
       await this.cargar();
     } catch (e: any) { console.error(e); }
   }

@@ -474,3 +474,109 @@ $$;
 -- Cifrado en tránsito: HTTPS + Supabase TLS.
 -- El permiso POST_NOTIFICATIONS se solicita en tiempo de ejecución (Android 13+).
 -- No se recolecta ubicación, contactos, fotos ni micrófono.
+
+-- ============================================
+-- 18. ACTUALIZACIONES — AGENDA Y CITAS
+-- ============================================
+
+alter table appointments drop constraint if exists appointments_status_check;
+alter table appointments add constraint appointments_status_check
+  check (status in ('pendiente','confirmada','cancelada','completada','reagendada'));
+
+alter table appointments add column if not exists emotional_state text;
+alter table appointments add column if not exists consent boolean default false;
+alter table appointments add column if not exists reagendada_date timestamptz;
+alter table appointments add column if not exists updated_at timestamptz default now();
+
+create trigger handle_updated_at_appointments before update on appointments
+  for each row execute procedure moddatetime (updated_at);
+
+-- ============================================
+-- 19. USUARIO PERSISTENTE + PERFILES
+-- ============================================
+
+create table if not exists profiles (
+  id uuid primary key,
+  nickname text,
+  avatar text,
+  emotional_points integer default 0,
+  level integer default 1,
+  streak integer default 0,
+  preferences jsonb default '{}'::jsonb,
+  created_at timestamptz default now(),
+  updated_at timestamptz default now(),
+  last_seen timestamptz default now()
+);
+
+alter table profiles enable row level security;
+
+create policy "Perfiles insert público" on profiles
+  for insert with check (true);
+
+create policy "Perfiles select propio" on profiles
+  for select using (true);
+
+create policy "Perfiles update propio" on profiles
+  for update using (auth.uid() = id or auth.uid() is null)
+  with check (auth.uid() = id or auth.uid() is null);
+
+create trigger handle_updated_at_profiles before update on profiles
+  for each row execute procedure moddatetime (updated_at);
+
+-- Mejorar user_progress
+alter table user_progress add column if not exists activity_type text;
+alter table user_progress add column if not exists activity_id uuid;
+alter table user_progress add column if not exists completed boolean default true;
+alter table user_progress add column if not exists updated_at timestamptz default now();
+
+create trigger handle_updated_at_user_progress before update on user_progress
+  for each row execute procedure moddatetime (updated_at);
+
+-- ============================================
+-- 20. TABLA — TOKENS DE NOTIFICACIONES PUSH
+-- ============================================
+create table if not exists push_tokens (
+  id uuid default gen_random_uuid() primary key,
+  token text not null unique,
+  device text default 'android',
+  user_id uuid,
+  is_active boolean default true,
+  created_at timestamptz default now()
+);
+
+alter table push_tokens enable row level security;
+
+create policy "Insert propio tokens" on push_tokens
+  for insert with check (true);
+
+create policy "Select admin tokens" on push_tokens
+  for select using (auth.jwt() -> 'app_metadata' ->> 'role' in ('admin', 'editor'));
+
+-- ============================================
+-- 21. VISTA — ESTADÍSTICAS DE CITAS
+-- ============================================
+create or replace view admin_stats_appointments with (security_invoker = true) as
+select
+  status,
+  count(*) as total,
+  count(*) filter (where requested_date >= current_date) as proximas
+from appointments
+group by status;
+
+-- ============================================
+-- 22. NOTAS PARA SUPABASE EDGE FUNCTIONS
+-- ============================================
+-- Para activar notificaciones push reales:
+--
+-- 1. Crear proyecto en Firebase Console
+-- 2. Descargar google-services.json → android/app/
+-- 3. En Supabase Dashboard → Edge Functions:
+--    - Crear función 'notify-event'
+--    - Crear función 'notify-appointment'
+-- 4. En Supabase Dashboard → Database → Webhooks:
+--    - Crear webhook para tabla 'eventos' (INSERT, UPDATE)
+--      → URL: {project-ref}.functions.supabase.co/notify-event
+--    - Crear webhook para tabla 'appointments' (INSERT, UPDATE)
+--      → URL: {project-ref}.functions.supabase.co/notify-appointment
+-- 5. Las Edge Functions deben usar firebase-admin SDK para enviar
+--    notificaciones a los tokens registrados en push_tokens

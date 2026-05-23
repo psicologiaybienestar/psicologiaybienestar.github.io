@@ -1,18 +1,20 @@
 import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
+import { FormsModule } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
 import { BulkImportService } from '../../../core/services/bulk-import.service';
 
 @Component({
   selector: 'app-admin-actividades',
   standalone: true,
-  imports: [DatePipe, ReactiveFormsModule],
+  imports: [DatePipe, ReactiveFormsModule, FormsModule],
   template: `
     <div>
       <div class="flex items-center justify-between mb-6">
         <h1 class="text-2xl font-bold text-gray-800">Actividades de Bienestar</h1>
         <div class="flex space-x-2">
+          <button (click)="exportF()" class="bg-green-600 text-white px-3 py-2 rounded-xl hover:bg-green-700 transition-colors font-semibold text-sm">Exportar</button>
           <button (click)="downloadTemplate()" class="bg-gray-100 text-gray-700 px-3 py-2 rounded-xl hover:bg-gray-200 transition-colors font-semibold text-sm">Plantilla</button>
           <label class="bg-white border border-gray-300 text-gray-700 px-3 py-2 rounded-xl hover:bg-gray-50 transition-colors font-semibold text-sm cursor-pointer">
             Importar
@@ -22,6 +24,31 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
             {{ showForm ? 'Cancelar' : 'Nueva actividad' }}
           </button>
         </div>
+      </div>
+
+      <!-- Filtros -->
+      <div class="flex flex-wrap gap-3 mb-6">
+        <select [(ngModel)]="typeFilter" (change)="applyFilter()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-sm">
+          <option value="">Todos los tipos</option>
+          <option value="mindfulness">Mindfulness</option>
+          <option value="meditation">Meditación</option>
+          <option value="breathing">Respiración</option>
+          <option value="relaxation">Relajación</option>
+          <option value="exercise">Ejercicio</option>
+          <option value="other">Otro</option>
+        </select>
+        <select [(ngModel)]="durationFilter" (change)="applyFilter()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-sm">
+          <option value="">Cualquier duración</option>
+          <option value="short">≤ 5 min</option>
+          <option value="medium">5-15 min</option>
+          <option value="long">15-30 min</option>
+          <option value="xlong">30+ min</option>
+        </select>
+        <select [(ngModel)]="activeFilterActivities" (change)="applyFilter()" class="px-4 py-2.5 rounded-xl border border-gray-300 text-sm">
+          <option value="all">Todas</option>
+          <option value="active">Activas</option>
+          <option value="inactive">Inactivas</option>
+        </select>
       </div>
 
       @if (importResult) {
@@ -111,7 +138,7 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
               </tr>
             </thead>
             <tbody class="divide-y divide-gray-100">
-              @for (item of items; track item.id) {
+              @for (item of filteredItems; track item.id) {
                 <tr class="hover:bg-gray-50 transition-colors">
                   <td class="px-6 py-4"><p class="font-medium text-gray-800">{{ item.title }}</p></td>
                   <td class="px-6 py-4"><span class="text-xs font-semibold px-3 py-1 rounded-full bg-teal-100 text-teal-800">{{ item.activity_type }}</span></td>
@@ -133,7 +160,7 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
             </tbody>
           </table>
         </div>
-        @if (items.length === 0 && !loading) { <p class="text-center text-gray-500 py-10">No hay actividades.</p> }
+        @if (filteredItems.length === 0 && !loading) { <p class="text-center text-gray-500 py-10">No hay actividades.</p> }
       </div>
     </div>
   `,
@@ -149,6 +176,41 @@ export class AdminActividadesComponent implements OnInit {
   formError = '';
   imgPreview: string | null = null;
   importResult: { success: number; errors: { row: number; message: string }[] } | null = null;
+
+  typeFilter = '';
+  durationFilter = '';
+  activeFilterActivities: 'all' | 'active' | 'inactive' = 'all';
+
+  get filteredItems() {
+    let result = [...this.items];
+    if (this.typeFilter) {
+      result = result.filter(i => i.activity_type === this.typeFilter);
+    }
+    if (this.activeFilterActivities === 'active') {
+      result = result.filter(i => i.is_active);
+    } else if (this.activeFilterActivities === 'inactive') {
+      result = result.filter(i => !i.is_active);
+    }
+    if (this.durationFilter) {
+      result = result.filter(i => {
+        const d = i.duration || 0;
+        switch (this.durationFilter) {
+          case 'short': return d <= 5;
+          case 'medium': return d > 5 && d <= 15;
+          case 'long': return d > 15 && d <= 30;
+          case 'xlong': return d > 30;
+          default: return true;
+        }
+      });
+    }
+    return result;
+  }
+
+  applyFilter() {}
+
+  async exportF() {
+    await this.bulkImport.exportToFile('wellness_activities', this.filteredItems);
+  }
 
   constructor(
     private fb: FormBuilder,

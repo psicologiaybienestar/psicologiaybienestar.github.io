@@ -3,7 +3,7 @@ import type { CapacitorConfig } from '@capacitor/cli';
 const config: CapacitorConfig = {
   appId: 'com.psicologiaybienestar.app',
   appName: 'Psicología & Bienestar',
-  webDir: 'www',
+  webDir: 'www-android',
   server: {
     androidScheme: 'https',
   },

@@ -1,56 +1,57 @@
 import { Component, OnInit } from '@angular/core';
+import { IonIcon } from '@ionic/angular/standalone';
 
 
 const MOODS = [
-  { emoji: '😊', label: 'Feliz', color: '#F0FDF4' },
-  { emoji: '😌', label: 'Tranquilo', color: '#EEF2FF' },
-  { emoji: '😐', label: 'Neutral', color: '#F9FAFB' },
-  { emoji: '😔', label: 'Triste', color: '#FFF7ED' },
-  { emoji: '😟', label: 'Preocupado', color: '#FEF2F2' },
-  { emoji: '😤', label: 'Enojado', color: '#FDF2F8' },
-  { emoji: '🙏', label: 'Agradecido', color: '#F5F3FF' },
-  { emoji: '🌟', label: 'Esperanzado', color: '#FFF7ED' },
-  { emoji: '🔥', label: 'Motivado', color: '#FEF2F2' },
+  { emoji: 'happy-outline', label: 'Feliz', color: '#F0FDF4' },
+  { emoji: 'happy-outline', label: 'Tranquilo', color: '#EEF2FF' },
+  { emoji: 'remove-outline', label: 'Neutral', color: '#F9FAFB' },
+  { emoji: 'sad-outline', label: 'Triste', color: '#FFF7ED' },
+  { emoji: 'sad-outline', label: 'Preocupado', color: '#FEF2F2' },
+  { emoji: 'flash-outline', label: 'Enojado', color: '#FDF2F8' },
+  { emoji: 'hand-left-outline', label: 'Agradecido', color: '#F5F3FF' },
+  { emoji: 'star-outline', label: 'Esperanzado', color: '#FFF7ED' },
+  { emoji: 'flame-outline', label: 'Motivado', color: '#FEF2F2' },
 ];
 
 const EMOTIONAL_TIPS = [
   {
-    icon: '🫂',
+    icon: 'people-outline',
     title: 'Permítete sentir',
     text: 'Todas las emociones son válidas. No las juzgues, solo obsérvalas y acéptalas.',
   },
   {
-    icon: '📝',
+    icon: 'document-text-outline',
     title: 'Escribe lo que sientes',
     text: 'Poner tus emociones en palabras las hace más manejables.',
   },
   {
-    icon: '🌊',
+    icon: 'water-outline',
     title: 'Déjalas fluir',
     text: 'Las emociones son como olas: llegan, crecen y se van. No te aferres a ellas.',
   },
   {
-    icon: '🧘',
+    icon: 'body-outline',
     title: 'Respira conscientemente',
     text: 'Inhalas, exhalas. Con cada respiración, vuelves al centro.',
   },
   {
-    icon: '💬',
+    icon: 'chatbubbles-outline',
     title: 'Habla con alguien',
     text: 'Compartir lo que sientes con alguien de confianza alivia la carga.',
   },
   {
-    icon: '☀️',
+    icon: 'sunny-outline',
     title: 'Cambia tu energía',
     text: 'Sal a caminar, escucha música o haz algo que te haga bien.',
   },
   {
-    icon: '🎵',
+    icon: 'musical-notes-outline',
     title: 'Música que sana',
     text: 'Escucha una canción que te haga sentir bien. La música conecta con tus emociones.',
   },
   {
-    icon: '🤗',
+    icon: 'hand-left-outline',
     title: 'Auto-compasión',
     text: 'Trátate con la misma amabilidad que tratarías a un amigo querido.',
   },
@@ -59,13 +60,13 @@ const EMOTIONAL_TIPS = [
 @Component({
   selector: 'app-emociones',
   standalone: true,
-  imports: [],
+  imports: [IonIcon],
   template: `
     <!-- Header emocional -->
     <section class="hero-section">
       <div class="hero-bg"></div>
       <div class="hero-content">
-        <span class="hero-emoji">💙</span>
+        <ion-icon class="hero-emoji" name="heart-outline"></ion-icon>
         <h1 class="hero-title">¿Cómo te sientes?</h1>
         <p class="hero-subtitle">Reconocer tus emociones es el primer paso para sanar</p>
       </div>
@@ -83,7 +84,7 @@ const EMOTIONAL_TIPS = [
             [style.background]="mood.color"
             (click)="selectMood(mood.label)"
           >
-            <span class="mood-emoji">{{ mood.emoji }}</span>
+            <ion-icon class="mood-emoji" [name]="mood.emoji"></ion-icon>
             <span class="mood-label">{{ mood.label }}</span>
           </button>
         }
@@ -102,7 +103,7 @@ const EMOTIONAL_TIPS = [
       <div class="tips-list">
         @for (tip of emotionalTips; track tip.title) {
           <div class="emotion-tip-card">
-            <span class="emotion-tip-icon">{{ tip.icon }}</span>
+            <ion-icon class="emotion-tip-icon" [name]="tip.icon"></ion-icon>
             <div>
               <h3 class="emotion-tip-title">{{ tip.title }}</h3>
               <p class="emotion-tip-text">{{ tip.text }}</p>
@@ -136,7 +137,7 @@ const EMOTIONAL_TIPS = [
         @for (day of moodHistory; track day.date) {
           <div class="history-day" [class.history-today]="day.isToday" title="{{ day.label }}">
             <span class="history-date">{{ day.dateNum }}</span>
-            <span class="history-mood">{{ day.emoji || '—' }}</span>
+            <ion-icon class="history-mood" [name]="day.emoji || ''"></ion-icon>
             <span class="history-label">{{ day.dayLabel }}</span>
           </div>
         }

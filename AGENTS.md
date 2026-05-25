@@ -27,7 +27,8 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 │   ├── web/src/          → Web app (production, full features)
 │   └── android/src/      → Independent Android app (in development, tabs UI)
 ├── shared/
-│   ├── services/         → 15 shared services (business logic)
+│   ├── assets/data/      → Local datasets (emotions.json, quotes.json, tips.json, activities.json)
+│   ├── services/         → 19 shared services (business logic)
 │   ├── interfaces/       → TypeScript interfaces
 │   ├── types/            → TypeScript types/enums
 │   ├── constants/        → DI tokens, defaults, config
@@ -45,14 +46,17 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 
 - **Standalone components** — no NgModules anywhere
 - **All routes lazy-loaded** via `loadComponent()` (`apps/web/src/app/app.routes.ts`)
-- **Web app**: `apps/web/src/` — full feature set with admin, contact, legal, etc.
-- **Android app**: `apps/android/src/` — 5-tab layout (Inicio, Agenda, Emociones, Juegos, Más), independent from web
+- **Web app**: `apps/web/src/app/` — full feature set with admin, contact, legal, etc.
+- **Android app**: `apps/android/src/app/` — 5-tab layout (Inicio, Agenda, Emociones, Juegos, Más), independent from web
 - **Shared services** in `shared/services/` — all business logic, re-exported by `apps/web/src/app/core/services/` for backward compat
+- **Dataset-first architecture**: Local JSON datasets (`shared/assets/data/`) as primary content source (30 emotions, 300 quotes, 300 tips, 200 activities). Supabase queries reduced to background sync with offline fallback.
+- **Content Engine** (`ContentEngineService`): Loads, mixes, rotates, and caches local datasets with history tracking via localStorage. Seeded daily rotation ensures variety without repetition.
 - **InjectionToken pattern** for `SupabaseService` and `TestimoniosService` — environment-agnostic DI via `SUPABASE_CONFIG` and `GOOGLE_SHEETS_URL`
 - **TypeScript path aliases**: `@shared/*` → `shared/*`, `@shared/services/*` → `shared/services/*`, etc.
 - **No state management library** — simple `providedIn: 'root'` services + RxJS. Signals not yet adopted.
 - **Default component styles**: SCSS (`.scss`)
 - **Component prefix**: `app`, kebab-case selectors. Class suffix: `Page` or `Component`.
+- **Premium Android design system**: Glassmorphism (`backdrop-filter: blur`), CSS variable tokens (`--pg-*`), gradient backgrounds, responsive spacing system. Global classes: `.glass-card`, `.glass-card-strong`, `.gradient-primary`, `.gradient-success`, `.gradient-purple`.
 - **Public layout**: `PublicLayoutComponent` wraps navbar, footer, social/WhatsApp buttons, cookie consent, event alert
 - **Admin routes** guarded by two guards (both must pass):
   1. `platformGuard` — blocks Android users from `/admin/*`
@@ -166,14 +170,18 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 | `WhatsAppService` | ✅ | WhatsApp sharing links |
 | `UserProfileService` | ✅ | User profile initialization |
 | `AgendaService` | ✅ | `appointments` CRUD |
-| `QuotesService` | ✅ | `motivational_quotes` CRUD |
-| `EmotionalTipsService` | ✅ | `emotional_tips` CRUD |
-| `WellnessActivitiesService` | ✅ | `wellness_activities` CRUD |
+| `QuotesService` | ✅ | `motivational_quotes` CRUD + local dataset fallback |
+| `EmotionalTipsService` | ✅ | `emotional_tips` CRUD + local dataset fallback |
+| `WellnessActivitiesService` | ✅ | `wellness_activities` CRUD + local dataset fallback |
 | `MiniGamesService` | ✅ | `mini_games` CRUD |
 | `BulkImportService` | ✅ | XLSX import/export |
 | `NotificationsService` | ✅ | Realtime subscriptions + web push |
 | `InternalNotificationsService` | ✅ | In-app `notifications` table |
 | `PushNotificationsService` | ✅ | FCM registration + token upsert |
+| `ContentEngineService` | ✅ | Local dataset loader, mixer, rotator with history tracking |
+| `EmotionsService` | ✅ | Emotion check-in, daily rotation (8/30), local + Supabase sync |
+| `ScheduledNotificationsService` | ✅ | 3 daily local notifications (9AM quote, 2PM activity, 8PM tip) |
+| `OfflineService` | ✅ | Online/offline detection via `navigator.onLine` + events |
 
 ## Filtros emocionales
 
@@ -299,7 +307,7 @@ Para generar: `npx capacitor-assets generate --iconBackgroundColor "#627eff" --s
 ## Progress
 
 - [x] Monorepo structure (apps/web, apps/android, shared, supabase)
-- [x] Shared services extracted (15 services)
+- [x] Shared services extracted (19 services)
 - [x] Path aliases configured
 - [x] notify-content Edge Function deployed
 - [x] Webhook triggers for 7 content tables
@@ -317,3 +325,12 @@ Para generar: `npx capacitor-assets generate --iconBackgroundColor "#627eff" --s
 - [x] APK built and installed on device, push notifications verified working
 - [ ] Customizar icono y splash (assets PNGs fuente + `npx capacitor-assets generate`)
 - [x] Connect Capacitor to www-android/ (webDir changed, Android now shows tabs UI)
+- [x] ContentEngineService — loads 4 local datasets with daily seeded rotation + history tracking
+- [x] EmotionsService — local check-in, daily rotation (8/30), Supabase sync, week stats
+- [x] ScheduledNotificationsService — 3 daily local notifications (9AM, 2PM, 8PM)
+- [x] OfflineService — realtime online/offline detection
+- [x] Admin emociones/minijuegos hidden from sidebar + routes (files preserved)
+- [x] Minigames registry (10 games) — Memory, Breathing, Gratitude, Reaction, Emotion Quiz implemented, 5 more stubs
+- [x] ALL emojis removed across codebase — replaced with ion-icon names, SVGs, text labels
+- [x] Premium Android design system — glassmorphism, gradient backgrounds, CSS variable tokens, global classes
+- [x] ngsw-config updated with dataset caching (performance strategy, 30d TTL, 1s timeout)

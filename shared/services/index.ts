@@ -13,3 +13,7 @@ export { BulkImportService } from './bulk-import.service';
 export { NotificationsService } from './notifications.service';
 export { InternalNotificationsService } from './internal-notifications.service';
 export { PushNotificationsService } from './push-notifications.service';
+export { ContentEngineService, type LocalEmotion, type LocalQuote, type LocalTip, type LocalActivity } from './content-engine.service';
+export { EmotionsService, type EmotionCheckIn } from './emotions.service';
+export { ScheduledNotificationsService } from './scheduled-notifications.service';
+export { OfflineService } from './offline.service';

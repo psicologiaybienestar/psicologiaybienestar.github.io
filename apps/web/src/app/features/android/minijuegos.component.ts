@@ -1,5 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-
+import { IonIcon } from '@ionic/angular/standalone';
 
 
 const AFFIRMATIONS = [
@@ -28,13 +28,13 @@ const AFFIRMATIONS = [
 @Component({
   selector: 'app-minijuegos',
   standalone: true,
-  imports: [],
+  imports: [IonIcon],
   template: `
     <!-- Header -->
     <section class="hero-section">
       <div class="hero-bg"></div>
       <div class="hero-content">
-        <span class="hero-emoji">🎮</span>
+        <ion-icon class="hero-emoji" name="game-controller-outline"></ion-icon>
         <h1 class="hero-title">Minijuegos</h1>
         <p class="hero-subtitle">Ejercicios interactivos para tu bienestar emocional</p>
       </div>
@@ -44,13 +44,13 @@ const AFFIRMATIONS = [
     <section class="section">
       <div class="tabs">
         <button class="tab-btn" [class.tab-active]="activeGame === 'breathing'" (click)="activeGame = 'breathing'">
-          <span>🧘</span> Respiración
+          <ion-icon name="body-outline"></ion-icon> Respiración
         </button>
         <button class="tab-btn" [class.tab-active]="activeGame === 'affirmations'" (click)="activeGame = 'affirmations'">
-          <span>💭</span> Afirmaciones
+          <ion-icon name="chatbubble-ellipses-outline"></ion-icon> Afirmaciones
         </button>
         <button class="tab-btn" [class.tab-active]="activeGame === 'gratitude'" (click)="activeGame = 'gratitude'">
-          <span>🌟</span> Gratitud
+          <ion-icon name="star-outline"></ion-icon> Gratitud
         </button>
       </div>
     </section>
@@ -92,7 +92,7 @@ const AFFIRMATIONS = [
           <h2 class="game-title">Afirmaciones Positivas</h2>
           <p class="game-subtitle">Toca para revelar una nueva afirmación</p>
           <div class="affirm-card" [class.affirm-fade]="affirmationKey > 0" (click)="nextAffirmation()">
-            <div class="affirm-icon">💛</div>
+            <ion-icon class="affirm-icon" name="heart-outline"></ion-icon>
             <p class="affirm-text">{{ currentAffirmation }}</p>
             <button class="affirm-btn" (click)="nextAffirmation(); $event.stopPropagation()">
               <svg xmlns="http://www.w3.org/2000/svg" class="h-5 w-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
@@ -116,7 +116,7 @@ const AFFIRMATIONS = [
 
           @if (gratitudeStreak > 0) {
             <div class="streak-badge">
-              <span class="streak-fire">🔥</span>
+              <ion-icon class="streak-fire" name="flame-outline"></ion-icon>
               <span><strong>{{ gratitudeStreak }}</strong> día{{ gratitudeStreak > 1 ? 's' : '' }} seguido{{ gratitudeStreak > 1 ? 's' : '' }}</span>
             </div>
           }
@@ -124,7 +124,7 @@ const AFFIRMATIONS = [
           <div class="gratitude-list">
             @if (gratitudeItems.length === 0) {
               <div class="gratitude-empty">
-                <span class="gratitude-empty-icon">🌱</span>
+                <ion-icon class="gratitude-empty-icon" name="leaf-outline"></ion-icon>
                 <p>Aún no has registrado nada. Escribe algo por lo que estés agradecido.</p>
               </div>
             }
@@ -226,7 +226,7 @@ const AFFIRMATIONS = [
       transition: all 0.2s ease;
       font-family: inherit;
     }
-    .tab-btn span {
+    .tab-btn ion-icon {
       font-size: 22px;
     }
     .tab-active {

@@ -117,7 +117,7 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center space-x-3">
                 <div class="w-10 h-10 rounded-xl flex items-center justify-center text-xl" [style.background]="item.color || '#F9FAFB'">
-                  {{ item.icon || '😊' }}
+                  {{ item.icon || 'heart-outline' }}
                 </div>
                 <div>
                   <h3 class="font-semibold text-gray-800">{{ item.emotion_name }}</h3>
@@ -182,7 +182,7 @@ export class AdminEmocionesComponent implements OnInit {
       emotion_name: ['', Validators.required],
       description: [''],
       color: ['#F9FAFB'],
-      icon: ['😊'],
+      icon: ['heart-outline'],
       is_active: [true],
     });
   }
@@ -203,7 +203,7 @@ export class AdminEmocionesComponent implements OnInit {
   toggleForm() { this.showForm = !this.showForm; if (this.showForm) this.resetForm(); }
 
   resetForm() {
-    this.form.reset({ color: '#F9FAFB', icon: '😊', is_active: true });
+    this.form.reset({ color: '#F9FAFB', icon: 'heart-outline', is_active: true });
     this.recommendationsList = [];
     this.editando = false;
     this.editandoId = null;
@@ -222,7 +222,7 @@ export class AdminEmocionesComponent implements OnInit {
       emotion_name: item.emotion_name,
       description: item.description,
       color: item.color || '#F9FAFB',
-      icon: item.icon || '😊',
+      icon: item.icon || 'heart-outline',
       is_active: item.is_active ?? true,
     });
   }

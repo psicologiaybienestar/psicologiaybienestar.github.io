@@ -1,11 +1,8 @@
 import { Routes } from '@angular/router';
+import { GAMES_REGISTRY } from './games/games.registry';
 
 export const routes: Routes = [
-  {
-    path: '',
-    redirectTo: '/inicio',
-    pathMatch: 'full',
-  },
+  { path: '', redirectTo: 'inicio', pathMatch: 'full' },
   {
     path: 'inicio',
     loadComponent: () => import('./pages/inicio/inicio.component').then(m => m.InicioComponent),
@@ -26,8 +23,12 @@ export const routes: Routes = [
     path: 'configuracion',
     loadComponent: () => import('./pages/configuracion/configuracion.component').then(m => m.ConfiguracionComponent),
   },
+  ...GAMES_REGISTRY.map(game => ({
+    path: game.route.slice(1),
+    loadComponent: game.component,
+  })),
   {
     path: '**',
-    redirectTo: '/inicio',
+    redirectTo: 'inicio',
   },
 ];

@@ -10,23 +10,23 @@ import { AgendaService } from '@shared/services/agenda.service';
   imports: [IonicModule, DatePipe, FormsModule],
   template: `
     <ion-header class="ion-no-border">
-      <ion-toolbar>
+      <ion-toolbar class="gradient-primary">
         <ion-title>Agenda</ion-title>
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
       <div class="section">
         <h2 class="section-title">Solicitar cita</h2>
-        <p class="section-desc">Déjanos tus datos y te contactaremos para confirmar</p>
+        <p class="page-intro">Déjanos tus datos y te contactaremos para confirmar</p>
 
         @if (mensajeExito) {
-          <div class="success-card">
+          <div class="glass-card success-message">
             <ion-icon name="checkmark-circle" color="success" />
             <p>{{ mensajeExito }}</p>
           </div>
         }
 
-        <div class="form-card">
+        <div class="glass-card-strong form-card">
           <ion-list>
             <ion-item>
               <ion-input [(ngModel)]="formData.user_name" label="Nombre" labelPlacement="stacked"
@@ -69,13 +69,13 @@ import { AgendaService } from '@shared/services/agenda.service';
         <h2 class="section-title">Mis citas</h2>
 
         @if (misCitas.length === 0) {
-          <div class="empty">
+          <div class="glass-card empty">
             <p>No tienes citas agendadas</p>
           </div>
         }
 
         @for (cita of misCitas; track cita.id) {
-          <div class="cita-card">
+          <div class="glass-card cita-card">
             <div class="cita-top">
               <div class="cita-icon">
                 <ion-icon name="calendar" />
@@ -95,28 +95,28 @@ import { AgendaService } from '@shared/services/agenda.service';
     </ion-content>
   `,
   styles: `
-    .section { margin-bottom: 24px; }
-    .section-title { font-size: 18px; font-weight: 700; margin: 0 0 4px; color: var(--ion-text-color); }
-    .section-desc { font-size: 13px; color: var(--ion-color-medium); margin: 0 0 16px; }
+    .section { margin-bottom: var(--pg-space-xl); }
 
-    .success-card { display: flex; align-items: flex-start; gap: 10px; background: color-mix(in srgb, var(--ion-color-success) 8%, white); border: 1px solid color-mix(in srgb, var(--ion-color-success) 20%, transparent); border-radius: 12px; padding: 12px; margin-bottom: 16px; }
-    .success-card ion-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
-    .success-card p { font-size: 14px; color: var(--ion-color-success); margin: 0; }
+    .success-message { display: flex; align-items: flex-start; gap: var(--pg-space-sm); padding: var(--pg-space-md); margin-bottom: var(--pg-space-lg); }
+    .success-message ion-icon { font-size: 22px; flex-shrink: 0; margin-top: 1px; }
+    .success-message p { font-size: 14px; color: var(--ion-color-success); margin: 0; }
 
-    .form-card { background: var(--ion-color-primary-contrast); border-radius: 16px; padding: 8px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-    .form-card ion-item { --padding-start: 8px; --padding-end: 8px; --inner-padding-end: 0; --background: transparent; }
+    .form-card { padding: var(--pg-space-sm); }
+    .form-card ion-item { --padding-start: var(--pg-space-sm); --padding-end: var(--pg-space-sm); --inner-padding-end: 0; --background: transparent; }
 
-    .empty { text-align: center; padding: 24px; color: var(--ion-color-medium); font-size: 14px; background: var(--ion-color-primary-contrast); border-radius: 12px; }
+    .empty { text-align: center; padding: var(--pg-space-xl); color: var(--ion-color-medium); font-size: 14px; }
 
-    .cita-card { background: var(--ion-color-primary-contrast); border-radius: 14px; padding: 14px; margin-bottom: 10px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
-    .cita-top { display: flex; align-items: center; gap: 12px; }
-    .cita-icon { width: 40px; height: 40px; border-radius: 12px; background: color-mix(in srgb, var(--ion-color-primary) 10%, white); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .cita-card { padding: var(--pg-space-md); margin-bottom: var(--pg-space-sm); }
+    .cita-top { display: flex; align-items: center; gap: var(--pg-space-md); }
+    .cita-icon { width: 40px; height: 40px; border-radius: var(--pg-radius-md); display: flex; align-items: center; justify-content: center; flex-shrink: 0; background: color-mix(in srgb, var(--ion-color-primary) 10%, white); }
     .cita-icon ion-icon { font-size: 20px; color: var(--ion-color-primary); }
     .cita-info { flex: 1; min-width: 0; }
     .cita-info h3 { font-size: 15px; font-weight: 600; margin: 0 0 2px; color: var(--ion-text-color); }
     .cita-date { font-size: 12px; color: var(--ion-color-medium); margin: 0; }
     .cita-badge { font-size: 11px; font-weight: 600; text-transform: capitalize; flex-shrink: 0; }
-    .cita-msg { font-size: 13px; color: var(--ion-color-medium); margin: 8px 0 0; line-height: 1.4; }
+    .cita-msg { font-size: 13px; color: var(--ion-color-medium); margin: var(--pg-space-sm) 0 0; line-height: 1.4; }
+
+    ion-toolbar.gradient-primary { --background: transparent; }
   `,
 })
 export class AgendaComponent implements OnInit {

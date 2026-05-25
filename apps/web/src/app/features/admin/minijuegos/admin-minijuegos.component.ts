@@ -129,7 +129,7 @@ import { BulkImportService } from '../../../core/services/bulk-import.service';
           <div class="bg-white rounded-2xl shadow-sm border border-gray-100 p-5">
             <div class="flex items-center justify-between mb-3">
               <div class="flex items-center space-x-3">
-                <span class="text-2xl">{{ item.icon || '🎮' }}</span>
+                <span class="text-2xl">{{ item.icon || 'game-controller-outline' }}</span>
                 <div>
                   <h3 class="font-semibold text-gray-800">{{ item.title }}</h3>
                   <div class="flex space-x-2 mt-1">
@@ -197,7 +197,7 @@ export class AdminMinijuegosComponent implements OnInit {
       description: [''],
       game_type: ['affirmations'],
       difficulty: ['facil'],
-      icon: ['🎮'],
+      icon: ['game-controller-outline'],
       route: [''],
       is_active: [true],
     });
@@ -216,7 +216,7 @@ export class AdminMinijuegosComponent implements OnInit {
   toggleForm() { this.showForm = !this.showForm; if (this.showForm) this.resetForm(); }
 
   resetForm() {
-    this.form.reset({ game_type: 'affirmations', difficulty: 'facil', icon: '🎮', is_active: true });
+    this.form.reset({ game_type: 'affirmations', difficulty: 'facil', icon: 'game-controller-outline', is_active: true });
     this.editando = false;
     this.editandoId = null;
     this.formError = '';

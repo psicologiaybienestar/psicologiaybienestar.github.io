@@ -113,16 +113,8 @@ export const routes: Routes = [
         loadComponent: () => import('./features/admin/consejos/admin-consejos.component').then(m => m.AdminConsejosComponent),
       },
       {
-        path: 'emociones',
-        loadComponent: () => import('./features/admin/emociones/admin-emociones.component').then(m => m.AdminEmocionesComponent),
-      },
-      {
         path: 'actividades',
         loadComponent: () => import('./features/admin/actividades/admin-actividades.component').then(m => m.AdminActividadesComponent),
-      },
-      {
-        path: 'minijuegos',
-        loadComponent: () => import('./features/admin/minijuegos/admin-minijuegos.component').then(m => m.AdminMinijuegosComponent),
       },
       {
         path: 'citas',

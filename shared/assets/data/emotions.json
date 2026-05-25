@@ -1,0 +1,452 @@
+[
+  {
+    "id": "feliz",
+    "nombre": "Feliz",
+    "icon": "sparkles-outline",
+    "color": "#22c55e",
+    "description": "Estado de bienestar y satisfacción plena",
+    "recommendations": [
+      "Comparte tu alegría con alguien cercano",
+      "Escribe tres cosas positivas de tu día",
+      "Realiza una actividad que disfrutes",
+      "Escucha música que te haga sentir bien"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "exercise"],
+    "related_tips": ["autoestima", "bienestar", "motivacion"]
+  },
+  {
+    "id": "tranquilo",
+    "nombre": "Tranquilo",
+    "icon": "moon-outline",
+    "color": "#3b82f6",
+    "description": "Sensación de paz interior y serenidad",
+    "recommendations": [
+      "Aprovecha esta calma para reflexionar",
+      "Practica la respiración consciente",
+      "Disfruta del momento presente",
+      "Lee un libro que te inspire"
+    ],
+    "suggested_activities": ["meditation", "breathing", "relaxation"],
+    "related_tips": ["relajacion", "mindfulness", "bienestar"]
+  },
+  {
+    "id": "ansioso",
+    "nombre": "Ansioso",
+    "icon": "pulse-outline",
+    "color": "#f59e0b",
+    "description": "Inquietud o preocupación anticipatoria",
+    "recommendations": [
+      "Practica respiración profunda 4-7-8",
+      "Identifica qué está causando tu ansiedad",
+      "Tómate un descanso de 5 minutos",
+      "Habla con alguien de confianza"
+    ],
+    "suggested_activities": ["breathing", "relaxation", "meditation"],
+    "related_tips": ["ansiedad", "respiracion", "relajacion"]
+  },
+  {
+    "id": "triste",
+    "nombre": "Triste",
+    "icon": "rainy-outline",
+    "color": "#6366f1",
+    "description": "Sentimiento de pérdida o desánimo",
+    "recommendations": [
+      "Permítete sentir sin juzgarte",
+      "Escribe lo que sientes en un diario",
+      "Busca el apoyo de personas queridas",
+      "Recuerda que esto es temporal"
+    ],
+    "suggested_activities": ["meditation", "mindfulness", "relaxation"],
+    "related_tips": ["autoestima", "bienestar", "general"]
+  },
+  {
+    "id": "enojado",
+    "nombre": "Enojado",
+    "icon": "flash-outline",
+    "color": "#ef4444",
+    "description": "Frustración o irritación intensa",
+    "recommendations": [
+      "Cuenta hasta diez antes de reaccionar",
+      "Sal a caminar para despejar tu mente",
+      "Escribe lo que te molesta",
+      "Practica respiración profunda"
+    ],
+    "suggested_activities": ["breathing", "exercise", "relaxation"],
+    "related_tips": ["estres", "ansiedad", "respiracion"]
+  },
+  {
+    "id": "estresado",
+    "nombre": "Estresado",
+    "icon": "barbell-outline",
+    "color": "#f97316",
+    "description": "Sobrecarga mental y presión acumulada",
+    "recommendations": [
+      "Prioriza tus tareas más importantes",
+      "Toma descansos regulares",
+      "Practica mindfulness por 5 minutos",
+      "Delega lo que no sea urgente"
+    ],
+    "suggested_activities": ["meditation", "breathing", "relaxation"],
+    "related_tips": ["estres", "ansiedad", "respiracion"]
+  },
+  {
+    "id": "motivado",
+    "nombre": "Motivado",
+    "icon": "trending-up-outline",
+    "color": "#10b981",
+    "description": "Energía positiva para alcanzar metas",
+    "recommendations": [
+      "Aprovecha esta energía para avanzar en tus proyectos",
+      "Establece metas claras para hoy",
+      "Comparte tu motivación con otros",
+      "Reconoce tu progreso"
+    ],
+    "suggested_activities": ["exercise", "meditation", "mindfulness"],
+    "related_tips": ["motivacion", "autoestima", "bienestar"]
+  },
+  {
+    "id": "agradecido",
+    "nombre": "Agradecido",
+    "icon": "heart-outline",
+    "color": "#ec4899",
+    "description": "Reconocimiento profundo por lo recibido",
+    "recommendations": [
+      "Escribe tres cosas por las que agradeces hoy",
+      "Expresa tu gratitud a alguien especial",
+      "Disfruta plenamente del momento",
+      "Lleva un diario de gratitud"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "relaxation"],
+    "related_tips": ["bienestar", "autoestima", "general"]
+  },
+  {
+    "id": "cansado",
+    "nombre": "Cansado",
+    "icon": "bed-outline",
+    "color": "#8b5cf6",
+    "description": "Fatiga física o mental acumulada",
+    "recommendations": [
+      "Descansa y recupera energías",
+      "Reduce el tiempo frente a pantallas",
+      "Toma una siesta reparadora",
+      "Hidrátate y come algo ligero"
+    ],
+    "suggested_activities": ["relaxation", "breathing", "meditation"],
+    "related_tips": ["relajacion", "bienestar", "estres"]
+  },
+  {
+    "id": "confundido",
+    "nombre": "Confundido",
+    "icon": "help-circle-outline",
+    "color": "#a855f7",
+    "description": "Incertidumbre o falta de claridad mental",
+    "recommendations": [
+      "Tómate un momento para ordenar tus ideas",
+      "Escribe el problema en papel",
+      "Habla con alguien de confianza",
+      "Divide el problema en partes pequeñas"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "relaxation"],
+    "related_tips": ["ansiedad", "estres", "general"]
+  },
+  {
+    "id": "esperanzado",
+    "nombre": "Esperanzado",
+    "icon": "sunny-outline",
+    "color": "#fbbf24",
+    "description": "Confianza en que las cosas mejorarán",
+    "recommendations": [
+      "Visualiza tus metas cumplidas",
+      "Rodéate de personas positivas",
+      "Celebra los pequeños avances",
+      "Mantén una actitud abierta al cambio"
+    ],
+    "suggested_activities": ["meditation", "mindfulness", "exercise"],
+    "related_tips": ["motivacion", "autoestima", "bienestar"]
+  },
+  {
+    "id": "inseguro",
+    "nombre": "Inseguro",
+    "icon": "shield-outline",
+    "color": "#94a3b8",
+    "description": "Falta de confianza en uno mismo o en la situación",
+    "recommendations": [
+      "Recuerda tus logros pasados",
+      "Habla contigo mismo con compasión",
+      "Pregúntate qué es lo peor que puede pasar",
+      "Busca el apoyo de personas que te valoren"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "breathing"],
+    "related_tips": ["autoestima", "ansiedad", "general"]
+  },
+  {
+    "id": "frustrado",
+    "nombre": "Frustrado",
+    "icon": "close-circle-outline",
+    "color": "#dc2626",
+    "description": "Malestar por no alcanzar un resultado esperado",
+    "recommendations": [
+      "Reevalúa tus expectativas",
+      "Tómate un descanso y vuelve después",
+      "Acepta lo que no puedes controlar",
+      "Busca una perspectiva diferente"
+    ],
+    "suggested_activities": ["breathing", "exercise", "relaxation"],
+    "related_tips": ["estres", "ansiedad", "respiracion"]
+  },
+  {
+    "id": "nostalgico",
+    "nombre": "Nostálgico",
+    "icon": "time-outline",
+    "color": "#818cf8",
+    "description": "Añoranza por momentos del pasado",
+    "recommendations": [
+      "Disfruta los recuerdos sin aferrarte",
+      "Valora las experiencias que te formaron",
+      "Conecta con alguien de tu pasado",
+      "Crea nuevos recuerdos significativos"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "relaxation"],
+    "related_tips": ["bienestar", "general", "autoestima"]
+  },
+  {
+    "id": "orgulloso",
+    "nombre": "Orgulloso",
+    "icon": "trophy-outline",
+    "color": "#f59e0b",
+    "description": "Satisfacción por logros propios o ajenos",
+    "recommendations": [
+      "Celebra tu esfuerzo y dedicación",
+      "Comparte tu logro con quienes te apoyaron",
+      "Reconoce el camino recorrido",
+      "Usa este impulso para tu próxima meta"
+    ],
+    "suggested_activities": ["exercise", "meditation", "mindfulness"],
+    "related_tips": ["autoestima", "motivacion", "bienestar"]
+  },
+  {
+    "id": "sorprendido",
+    "nombre": "Sorprendido",
+    "icon": "eye-outline",
+    "color": "#06b6d4",
+    "description": "Asombro ante algo inesperado",
+    "recommendations": [
+      "Permítete disfrutar la sorpresa",
+      "Reflexiona sobre lo que aprendiste",
+      "Comparte tu asombro con otros",
+      "Mantén la mente abierta"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "general"],
+    "related_tips": ["bienestar", "general", "motivacion"]
+  },
+  {
+    "id": "abrumado",
+    "nombre": "Abrumado",
+    "icon": "layers-outline",
+    "color": "#7c3aed",
+    "description": "Sensación de tener demasiado que procesar",
+    "recommendations": [
+      "Haz una lista ordenada de pendientes",
+      "Concéntrate en una cosa a la vez",
+      "Pide ayuda si es necesario",
+      "Respira hondo y prioriza"
+    ],
+    "suggested_activities": ["breathing", "meditation", "relaxation"],
+    "related_tips": ["estres", "ansiedad", "respiracion"]
+  },
+  {
+    "id": "sereno",
+    "nombre": "Sereno",
+    "icon": "water-outline",
+    "color": "#0ea5e9",
+    "description": "Paz mental y ecuanimidad interior",
+    "recommendations": [
+      "Disfruta este estado de equilibrio",
+      "Comparte tu calma con quienes te rodean",
+      "Practica la gratitud por este momento",
+      "Observa tus pensamientos sin juzgar"
+    ],
+    "suggested_activities": ["meditation", "mindfulness", "relaxation"],
+    "related_tips": ["relajacion", "mindfulness", "bienestar"]
+  },
+  {
+    "id": "inspirado",
+    "nombre": "Inspirado",
+    "icon": "bulb-outline",
+    "color": "#eab308",
+    "description": "Chispa creativa y claridad de propósito",
+    "recommendations": [
+      "Escribe tus ideas antes de que se desvanezcan",
+      "Comparte tu inspiración con otros",
+      "Crea algo nuevo hoy",
+      "Sigue esa corriente creativa"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "exercise"],
+    "related_tips": ["motivacion", "autoestima", "bienestar"]
+  },
+  {
+    "id": "agotado",
+    "nombre": "Agotado",
+    "icon": "battery-dead-outline",
+    "color": "#6b7280",
+    "description": "Ausencia total de energía física y mental",
+    "recommendations": [
+      "Prioriza el descanso absoluto",
+      "Desconéctate de obligaciones",
+      "Hidrátate y come algo nutritivo",
+      "No tomes decisiones importantes hoy"
+    ],
+    "suggested_activities": ["relaxation", "breathing", "meditation"],
+    "related_tips": ["estres", "relajacion", "bienestar"]
+  },
+  {
+    "id": "optimista",
+    "nombre": "Optimista",
+    "icon": "arrow-up-circle-outline",
+    "color": "#16a34a",
+    "description": "Actitud positiva frente al futuro",
+    "recommendations": [
+      "Comparte tu optimismo con otros",
+      "Establece metas ilusionantes",
+      "Disfruta esta energía positiva",
+      "Planea algo especial para los próximos días"
+    ],
+    "suggested_activities": ["exercise", "mindfulness", "meditation"],
+    "related_tips": ["motivacion", "autoestima", "bienestar"]
+  },
+  {
+    "id": "preocupado",
+    "nombre": "Preocupado",
+    "icon": "alert-circle-outline",
+    "color": "#d97706",
+    "description": "Pensamientos recurrentes sobre algo futuro",
+    "recommendations": [
+      "Identifica si puedes actuar o no",
+      "Enfócate en lo que sí controlas",
+      "Establece un límite de tiempo para preocuparte",
+      "Habla con alguien que te escuche"
+    ],
+    "suggested_activities": ["breathing", "meditation", "relaxation"],
+    "related_tips": ["ansiedad", "estres", "respiracion"]
+  },
+  {
+    "id": "relajado",
+    "nombre": "Relajado",
+    "icon": "leaf-outline",
+    "color": "#22d3ee",
+    "description": "Estado de descanso y liberación de tensiones",
+    "recommendations": [
+      "Aprovecha para conectar contigo mismo",
+      "Escucha música suave",
+      "Disfruta de la naturaleza",
+      "Practica la respiración consciente"
+    ],
+    "suggested_activities": ["relaxation", "breathing", "meditation"],
+    "related_tips": ["relajacion", "mindfulness", "bienestar"]
+  },
+  {
+    "id": "entusiasmado",
+    "nombre": "Entusiasmado",
+    "icon": "rocket-outline",
+    "color": "#8b5cf6",
+    "description": "Emoción intensa por algo nuevo o deseado",
+    "recommendations": [
+      "Canaliza esta energía de forma productiva",
+      "Comparte tu emoción con otros",
+      "Disfruta plenamente esta sensación",
+      "Aprovecha para iniciar ese proyecto"
+    ],
+    "suggested_activities": ["exercise", "mindfulness", "meditation"],
+    "related_tips": ["motivacion", "bienestar", "general"]
+  },
+  {
+    "id": "vulnerable",
+    "nombre": "Vulnerable",
+    "icon": "umbrella-outline",
+    "color": "#a78bfa",
+    "description": "Sensibilidad emocional expuesta",
+    "recommendations": [
+      "Sé amable contigo mismo",
+      "Permítete pedir ayuda",
+      "Establece límites saludables",
+      "Recuerda que la vulnerabilidad es fortaleza"
+    ],
+    "suggested_activities": ["meditation", "breathing", "relaxation"],
+    "related_tips": ["autoestima", "ansiedad", "general"]
+  },
+  {
+    "id": "equilibrado",
+    "nombre": "Equilibrado",
+    "icon": "scale-outline",
+    "color": "#059669",
+    "description": "Armonía emocional y mental",
+    "recommendations": [
+      "Mantén tus rutinas saludables",
+      "Escucha las necesidades de tu cuerpo",
+      "Comparte tu equilibrio con otros",
+      "Continúa practicando el autocuidado"
+    ],
+    "suggested_activities": ["meditation", "mindfulness", "exercise"],
+    "related_tips": ["bienestar", "relajacion", "general"]
+  },
+  {
+    "id": "solitario",
+    "nombre": "Solitario",
+    "icon": "person-outline",
+    "color": "#64748b",
+    "description": "Deseo de conexión o compañía",
+    "recommendations": [
+      "Comunícate con un ser querido",
+      "Asiste a un grupo o actividad social",
+      "Escribe cómo te sientes",
+      "Recuerda que no estás solo"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "exercise"],
+    "related_tips": ["autoestima", "bienestar", "general"]
+  },
+  {
+    "id": "concentrado",
+    "nombre": "Concentrado",
+    "icon": "crosshair-outline",
+    "color": "#0ea5e9",
+    "description": "Atención plena en una tarea específica",
+    "recommendations": [
+      "Mantén el enfoque en tu objetivo",
+      "Elimina distracciones a tu alrededor",
+      "Toma pausas breves para recargar",
+      "Recompénsate al completar la tarea"
+    ],
+    "suggested_activities": ["mindfulness", "meditation", "breathing"],
+    "related_tips": ["mindfulness", "bienestar", "general"]
+  },
+  {
+    "id": "avergonzado",
+    "nombre": "Avergonzado",
+    "icon": "eye-off-outline",
+    "color": "#d946ef",
+    "description": "Malestar por sentirte expuesto o juzgado",
+    "recommendations": [
+      "Recuerda que todos cometemos errores",
+      "Habla con compasión contigo mismo",
+      "Acepta la situación sin castigarte",
+      "Aprende y sigue adelante"
+    ],
+    "suggested_activities": ["breathing", "meditation", "relaxation"],
+    "related_tips": ["autoestima", "ansiedad", "general"]
+  },
+  {
+    "id": "renovado",
+    "nombre": "Renovado",
+    "icon": "refresh-outline",
+    "color": "#14b8a6",
+    "description": "Nuevo comienzo y energía recargada",
+    "recommendations": [
+      "Aprovecha este nuevo impulso",
+      "Establece intenciones para tu día",
+      "Deja atrás lo que ya no te sirve",
+      "Abre espacio para nuevas experiencias"
+    ],
+    "suggested_activities": ["meditation", "mindfulness", "exercise"],
+    "related_tips": ["motivacion", "bienestar", "general"]
+  }
+]

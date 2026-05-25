@@ -1,5 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { SlicePipe } from '@angular/common';
+import { IonIcon } from '@ionic/angular/standalone';
 import { NotificationsService, NotificationPreferences } from '../../core/services/notifications.service';
 import { PushNotificationsService } from '../../core/services/push-notifications.service';
 import { UserProfileService } from '../../core/services/user-profile.service';
@@ -14,14 +15,14 @@ interface ToggleItem {
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [SlicePipe],
+  imports: [SlicePipe, IonIcon],
   template: `
     <div class="page">
       <!-- Header -->
       <section class="hero-section">
         <div class="hero-bg"></div>
         <div class="hero-content">
-          <div class="hero-icon">⚙️</div>
+          <ion-icon class="hero-icon" name="settings-outline"></ion-icon>
           <h1 class="hero-title">Configuración</h1>
           <p class="hero-subtitle">Personaliza tu experiencia en la app</p>
         </div>
@@ -39,11 +40,11 @@ interface ToggleItem {
             @if (profile) {
               <div class="info-row">
                 <span class="info-label">Puntos</span>
-                <span class="info-value">{{ profile.emotional_points || 0 }} ⭐</span>
+                <span class="info-value">{{ profile.emotional_points || 0 }} <ion-icon name="star-outline"></ion-icon></span>
               </div>
               <div class="info-row">
                 <span class="info-label">Racha</span>
-                <span class="info-value">{{ profile.streak || 0 }} días 🔥</span>
+                <span class="info-value">{{ profile.streak || 0 }} días <ion-icon name="flame-outline"></ion-icon></span>
               </div>
             }
           </div>
@@ -58,7 +59,7 @@ interface ToggleItem {
         <div class="toggle-list">
           @for (item of toggles; track item.key) {
             <div class="toggle-row" (click)="toggle(item.key)">
-              <span class="toggle-icon">{{ item.icon }}</span>
+              <ion-icon class="toggle-icon" [name]="item.icon"></ion-icon>
               <div class="toggle-info">
                 <span class="toggle-label">{{ item.label }}</span>
                 <span class="toggle-desc">{{ item.desc }}</span>
@@ -74,7 +75,11 @@ interface ToggleItem {
           <svg xmlns="http://www.w3.org/2000/svg" class="btn-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
             <path d="M18 8A6 6 0 006 8c0 7-3 9-3 9h18s-3-2-3-9"/><path d="M13.73 21a2 2 0 01-3.46 0"/>
           </svg>
-          {{ pushEnabled ? '✅ Notificaciones activas' : 'Activar notificaciones push' }}
+          @if (pushEnabled) {
+            <ion-icon name="checkmark-circle-outline"></ion-icon> Notificaciones activas
+          } @else {
+            Activar notificaciones push
+          }
         </button>
 
         @if (fcmToken) {
@@ -308,11 +313,11 @@ export class ConfiguracionComponent implements OnInit {
   profile: any = null;
 
   toggles: ToggleItem[] = [
-    { key: 'eventos', icon: '📅', label: 'Eventos', desc: 'Nuevos eventos y cambios' },
-    { key: 'consejos', icon: '💡', label: 'Consejos diarios', desc: 'Tips de bienestar cada día' },
-    { key: 'frases', icon: '💛', label: 'Frases motivacionales', desc: 'Inspiración diaria' },
-    { key: 'recordatorios', icon: '⏰', label: 'Recordatorios', desc: 'Alertas emocionales' },
-    { key: 'minijuegos', icon: '🎮', label: 'Minijuegos', desc: 'Nuevas actividades' },
+    { key: 'eventos', icon: 'calendar-outline', label: 'Eventos', desc: 'Nuevos eventos y cambios' },
+    { key: 'consejos', icon: 'bulb-outline', label: 'Consejos diarios', desc: 'Tips de bienestar cada día' },
+    { key: 'frases', icon: 'heart-outline', label: 'Frases motivacionales', desc: 'Inspiración diaria' },
+    { key: 'recordatorios', icon: 'alarm-outline', label: 'Recordatorios', desc: 'Alertas emocionales' },
+    { key: 'minijuegos', icon: 'game-controller-outline', label: 'Minijuegos', desc: 'Nuevas actividades' },
   ];
 
   ngOnInit() {

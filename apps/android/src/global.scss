@@ -1,1 +1,55 @@
-@import 'theme/variables.scss';
+@use 'theme/variables.scss';
+
+ion-content {
+  --background: var(--ion-background-color);
+}
+
+.glass {
+  background: var(--pg-glass-bg);
+  backdrop-filter: blur(var(--pg-glass-blur));
+  -webkit-backdrop-filter: blur(var(--pg-glass-blur));
+  border: 1px solid var(--pg-glass-border);
+  box-shadow: var(--pg-glass-shadow);
+}
+
+.glass-card {
+  background: var(--pg-glass-bg);
+  backdrop-filter: blur(var(--pg-glass-blur));
+  -webkit-backdrop-filter: blur(var(--pg-glass-blur));
+  border: 1px solid var(--pg-glass-border);
+  box-shadow: var(--pg-glass-shadow);
+  border-radius: var(--pg-radius-md);
+}
+
+.glass-card-strong {
+  background: rgba(255, 255, 255, 0.85);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.5);
+  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+  border-radius: var(--pg-radius-md);
+}
+
+.gradient-primary {
+  background: var(--pg-gradient-primary);
+}
+
+.gradient-success {
+  background: var(--pg-gradient-success);
+}
+
+.gradient-purple {
+  background: var(--pg-gradient-purple);
+}
+
+.section-title {
+  font: var(--pg-font-subtitle);
+  color: var(--ion-text-color);
+  margin: 0 0 var(--pg-space-md);
+}
+
+.page-intro {
+  font: var(--pg-font-body);
+  color: var(--ion-color-medium);
+  margin-bottom: var(--pg-space-lg);
+}

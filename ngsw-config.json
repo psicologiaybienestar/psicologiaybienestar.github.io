@@ -25,5 +25,20 @@
         ]
       }
     }
-  ]
+  ],
+  "dataGroups": [
+    {
+      "name": "datasets",
+      "urls": [
+        "/assets/data/*.json"
+      ],
+      "cacheConfig": {
+        "maxSize": 10,
+        "maxAge": "30d",
+        "timeout": "1s",
+        "strategy": "performance"
+      }
+    }
+  ],
+  "navigationRequestStrategy": "freshness"
 }

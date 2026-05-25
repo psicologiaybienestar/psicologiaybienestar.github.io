@@ -3,17 +3,18 @@ import { AgendaService } from '../../core/services/agenda.service';
 import { WhatsAppService } from '../../core/services/whatsapp.service';
 import { FormsModule } from '@angular/forms';
 import { DatePipe } from '@angular/common';
+import { IonIcon } from '@ionic/angular/standalone';
 
 @Component({
   selector: 'app-agenda',
   standalone: true,
-  imports: [FormsModule, DatePipe],
+  imports: [FormsModule, DatePipe, IonIcon],
   template: `
     <div class="agenda-page">
       <div class="hero-section">
         <div class="hero-bg"></div>
         <div class="hero-content">
-          <div class="hero-icon">📅</div>
+          <ion-icon class="hero-icon" name="calendar-outline"></ion-icon>
           <h1 class="hero-title">Agenda</h1>
           <p class="hero-subtitle">Tu espacio para solicitar citas y acompañamiento</p>
         </div>
@@ -41,7 +42,7 @@ import { DatePipe } from '@angular/common';
 
         @if (submitSuccess) {
           <div class="success-card">
-            <div class="success-icon">✅</div>
+            <ion-icon class="success-icon" name="checkmark-circle-outline"></ion-icon>
             <h3 class="success-title">Solicitud enviada</h3>
             <p class="success-text">Hemos recibido tu solicitud. Te contactaremos pronto para confirmar la cita.</p>
             <button class="reset-btn" (click)="resetForm()">Nueva solicitud</button>
@@ -135,7 +136,7 @@ import { DatePipe } from '@angular/common';
               <div class="emotion-select">
                 <select [(ngModel)]="formData.emotional_state" name="emotional_state" class="form-input">
                   @for (emotion of emotionalStates; track emotion.value) {
-                    <option [value]="emotion.value">{{ emotion.icon }} {{ emotion.label }}</option>
+                    <option [value]="emotion.value">{{ emotion.label }}</option>
                   }
                 </select>
               </div>
@@ -178,7 +179,7 @@ import { DatePipe } from '@angular/common';
               @if (submitting) {
                 <span class="loader"></span> Enviando...
               } @else {
-                ✨ Solicitar cita
+                <ion-icon name="sparkles-outline"></ion-icon> Solicitar cita
               }
             </button>
           </form>

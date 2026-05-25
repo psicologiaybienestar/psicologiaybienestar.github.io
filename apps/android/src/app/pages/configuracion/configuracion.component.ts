@@ -17,15 +17,15 @@ import { UserProfileService } from '@shared/services/user-profile.service';
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <div class="profile-card">
-        <div class="avatar">{{ inicial }}</div>
+      <div class="glass-card-strong profile-card">
+        <div class="avatar gradient-primary">{{ inicial }}</div>
         <div class="profile-info">
           <h2>{{ nickname || 'Invitado' }}</h2>
           <p>ID: {{ userId?.substring(0, 8) || '---' }}</p>
         </div>
       </div>
 
-      <div class="section">
+      <div class="glass-card section">
         <div class="menu-item">
           <div class="menu-left">
             <div class="menu-icon bg-primary">
@@ -40,7 +40,7 @@ import { UserProfileService } from '@shared/services/user-profile.service';
         </div>
       </div>
 
-      <div class="section">
+      <div class="glass-card section">
         <div class="menu-item" (click)="frasesAbiertas = !frasesAbiertas">
           <div class="menu-left">
             <div class="menu-icon bg-secondary">
@@ -65,7 +65,7 @@ import { UserProfileService } from '@shared/services/user-profile.service';
         }
       </div>
 
-      <div class="section">
+      <div class="glass-card section">
         <div class="menu-item" (click)="serviciosAbiertos = !serviciosAbiertos">
           <div class="menu-left">
             <div class="menu-icon bg-tertiary">
@@ -80,15 +80,15 @@ import { UserProfileService } from '@shared/services/user-profile.service';
         </div>
         @if (serviciosAbiertos) {
           <div class="sub-section">
-            <div class="servicio-card">
+            <div class="glass-card servicio-card">
               <h3>Terapia psicológica</h3>
               <p>Atención profesional personalizada para tu bienestar emocional.</p>
             </div>
-            <div class="servicio-card">
+            <div class="glass-card servicio-card">
               <h3>Talleres y eventos</h3>
               <p>Actividades grupales para el crecimiento personal.</p>
             </div>
-            <div class="servicio-card">
+            <div class="glass-card servicio-card">
               <h3>Recursos digitales</h3>
               <p>Ejercicios, meditaciones y herramientas de autoayuda.</p>
             </div>
@@ -96,7 +96,7 @@ import { UserProfileService } from '@shared/services/user-profile.service';
         }
       </div>
 
-      <div class="section">
+      <div class="actions-section">
         <button class="action-btn web-btn" (click)="abrirWeb()">
           <ion-icon name="globe" />
           <span>Abrir versión web</span>
@@ -107,24 +107,24 @@ import { UserProfileService } from '@shared/services/user-profile.service';
         </button>
       </div>
 
-      <div class="about">
+      <div class="glass-card about">
         <p class="version">Psicología & Bienestar v1.0.0</p>
         <p class="copy">&copy; 2026 Todos los derechos reservados</p>
       </div>
     </ion-content>
   `,
   styles: `
-    .profile-card { display: flex; align-items: center; gap: 14px; padding: 16px; background: var(--ion-color-primary-contrast); border-radius: 16px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
-    .avatar { width: 48px; height: 48px; border-radius: 50%; background: linear-gradient(135deg, var(--ion-color-primary), var(--ion-color-secondary)); color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; flex-shrink: 0; }
+    .profile-card { display: flex; align-items: center; gap: var(--pg-space-md); padding: var(--pg-space-lg); margin-bottom: var(--pg-space-xl); }
+    .avatar { width: 48px; height: 48px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; flex-shrink: 0; }
     .profile-info h2 { font-size: 16px; font-weight: 700; margin: 0 0 2px; color: var(--ion-text-color); }
     .profile-info p { font-size: 12px; color: var(--ion-color-medium); margin: 0; }
 
-    .section { background: var(--ion-color-primary-contrast); border-radius: 16px; margin-bottom: 16px; overflow: hidden; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .section { margin-bottom: var(--pg-space-lg); overflow: hidden; }
 
-    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; }
+    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: var(--pg-space-md) var(--pg-space-lg); cursor: pointer; }
     .menu-item:active { background: var(--ion-color-light); }
-    .menu-left { display: flex; align-items: center; gap: 12px; }
-    .menu-icon { width: 36px; height: 36px; border-radius: 10px; display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
+    .menu-left { display: flex; align-items: center; gap: var(--pg-space-md); }
+    .menu-icon { width: 36px; height: 36px; border-radius: var(--pg-radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
     .menu-icon ion-icon { font-size: 18px; color: white; }
     .bg-primary { background: var(--ion-color-primary); }
     .bg-secondary { background: var(--ion-color-secondary); }
@@ -132,23 +132,23 @@ import { UserProfileService } from '@shared/services/user-profile.service';
     .menu-label { font-size: 14px; font-weight: 600; color: var(--ion-text-color); margin: 0; }
     .menu-desc { font-size: 12px; color: var(--ion-color-medium); margin: 1px 0 0; }
 
-    .sub-section { padding: 0 16px 12px; }
-    .frase-item { padding: 10px 0; border-top: 1px solid var(--ion-color-light); }
+    .sub-section { padding: 0 var(--pg-space-lg) var(--pg-space-md); }
+    .frase-item { padding: var(--pg-space-sm) 0; border-top: 1px solid var(--ion-color-light); }
     .frase-text { font-size: 14px; font-style: italic; color: var(--ion-text-color); margin: 0 0 4px; line-height: 1.4; }
     .frase-author { font-size: 12px; color: var(--ion-color-medium); margin: 0; }
 
-    .servicio-card { padding: 12px; margin-bottom: 8px; background: var(--ion-color-light); border-radius: 12px; }
+    .servicio-card { padding: var(--pg-space-md); margin-bottom: var(--pg-space-sm); }
     .servicio-card h3 { font-size: 14px; font-weight: 600; margin: 0 0 4px; color: var(--ion-text-color); }
     .servicio-card p { font-size: 13px; color: var(--ion-color-medium); margin: 0; line-height: 1.4; }
 
-    .section:last-of-type { background: transparent; box-shadow: none; padding: 0; }
-    .action-btn { display: flex; align-items: center; justify-content: center; gap: 8px; width: 100%; padding: 14px; border: none; border-radius: 14px; font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-bottom: 10px; transition: transform 0.15s; }
+    .actions-section { padding: 0; }
+    .action-btn { display: flex; align-items: center; justify-content: center; gap: var(--pg-space-sm); width: 100%; padding: var(--pg-space-md); border: none; border-radius: var(--pg-radius-md); font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-bottom: var(--pg-space-sm); transition: var(--pg-transition-fast); }
     .action-btn:active { transform: scale(0.98); }
     .action-btn ion-icon { font-size: 20px; }
     .web-btn { background: var(--ion-color-primary); color: white; }
     .wa-btn { background: #25D366; color: white; }
 
-    .about { text-align: center; padding: 16px 0 8px; }
+    .about { text-align: center; padding: var(--pg-space-lg); }
     .version { font-size: 13px; color: var(--ion-color-medium); margin: 0 0 4px; }
     .copy { font-size: 11px; color: var(--ion-color-medium); margin: 0; }
   `,

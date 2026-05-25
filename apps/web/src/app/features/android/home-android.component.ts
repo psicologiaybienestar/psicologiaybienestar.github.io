@@ -11,23 +11,24 @@ import { QuotesService } from '../../core/services/quotes.service';
 import { EmotionalTipsService } from '../../core/services/emotional-tips.service';
 import { WellnessActivitiesService } from '../../core/services/wellness-activities.service';
 import { MiniGamesService } from '../../core/services/mini-games.service';
+import { IonIcon } from '@ionic/angular/standalone';
 import { InternalNotificationsService } from '../../core/services/internal-notifications.service';
 
 const WELLNESS_COLORS = ['#EEF2FF', '#F0FDF4', '#FFF7ED', '#FDF2F8', '#FEF2F2', '#F5F3FF', '#ECFDF5', '#FFF1F2'];
 const TIP_ICONS: Record<string, string> = {
-  ansiedad: '🧠', autoestima: '💚', relajación: '🧘', estrés: '💭',
-  motivación: '💪', mindfulness: '🌿', bienestar: '☀️', respiración: '🫁',
-  general: '💧',
+  ansiedad: 'pulse-outline', autoestima: 'heart-outline', relajación: 'body-outline', estrés: 'chatbubble-ellipses-outline',
+  motivación: 'fitness-outline', mindfulness: 'leaf-outline', bienestar: 'sunny-outline', respiración: 'pulse-outline',
+  general: 'water-outline',
 };
 const ACTIVITY_ICONS: Record<string, string> = {
-  mindfulness: '🧘', meditacion: '🌿', respiracion: '🫁', relajacion: '😌',
-  yoga: '🧘‍♀️', ejercicio: '💪', lectura: '📖', musica: '🎵',
+  mindfulness: 'body-outline', meditacion: 'leaf-outline', respiracion: 'pulse-outline', relajacion: 'happy-outline',
+  yoga: 'body-outline', ejercicio: 'fitness-outline', lectura: 'book-outline', musica: 'musical-notes-outline',
 };
 
 @Component({
   selector: 'app-home-android',
   standalone: true,
-  imports: [RouterLink, DatePipe],
+  imports: [RouterLink, DatePipe, IonIcon],
   template: `
     <!-- Hero compacto emocional -->
     <section class="hero-section">
@@ -56,16 +57,16 @@ const ACTIVITY_ICONS: Record<string, string> = {
               <button class="notif-mark-read" (click)="markAllAsRead(); $event.stopPropagation()">Leer todo</button>
             }
             @if (notificationsList.length > 0) {
-              <button class="notif-delete-all" (click)="deleteAllRead(); $event.stopPropagation()">🗑️</button>
+              <button class="notif-delete-all" (click)="deleteAllRead(); $event.stopPropagation()"><ion-icon name="trash-outline"></ion-icon></button>
             }
-            <button class="notif-close" (click)="toggleNotifications()">✕</button>
+            <button class="notif-close" (click)="toggleNotifications()"><ion-icon name="close-outline"></ion-icon></button>
           </div>
           @if (notificationsList.length === 0) {
             <div class="notif-empty">Sin novedades aún</div>
           }
           @for (n of notificationsList; track n.id) {
             <div class="notif-item" [class.notif-unread]="!n.is_read">
-              <span class="notif-item-icon">{{ getNotifIcon(n.type) }}</span>
+              <ion-icon class="notif-item-icon" [name]="getNotifIcon(n.type)"></ion-icon>
               <div class="notif-item-body" (click)="markAsRead(n.id)">
                 <p class="notif-item-title">{{ n.title }}</p>
                 @if (n.body) {
@@ -73,7 +74,7 @@ const ACTIVITY_ICONS: Record<string, string> = {
                 }
                 <span class="notif-item-time">{{ n.created_at | date:'dd MMM HH:mm' }}</span>
               </div>
-              <button class="notif-delete-one" (click)="deleteOne(n.id); $event.stopPropagation()">✕</button>
+              <button class="notif-delete-one" (click)="deleteOne(n.id); $event.stopPropagation()"><ion-icon name="close-outline"></ion-icon></button>
             </div>
           }
         </div>
@@ -91,7 +92,7 @@ const ACTIVITY_ICONS: Record<string, string> = {
           @for (tip of dynamicTips; track tip.title; let i = $index) {
             <div class="swiper-slide">
               <div class="tip-card" [style.animationDelay]="i * 0.05 + 's'">
-                <span class="tip-icon">{{ tip.icon }}</span>
+                <ion-icon class="tip-icon" [name]="tip.icon"></ion-icon>
                 <div>
                   <h3 class="tip-title">{{ tip.title }}</h3>
                   <p class="tip-text">{{ tip.text }}</p>
@@ -126,7 +127,7 @@ const ACTIVITY_ICONS: Record<string, string> = {
       <div class="wellness-grid">
         @for (card of dynamicWellness; track card.title) {
           <div class="wellness-card" [style.background]="card.color">
-            <span class="wellness-icon">{{ card.icon }}</span>
+            <ion-icon class="wellness-icon" [name]="card.icon"></ion-icon>
             <h3 class="wellness-title">{{ card.title }}</h3>
             <p class="wellness-text">{{ card.text }}</p>
           </div>
@@ -143,21 +144,21 @@ const ACTIVITY_ICONS: Record<string, string> = {
       <div class="games-scroll">
         <!-- Hardcoded clásicos -->
         <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);">
-          <div class="game-card-icon">🧘</div>
+          <ion-icon class="game-card-icon" name="body-outline"></ion-icon>
           <div>
             <h3 class="game-card-title">Respiración</h3>
             <p class="game-card-text">Guía de respiración consciente</p>
           </div>
         </a>
         <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #f093fb 0%, #f5576c 100%);">
-          <div class="game-card-icon">💭</div>
+          <ion-icon class="game-card-icon" name="chatbubble-ellipses-outline"></ion-icon>
           <div>
             <h3 class="game-card-title">Afirmaciones</h3>
             <p class="game-card-text">Tarjetas de pensamiento positivo</p>
           </div>
         </a>
         <a routerLink="/minijuegos" class="game-card" style="background: linear-gradient(135deg, #4facfe 0%, #00f2fe 100%);">
-          <div class="game-card-icon">🌟</div>
+          <ion-icon class="game-card-icon" name="star-outline"></ion-icon>
           <div>
             <h3 class="game-card-title">Gratitud</h3>
             <p class="game-card-text">Tu diario de agradecimiento</p>
@@ -167,7 +168,7 @@ const ACTIVITY_ICONS: Record<string, string> = {
         @for (game of dynamicGames; track game.id) {
           <a [routerLink]="game.route || '/minijuegos'" class="game-card"
              [style.background]="'linear-gradient(135deg, ' + getGradientColor($index + 3, 0) + ', ' + getGradientColor($index + 3, 1) + ')'">
-            <div class="game-card-icon">{{ game.icon || '🎮' }}</div>
+            <ion-icon class="game-card-icon" [name]="game.icon || 'game-controller-outline'"></ion-icon>
             <div>
               <h3 class="game-card-title">{{ game.title }}</h3>
               <p class="game-card-text">{{ (game.description || '').substring(0, 40) }}</p>
@@ -489,6 +490,7 @@ const ACTIVITY_ICONS: Record<string, string> = {
     .game-card-icon {
       font-size: 36px;
       margin-bottom: 8px;
+      display: block;
     }
     .game-card-title {
       font-size: 16px;
@@ -915,7 +917,7 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
       ]);
 
       this.dynamicTips = tips.map(t => ({
-        icon: TIP_ICONS[t.emotion_type] || '💡',
+        icon: TIP_ICONS[t.emotion_type] || 'bulb-outline',
         title: t.title,
         text: t.description || t.title,
       }));
@@ -925,9 +927,9 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
       }
 
       this.dynamicWellness = wellness.slice(0, 4).map((a, i) => ({
-        icon: ACTIVITY_ICONS[a.activity_type] || '🌟',
+        icon: ACTIVITY_ICONS[a.activity_type] || 'star-outline',
         title: a.title,
-        text: (a.content || '').substring(0, 60),
+        text: ((a as any).content || (a as any).description || '').substring(0, 60),
         color: WELLNESS_COLORS[i % WELLNESS_COLORS.length],
       }));
 
@@ -985,10 +987,10 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
 
   getNotifIcon(type: string): string {
     const icons: Record<string, string> = {
-      eventos: '📅', noticias: '📰', motivational_quotes: '💬',
-      emotional_tips: '💡', wellness_activities: '🧘', mini_games: '🎮',
+      eventos: 'calendar-outline', noticias: 'newspaper-outline', motivational_quotes: 'chatbubbles-outline',
+      emotional_tips: 'bulb-outline', wellness_activities: 'body-outline', mini_games: 'game-controller-outline',
     };
-    return icons[type] || '🔔';
+    return icons[type] || 'notifications-outline';
   }
 
   private gradients = [

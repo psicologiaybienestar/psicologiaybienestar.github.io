@@ -29,9 +29,9 @@ import { InternalNotificationsService } from '../../core/services/internal-notif
                 <button (click)="markAll(); $event.stopPropagation()" class="text-xs text-primary font-semibold hover:underline whitespace-nowrap">Leer todo</button>
               }
               @if (list.length > 0) {
-                <button (click)="deleteAllRead(); $event.stopPropagation()" class="text-xs text-gray-400 hover:text-red-500 ml-1" title="Vaciar leídas">🗑️</button>
+                <button (click)="deleteAllRead(); $event.stopPropagation()" class="text-xs text-gray-400 hover:text-red-500 ml-1" title="Vaciar leídas"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg></button>
               }
-              <button (click)="open = false" class="text-gray-400 hover:text-gray-600 ml-1 text-sm">✕</button>
+              <button (click)="open = false" class="text-gray-400 hover:text-gray-600 ml-1 text-sm"><svg xmlns="http://www.w3.org/2000/svg" class="h-4 w-4 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
           </div>
           @if (list.length === 0) {
@@ -47,7 +47,7 @@ import { InternalNotificationsService } from '../../core/services/internal-notif
                 }
                 <p class="text-[10px] text-gray-400 mt-0.5">{{ n.created_at | date:'dd MMM HH:mm' }}</p>
               </div>
-              <button (click)="deleteOne(n.id); $event.stopPropagation()" class="text-gray-300 hover:text-red-500 text-xs shrink-0 self-start mt-1" title="Eliminar">✕</button>
+              <button (click)="deleteOne(n.id); $event.stopPropagation()" class="text-gray-300 hover:text-red-500 text-xs shrink-0 self-start mt-1" title="Eliminar"><svg xmlns="http://www.w3.org/2000/svg" class="h-3.5 w-3.5 inline" fill="none" viewBox="0 0 24 24" stroke="currentColor" stroke-width="2"><path stroke-linecap="round" stroke-linejoin="round" d="M6 18L18 6M6 6l12 12"/></svg></button>
             </div>
           }
         </div>
@@ -102,10 +102,10 @@ export class FloatingNotifComponent implements OnInit, OnDestroy {
 
   icon(type: string): string {
     const m: Record<string, string> = {
-      eventos: '📅', noticias: '📰', motivational_quotes: '💬',
-      emotional_tips: '💡', wellness_activities: '🧘', mini_games: '🎮',
-      emotions: '😊',
+      eventos: 'calendar-outline', noticias: 'newspaper-outline', motivational_quotes: 'chatbubbles-outline',
+      emotional_tips: 'bulb-outline', wellness_activities: 'leaf-outline', mini_games: 'game-controller-outline',
+      emotions: 'happy-outline',
     };
-    return m[type] || '🔔';
+    return m[type] || 'notifications-outline';
   }
 }

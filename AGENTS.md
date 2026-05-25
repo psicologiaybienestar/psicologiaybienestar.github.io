@@ -1,33 +1,70 @@
 # AGENTS.md — Psicología & Bienestar
 
-Ionic + Angular 20 + Capacitor 8 + Supabase hybrid app (web + Android). Single project, not a monorepo.
+Ionic + Angular 20 + Capacitor 8 + Supabase hybrid app. Monorepo with `apps/web/` + `apps/android/` + `shared/` + `supabase/`.
 
 ## Commands
 
 | Command | What it does |
 |---|---|
-| `npm start` | Dev server (`ng serve`) |
-| `npm run build` | Production build → `www/` |
+| `npm start` | Dev server (`ng serve` — builds `app` project) |
+| `npm run build` | Build `app` (web) → `www/` |
+| `npm run build:android` | Build `android` project → `www-android/` |
 | `npm run watch` | Dev build-watch (not serve) |
 | `npm test` | Karma+Jasmine (interactive, Chrome) |
 | `npm run lint` | ESLint via `@angular-eslint` |
 | `ng test --browsers=ChromeHeadless --watch=false --configuration=ci` | CI single-run tests |
+| `ng build app` | Explicit web build |
+| `ng build android` | Explicit Android build (→ `www-android/`) |
+| `npx cap sync android` | Copy web build to Android native assets |
+| `cd android && .\gradlew clean assembleDebug` | Build native APK |
 
 Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && npm run test -- --configuration=ci --browsers=ChromeHeadless`
+
+## Monorepo structure
+
+```
+├── apps/
+│   ├── web/src/          → Web app (production, full features)
+│   └── android/src/      → Independent Android app (in development, tabs UI)
+├── shared/
+│   ├── services/         → 15 shared services (business logic)
+│   ├── interfaces/       → TypeScript interfaces
+│   ├── types/            → TypeScript types/enums
+│   ├── constants/        → DI tokens, defaults, config
+│   ├── utils/            → Utility functions
+│   └── placeholder/      → Placeholder component (scaffolding)
+├── supabase/
+│   ├── functions/        → Edge Functions (notify-content, etc.)
+│   └── migrations/       → DB migrations
+├── angular.json          → Two projects: app + android
+├── capacitor.config.ts   → Points webDir to www/ (the web app build)
+└── tailwind.config.js    → Content paths: apps/web/src/, apps/android/src/, shared/
+```
 
 ## Architecture
 
 - **Standalone components** — no NgModules anywhere
-- **All routes lazy-loaded** via `loadComponent()` (`src/app/app.routes.ts`)
+- **All routes lazy-loaded** via `loadComponent()` (`apps/web/src/app/app.routes.ts`)
+- **Web app**: `apps/web/src/` — full feature set with admin, contact, legal, etc.
+- **Android app**: `apps/android/src/` — 5-tab layout (Inicio, Agenda, Emociones, Juegos, Más), independent from web
+- **Shared services** in `shared/services/` — all business logic, re-exported by `apps/web/src/app/core/services/` for backward compat
+- **InjectionToken pattern** for `SupabaseService` and `TestimoniosService` — environment-agnostic DI via `SUPABASE_CONFIG` and `GOOGLE_SHEETS_URL`
+- **TypeScript path aliases**: `@shared/*` → `shared/*`, `@shared/services/*` → `shared/services/*`, etc.
+- **No state management library** — simple `providedIn: 'root'` services + RxJS. Signals not yet adopted.
+- **Default component styles**: SCSS (`.scss`)
+- **Component prefix**: `app`, kebab-case selectors. Class suffix: `Page` or `Component`.
 - **Public layout**: `PublicLayoutComponent` wraps navbar, footer, social/WhatsApp buttons, cookie consent, event alert
 - **Admin routes** guarded by two guards (both must pass):
   1. `platformGuard` — blocks Android users from `/admin/*`
-   2. `adminGuard` — checks Supabase JWT `app_metadata.role` is `admin` or `editor`
+  2. `adminGuard` — checks Supabase JWT `app_metadata.role` is `admin` or `editor`
 - **`/admin/login`** has no guards (accessible everywhere)
-- **No state management library** — uses simple `providedIn: 'root'` services + RxJS. Signals not yet adopted.
-- **Default component styles**: SCSS (`.scss`)
-- **Component prefix**: `app`, kebab-case selectors. Class suffix: `Page` or `Component`.
 - **Routing param for news**: `/noticia/:slug` (slug-based), **eventos**: `/evento/:id` (UUID-based)
+
+## Critical: Capacitor webDir
+
+**Capacitor currently points `webDir: 'www'`** which is the web app build output. The Android project (`apps/android/`) builds to `www-android/` but is NOT wired to Capacitor yet.
+
+**Decision (Opción B):** Keep `webDir: 'www'` for now. The Android app (`apps/android/`) is developed independently without affecting the production hybrid app. When the Android app reaches feature parity, switch `webDir` to `www-android/` and update `capacitor.config.ts`.
 
 ## Supabase
 
@@ -54,19 +91,20 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
   ```sql
   UPDATE auth.users SET raw_app_meta_data = '{"role": "admin"}' WHERE email = '...';
   ```
-- Environment vars in `src/environments/environment.ts` (replaced with `environment.prod.ts` in production builds — both currently identical)
+- Environment vars in `apps/web/src/environments/environment.ts` (replaced with `environment.prod.ts` in production builds)
 
 ## Testing
 
 - **Karma + Jasmine** (not Jest, not Playwright)
 - Requires **Chrome** installed locally
-- Test entry: `src/test.ts`, spec TSConfig: `tsconfig.spec.json`
+- Test entry: `apps/web/src/test.ts`, spec TSConfig: `tsconfig.spec.json`
 - Coverage output: `./coverage/app`
 
 ## Configuration quirks
 
 - `.npmrc`: `legacy-peer-deps=true` — do not remove
-- Build output: `www/` (not `dist/`)
+- Build output: `www/` (web), `www-android/` (android)
+- `www/` and `www-android/` are in `.gitignore`
 - Default schematics: `@ionic/angular-toolkit`
 - Build budgets: initial 2 MB warning / 5 MB error; anyComponentStyle 2 KB / 4 KB
 - ServiceWorker enabled in production builds (`ngsw-config.json`)
@@ -76,28 +114,28 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 - `.editorconfig`: 2-space indent, UTF-8, single quotes for `.ts`
 - `android/app/build.gradle`: NO duplicar `apply plugin: com.google.gms.google-services` — solo debe aparecer en el try-catch al final del archivo
 - `android/app/google-services.json`: `project_number` = sender ID de FCM; verificar con `ProcessDebugGoogleServices/values/values.xml` genera `gcm_defaultSenderId`
-- Al rebuildear Android: `npm run build → npx cap sync android → cd android && .\gradlew clean assembleDebug`
 
 ## Deployment
 
-| Target | Notes |
-|---|---|
-| Netlify | Build → `www/`, SPA redirect `/* → /index.html` |
-| GitHub Pages | CI on push to `main`, publishes `www/` to `gh-pages` branch |
-| Android | `npm run build` → `npx cap sync android` → `npx cap open android` |
+| Target | Build command | Publish dir | Notes |
+|---|---|---|---|
+| Netlify | `npm run build` | `www/` | SPA redirect `/* → /index.html` |
+| GitHub Pages | `npm run build` (CI) | `www/` | CI on push to `main`, publishes to `gh-pages` branch |
+| Android (current) | `npm run build → npx cap sync android → cd android && .\gradlew clean assembleDebug` | `www/` via Capacitor | Uses web app build |
+| Android (future) | `ng build android → npx cap sync android` | `www-android/` via Capacitor | Switch webDir when ready |
 
 ## External services
 
 | Service | Purpose | Config location |
 |---|---|---|
-| Supabase | Auth, DB, Storage | `src/environments/environment.ts` |
+| Supabase | Auth, DB, Storage | `apps/web/src/environments/environment.ts` |
 | Formspree | Contact form | `formspreeUrl` in environment |
 | Google Sheets CSV | Testimonials source | `googleSheetsUrl` in environment |
 | TipTap | Rich text editor (admin) | Imported per-component |
 | Swiper | Testimonials carousel | Imported per-component |
 | Lucide | Icons | `@lucide/angular` |
 | browser-image-compression | Image upload optimization | Used in admin uploads |
-| xlsx (SheetJS) | XLSX import/export for bulk data | `src/app/core/services/bulk-import.service.ts` |
+| xlsx (SheetJS) | XLSX import/export for bulk data | `shared/services/bulk-import.service.ts` |
 | @capacitor/push-notifications | FCM push notifications (v8.1.1) | Plugin auto-wired via npx cap sync |
 | Firebase Cloud Messaging | Push delivery | `android/app/google-services.json` |
 
@@ -117,12 +155,25 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 | `/admin/minijuegos` | `AdminMinijuegosComponent` | CRUD con toggle activo, tipo, dificultad |
 | `/admin/citas` | `AdminCitasComponent` | Filtros por estado, cambiar estado, eliminar |
 
-## Servicios nuevos
+## Shared services (`shared/services/`)
 
-| Servicio | Archivo | Descripción |
+| Servicio | Re-export en web app | Descripción |
 |---|---|---|
-| `BulkImportService` | `src/app/core/services/bulk-import.service.ts` | Importación XLSX con validación por columna. Tablas: motivational_quotes, emotional_tips, wellness_activities. Descarga de plantillas. |
-| `PushNotificationsService` | `src/app/core/services/push-notifications.service.ts` | Registro FCM, solicitud de permiso, upsert de token a `push_tokens`, creación de canales, manejo de tap |
+| `SupabaseService` | `apps/web/src/app/core/services/` | Client Supabase, queries helpers |
+| `AuthService` | ✅ | Auth session management |
+| `PlatformService` | ✅ | Platform detection (isAndroid, isWeb, etc.) |
+| `TestimoniosService` | ✅ | Testimonials (Google Sheets + Supabase) |
+| `WhatsAppService` | ✅ | WhatsApp sharing links |
+| `UserProfileService` | ✅ | User profile initialization |
+| `AgendaService` | ✅ | `appointments` CRUD |
+| `QuotesService` | ✅ | `motivational_quotes` CRUD |
+| `EmotionalTipsService` | ✅ | `emotional_tips` CRUD |
+| `WellnessActivitiesService` | ✅ | `wellness_activities` CRUD |
+| `MiniGamesService` | ✅ | `mini_games` CRUD |
+| `BulkImportService` | ✅ | XLSX import/export |
+| `NotificationsService` | ✅ | Realtime subscriptions + web push |
+| `InternalNotificationsService` | ✅ | In-app `notifications` table |
+| `PushNotificationsService` | ✅ | FCM registration + token upsert |
 
 ## Filtros emocionales
 
@@ -130,7 +181,35 @@ Taxonomía `emotion_type` con 9 valores: `general`, `ansiedad`, `autoestima`, `r
 
 ## Push Notifications (FCM)
 
-### Auto-registro en AppComponent
+### Arquitectura general
+
+```
+DB INSERT (tabla X)
+  → Webhook trigger (supabase_functions.http_request)
+    → Edge Function notify-content (FCM send)
+      → Dispositivo Android
+```
+
+### Edge Function: `notify-content`
+- **Ruta**: `supabase/functions/notify-content/index.ts`
+- **Desplegada en**: `https://nwmewlnwcmsdswmxynvj.functions.supabase.co/notify-content`
+- **Soporta**: noticias, motivational_quotes, emotional_tips, wellness_activities, mini_games, emotions
+- **Payload autogenerado** por `supabase_functions.http_request`: `{ type, table, record, old_record }`
+- **Requiere**: `FIREBASE_SERVICE_ACCOUNT` en Secrets, `verify_jwt: true`
+
+### Webhook triggers (6 tablas + emotions)
+Creados via SQL en `supabase-migration.sql` (secciones 23 y 24):
+| Trigger | Tabla | Evento |
+|---|---|---|
+| `trg_webhook_noticias` | noticias | INSERT |
+| `trg_webhook_quotes` | motivational_quotes | INSERT |
+| `trg_webhook_tips` | emotional_tips | INSERT |
+| `trg_webhook_activities` | wellness_activities | INSERT |
+| `trg_webhook_games` | mini_games | INSERT |
+| `trg_webhook_eventos` | eventos | INSERT |
+| `trg_webhook_emotions` | emotions | INSERT |
+
+### Auto-registro en AppComponent (web y Android)
 - `AppComponent.ngOnInit()` → `await this.userProfileService.init()` → 1s timeout → `this.pushService.register()`
 - Solo se ejecuta en Android (`PlatformService.isAndroid` → `Capacitor.getPlatform() === 'android'`)
 - Service worker auto-update también se ejecuta en Android
@@ -141,7 +220,7 @@ Taxonomía `emotion_type` con 9 valores: `general`, `ansiedad`, `autoestima`, `r
 3. `PushNotifications.requestPermissions()` — en Android 13+ muestra popup
 4. `PushNotifications.register()` → llama a `FirebaseMessaging.getInstance().getToken()` en native
 5. Token llega vía listener `registration` → `saveToken()` → upsert a `push_tokens`
-6. Creación de 5 canales: eventos, consejos, frases, citas, recordatorios
+6. Creación de **10 canales**: eventos, consejos, frases, citas, noticias, actividades, minijuegos, emociones, recordatorios, sistema
 
 ### Configuración Android
 | Archivo | Rol |
@@ -177,5 +256,32 @@ adb logcat -v time -s FirebaseInit FirebaseInstanceId FCM PushNotifications Capa
 ```
 
 ### push_tokens RLS
+- `push_tokens` tiene 4 políticas: Insert propio, Select admin, Select anon upsert, Update propio
+- `Select anon push_tokens upsert` permite SELECT para anon (necesario para upsert)
 - `upsert({ token, device: 'android', user_id, is_active: true }, { onConflict: 'token' })`
-- Requiere políticas INSERT y UPDATE para `anon` (o `authenticated` si el usuario inició sesión)
+
+## Android app views (`apps/android/src/app/pages/`)
+
+| Ruta | Componente | Funcionalidad |
+|---|---|---|
+| `/inicio` | `InicioComponent` | Dashboard: frase motivacional, contadores, últimas noticias |
+| `/agenda` | `AgendaComponent` | Formulario de cita + listado con fechas y estados |
+| `/emociones` | `EmocionesComponent` | Check-in emocional (8 estados) + historial en `user_progress` |
+| `/minijuegos` | `MinijuegosComponent` | Lista desde `mini_games` con tipo y dificultad |
+| `/configuracion` | `ConfiguracionComponent` | Toggle push, info app, link versión web |
+
+- Navegación por **5 tabs inferiores** con `ion-tab-bar`
+- **No conectado a Capacitor aún** — Capacitor apunta al web build (`www/`)
+
+## Progress
+
+- [x] Monorepo structure (apps/web, apps/android, shared, supabase)
+- [x] Shared services extracted (15 services)
+- [x] Path aliases configured
+- [x] notify-content Edge Function deployed
+- [x] Webhook triggers for 7 content tables
+- [x] push_tokens RLS fix
+- [x] Push notifications end-to-end working
+- [x] Tailwind CSS paths fixed
+- [x] Android app views with tab navigation
+- [ ] Connect Capacitor to www-android/ (when Android app is ready)

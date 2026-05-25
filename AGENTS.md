@@ -62,7 +62,7 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 
 ## Critical: Capacitor webDir
 
-**Capacitor currently points `webDir: 'www'`** which is the web app build output. The Android project (`apps/android/`) builds to `www-android/` but is NOT wired to Capacitor yet.
+**Capacitor currently points `webDir: 'www-android'`** which is the Android app build output. The Android project (`apps/android/`) builds to `www-android/` and is wired to Capacitor.
 
 **Decision (Opción B):** Keep `webDir: 'www'` for now. The Android app (`apps/android/`) is developed independently without affecting the production hybrid app. When the Android app reaches feature parity, switch `webDir` to `www-android/` and update `capacitor.config.ts`.
 
@@ -289,7 +289,7 @@ Para generar: `npx capacitor-assets generate --iconBackgroundColor "#627eff" --s
 | `/configuracion` | `ConfiguracionComponent` | Toggle push, info app, link versión web |
 
 - Navegación por **5 tabs inferiores** con `ion-tab-bar`
-- **No conectado a Capacitor aún** — Capacitor apunta al web build (`www/`)
+- **Conectado a Capacitor** — Capacitor apunta a `www-android/`, el APK muestra las vistas con tabs
 
 ## Progress
 
@@ -303,4 +303,4 @@ Para generar: `npx capacitor-assets generate --iconBackgroundColor "#627eff" --s
 - [x] Tailwind CSS paths fixed
 - [x] Android app views with tab navigation
 - [ ] Customizar icono y splash (assets PNGs fuente + `npx capacitor-assets generate`)
-- [ ] Connect Capacitor to www-android/ (when Android app is ready)
+- [x] Connect Capacitor to www-android/ (webDir changed, Android now shows tabs UI)

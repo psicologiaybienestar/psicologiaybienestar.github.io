@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1779682488469,
+  "timestamp": 1779683065357,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -60,7 +60,7 @@
         "/manifest.webmanifest",
         "/polyfills.76ed0f0e63d5e642.js",
         "/runtime.8c6dec016edaf4e8.js",
-        "/styles.71b7dbc7c859a2cb.css"
+        "/styles.a4ad1b2a46d6cbc0.css"
       ],
       "patterns": []
     },
@@ -166,12 +166,12 @@
     "/assets/team/sindy_team.png": "069a472024b60b408c3a26f159f0922d2a9227db",
     "/assets/team/viviana_team.png": "3b4f727073b4fd04ad5aaea5a964a7c3e3556080",
     "/common.20781ed5740a1b80.js": "65b2a70ffa06bbfcab3ac2364219a5b8b5cf8fd6",
-    "/index.html": "b8651c4ab9447468d01fbab4961c0670ecb43fe6",
+    "/index.html": "a5558870d722e1c0f370c88f235df32e02082ead",
     "/main.0f8de3953cc1be8e.js": "66e6da2d6cd2d76d55c03a77c4b70d2c8b0bd563",
     "/manifest.webmanifest": "6577c79e94818cfe9ac0d555b6cee44f2e1bc1b8",
     "/polyfills.76ed0f0e63d5e642.js": "58c9cdb9a251255e7e9d3f107859e136788c41aa",
     "/runtime.8c6dec016edaf4e8.js": "c6b6041843413849c94db8c03336312359e5b293",
-    "/styles.71b7dbc7c859a2cb.css": "9d06a972fcfca31eb2f6dfbf2bb59ef2dbcdd0ba"
+    "/styles.a4ad1b2a46d6cbc0.css": "ec7db0c786b4f2e42273f57d849fd042cc362c42"
   },
   "navigationUrls": [
     {

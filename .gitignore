@@ -1,6 +1,7 @@
 node_modules/
 .angular/
 www/
+www-android/
 capacitor-cordova-android-plugins/
 .vscode/
 .idea/

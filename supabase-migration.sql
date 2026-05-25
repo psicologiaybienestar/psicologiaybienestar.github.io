@@ -694,6 +694,10 @@ alter table notification_ack enable row level security;
 create policy "Notification ack all" on notification_ack
   for all using (true) with check (true);
 
+-- Fix: Permitir upsert desde anon (necesario para PushNotificationsService.saveToken)
+create policy "Select anon push_tokens upsert" on push_tokens
+  for select using (true);
+
 -- NOTA: Si aparece 504 Gateway Timeout al crear eventos desde admin:
 -- 1. Ir a Supabase Dashboard → Edge Functions → notify-event / notify-appointment
 -- 2. Settings → aumentar timeout de 60s a 120s

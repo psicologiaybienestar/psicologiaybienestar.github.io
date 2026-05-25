@@ -260,6 +260,24 @@ adb logcat -v time -s FirebaseInit FirebaseInstanceId FCM PushNotifications Capa
 - `Select anon push_tokens upsert` permite SELECT para anon (necesario para upsert)
 - `upsert({ token, device: 'android', user_id, is_active: true }, { onConflict: 'token' })`
 
+## Assets (icono y splash)
+
+- Los actuales son los defaults de Capacitor (logo Ionic).
+- **Pendiente**: crear `assets/` raíz con PNGs fuente y ejecutar `npx capacitor-assets generate` para generar todas las densidades.
+- Splash background color: `#627eff` (definido en `capacitor.config.ts`)
+
+Archivos fuente necesarios en `assets/`:
+
+| Archivo | Tamaño | Descripción |
+|---|---|---|
+| `icon.png` | 1024×1024 | Icono principal (cuadrado, con relleno) |
+| `icon-foreground.png` | 1024×1024 | Capa frontal adaptive icon (sin fondo) |
+| `icon-background.png` | 1024×1024 | Capa fondo adaptive icon (color sólido) |
+| `splash.png` | 2732×2732 | Splash con logo sobre fondo `#627eff` |
+| `splash-dark.png` | 2732×2732 | (Opcional) Splash modo oscuro |
+
+Para generar: `npx capacitor-assets generate --iconBackgroundColor "#627eff" --splashBackgroundColor "#627eff"`
+
 ## Android app views (`apps/android/src/app/pages/`)
 
 | Ruta | Componente | Funcionalidad |
@@ -284,4 +302,5 @@ adb logcat -v time -s FirebaseInit FirebaseInstanceId FCM PushNotifications Capa
 - [x] Push notifications end-to-end working
 - [x] Tailwind CSS paths fixed
 - [x] Android app views with tab navigation
+- [ ] Customizar icono y splash (assets PNGs fuente + `npx capacitor-assets generate`)
 - [ ] Connect Capacitor to www-android/ (when Android app is ready)

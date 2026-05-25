@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapp=self.webpackChunkapp||[]).push([[645],{8645(u,i,s){s.r(i),s.d(i,{PushNotifications:()=>o});const o=(0,s(5083).registerPlugin)("PushNotifications",{})}}]);

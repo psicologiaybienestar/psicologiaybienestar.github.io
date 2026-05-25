@@ -1,0 +1,1 @@
+"use strict";(self.webpackChunkapp=self.webpackChunkapp||[]).push([[254],{8254(f,n,e){e.r(n),e.d(n,{Preferences:()=>P});const P=(0,e(5083).registerPlugin)("Preferences",{web:()=>e.e(924).then(e.bind(e,2924)).then(c=>new c.PreferencesWeb)})}}]);

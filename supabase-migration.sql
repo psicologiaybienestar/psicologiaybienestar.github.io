@@ -698,6 +698,18 @@ create policy "Notification ack all" on notification_ack
 create policy "Select anon push_tokens upsert" on push_tokens
   for select using (true);
 
+-- ============================================
+-- 24. WEBHOOK — emotions → notify-content
+-- ============================================
+create trigger trg_webhook_emotions after insert on emotions
+  for each row execute function supabase_functions.http_request(
+    'https://nwmewlnwcmsdswmxynvj.functions.supabase.co/notify-content',
+    'POST',
+    '{"Content-type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53bWV3bG53Y21zZHN3bXh5bnZqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTQ5NTQ0NywiZXhwIjoyMDk1MDcxNDQ3fQ.V1KsvR6HnLxPaxdwR4ijN3l-9jPldiBMziYJwRcyYdo"}',
+    '{}',
+    '5000'
+  );
+
 -- NOTA: Si aparece 504 Gateway Timeout al crear eventos desde admin:
 -- 1. Ir a Supabase Dashboard → Edge Functions → notify-event / notify-appointment
 -- 2. Settings → aumentar timeout de 60s a 120s

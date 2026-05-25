@@ -8,23 +8,23 @@ export const routes: Routes = [
   },
   {
     path: 'inicio',
-    loadComponent: () => import('@shared/placeholder').then(m => m.PlaceholderComponent),
+    loadComponent: () => import('./pages/inicio/inicio.component').then(m => m.InicioComponent),
   },
   {
     path: 'agenda',
-    loadComponent: () => import('@shared/placeholder').then(m => m.PlaceholderComponent),
+    loadComponent: () => import('./pages/agenda/agenda.component').then(m => m.AgendaComponent),
   },
   {
     path: 'emociones',
-    loadComponent: () => import('@shared/placeholder').then(m => m.PlaceholderComponent),
+    loadComponent: () => import('./pages/emociones/emociones.component').then(m => m.EmocionesComponent),
   },
   {
     path: 'minijuegos',
-    loadComponent: () => import('@shared/placeholder').then(m => m.PlaceholderComponent),
+    loadComponent: () => import('./pages/minijuegos/minijuegos.component').then(m => m.MinijuegosComponent),
   },
   {
     path: 'configuracion',
-    loadComponent: () => import('@shared/placeholder').then(m => m.PlaceholderComponent),
+    loadComponent: () => import('./pages/configuracion/configuracion.component').then(m => m.ConfiguracionComponent),
   },
   {
     path: '**',

@@ -26,58 +26,88 @@ const EMOCIONES = [
       </ion-toolbar>
     </ion-header>
     <ion-content class="ion-padding">
-      <p class="intro">Registra tu estado emocional y haz seguimiento a tu bienestar</p>
+      <p class="intro">Selecciona tu estado emocional y haz seguimiento a tu bienestar</p>
 
-      <div class="emociones-grid">
-        @for (emoji of emociones; track emoji.nombre) {
-          <button class="emoji-card" [class.selected]="seleccionada === emoji.nombre"
-                  [style.--card-color]="emoji.color" (click)="seleccionar(emoji.nombre)">
-            <span class="emoji-icon">{{ emoji.emoji }}</span>
-            <span class="emoji-label">{{ emoji.nombre }}</span>
+      <div class="grid">
+        @for (e of emociones; track e.nombre) {
+          <button class="card-emoji" [class.selected]="seleccionada === e.nombre"
+                  [style.--c]="e.color" (click)="seleccionar(e.nombre)">
+            <span class="emoji">{{ e.emoji }}</span>
+            <span class="label">{{ e.nombre }}</span>
           </button>
         }
       </div>
 
       @if (seleccionada) {
-        <ion-item>
-          <ion-label position="stacked">Nota (opcional)</ion-label>
-          <ion-textarea [(ngModel)]="nota" placeholder="¿Qué provocó esta emoción?" rows={2} />
-        </ion-item>
-
-        <ion-button expand="block" (click)="guardar()" [disabled]="guardando">
-          {{ guardando ? 'Guardando...' : 'Registrar emoción' }}
-        </ion-button>
+        <div class="form-block">
+          <ion-textarea [(ngModel)]="nota" placeholder="¿Qué provocó esta emoción?" autoGrow rows="2"
+                        fill="outline" label="Nota (opcional)" labelPlacement="stacked"></ion-textarea>
+          <ion-button expand="block" (click)="guardar()" [disabled]="guardando" class="ion-margin-top">
+            @if (guardando) {
+              <ion-spinner slot="start" />
+              Guardando...
+            } @else {
+              Registrar emoción
+            }
+          </ion-button>
+        </div>
       }
 
-      <ion-list-header class="ion-padding-top">
-        <ion-label>Tu historial</ion-label>
-      </ion-list-header>
+      <div class="section">
+        <h2 class="section-title">Tu historial</h2>
 
-      @if (historial.length === 0) {
-        <ion-item>
-          <ion-label class="ion-text-center ion-padding">Aún no has registrado emociones</ion-label>
-        </ion-item>
-      }
-      @for (item of historial; track item.id) {
-        <ion-item>
-          <ion-label>
-            <h2>{{ item.emocion }} {{ getEmoji(item.emocion) }}</h2>
-            @if (item.nota) { <p>{{ item.nota }}</p> }
-            <p class="fecha">{{ item.created_at | date:'dd/MM/yyyy HH:mm' }}</p>
-          </ion-label>
-        </ion-item>
-      }
+        @if (historial.length === 0) {
+          <div class="empty">
+            <p>Aún no has registrado emociones</p>
+          </div>
+        }
+
+        <div class="timeline">
+          @for (item of historial; track item.id) {
+            <div class="tl-item">
+              <div class="tl-dot" [style.--c]="getColor(item.emocion)"></div>
+              <div class="tl-body">
+                <div class="tl-head">
+                  <span class="tl-emoji">{{ getEmoji(item.emocion) }}</span>
+                  <span class="tl-name">{{ item.emocion }}</span>
+                  <span class="tl-date">{{ item.created_at | date:'dd/MM/yy HH:mm' }}</span>
+                </div>
+                @if (item.nota) {
+                  <p class="tl-note">{{ item.nota }}</p>
+                }
+              </div>
+            </div>
+          }
+        </div>
+      </div>
     </ion-content>
   `,
   styles: `
     .intro { font-size: 14px; color: var(--ion-color-medium); margin-bottom: 16px; }
-    .emociones-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 8px; margin-bottom: 20px; }
-    .emoji-card { display: flex; flex-direction: column; align-items: center; gap: 4px; padding: 12px 4px; border-radius: 14px; border: 2px solid transparent; background: var(--ion-color-primary-contrast); cursor: pointer; transition: all 0.2s; font-family: inherit; }
-    .emoji-card:active { transform: scale(0.95); }
-    .emoji-card.selected { border-color: var(--card-color); background: color-mix(in srgb, var(--card-color) 10%, white); }
-    .emoji-icon { font-size: 28px; line-height: 1; }
-    .emoji-label { font-size: 11px; font-weight: 600; color: var(--ion-text-color); }
-    .fecha { font-size: 11px; color: var(--ion-color-medium); margin-top: 4px; }
+
+    .grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; margin-bottom: 20px; }
+    .card-emoji { display: flex; flex-direction: column; align-items: center; gap: 6px; padding: 16px 4px; border-radius: 14px; border: 2px solid transparent; background: var(--ion-color-primary-contrast); cursor: pointer; transition: all 0.2s; font-family: inherit; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+    .card-emoji:active { transform: scale(0.94); }
+    .card-emoji.selected { border-color: var(--c); background: color-mix(in srgb, var(--c) 10%, white); box-shadow: 0 2px 12px color-mix(in srgb, var(--c) 25%, transparent); }
+    .emoji { font-size: 30px; line-height: 1; }
+    .label { font-size: 11px; font-weight: 600; color: var(--ion-text-color); }
+
+    .form-block { background: var(--ion-color-primary-contrast); border-radius: 14px; padding: 16px; margin-bottom: 20px; box-shadow: 0 1px 4px rgba(0,0,0,0.04); }
+
+    .section { margin-bottom: 20px; }
+    .section-title { font-size: 18px; font-weight: 700; margin: 0 0 12px; color: var(--ion-text-color); }
+    .empty { text-align: center; padding: 24px; color: var(--ion-color-medium); font-size: 14px; }
+
+    .timeline { position: relative; padding-left: 20px; }
+    .timeline::before { content: ''; position: absolute; left: 8px; top: 4px; bottom: 4px; width: 2px; background: var(--ion-color-light-shade); border-radius: 1px; }
+    .tl-item { position: relative; padding-bottom: 16px; }
+    .tl-dot { position: absolute; left: -16px; top: 4px; width: 12px; height: 12px; border-radius: 50%; background: var(--c, var(--ion-color-primary)); border: 2px solid var(--ion-color-primary-contrast); box-shadow: 0 0 0 2px var(--c, var(--ion-color-primary)); }
+    .tl-body { background: var(--ion-color-primary-contrast); border-radius: 12px; padding: 10px 12px; box-shadow: 0 1px 3px rgba(0,0,0,0.03); }
+    .tl-head { display: flex; align-items: center; gap: 6px; margin-bottom: 4px; }
+    .tl-emoji { font-size: 16px; }
+    .tl-name { font-size: 14px; font-weight: 600; color: var(--ion-text-color); }
+    .tl-date { font-size: 11px; color: var(--ion-color-medium); margin-left: auto; }
+    .tl-note { font-size: 13px; color: var(--ion-color-medium); margin: 0; line-height: 1.4; }
   `,
 })
 export class EmocionesComponent implements OnInit {
@@ -125,5 +155,9 @@ export class EmocionesComponent implements OnInit {
 
   getEmoji(emocion: string): string {
     return EMOCIONES.find(e => e.nombre === emocion)?.emoji || '';
+  }
+
+  getColor(emocion: string): string {
+    return EMOCIONES.find(e => e.nombre === emocion)?.color || 'var(--ion-color-primary)';
   }
 }

@@ -238,6 +238,11 @@ Creados via SQL en `supabase-migration.sql` (secciones 23 y 24):
 - `com.google.firebase.provider.FirebaseInitProvider` — auto-init al arranque
 - `com.google.firebase.iid.FirebaseInstanceIdReceiver` — receiver de FCM
 
+### End-to-end test (confirmado 2026-05-25)
+- Edge Function `notify-content` invocada manualmente con payload `{ type: 'INSERT', table: 'motivational_quotes', record: {...} }`
+- Status `202 Accepted` → función procesa asíncronamente → FCM entrega al dispositivo
+- **Resultado: notificación recibida exitosamente en dispositivo Android físico**
+
 ### Debug workflow (dispositivo físico)
 ```powershell
 # 1. Limpiar logs previos
@@ -299,8 +304,16 @@ Para generar: `npx capacitor-assets generate --iconBackgroundColor "#627eff" --s
 - [x] notify-content Edge Function deployed
 - [x] Webhook triggers for 7 content tables
 - [x] push_tokens RLS fix
-- [x] Push notifications end-to-end working
+- [x] Push notifications end-to-end working (tested on device 2026-05-25)
 - [x] Tailwind CSS paths fixed
 - [x] Android app views with tab navigation
+- [x] All 5 Android pages redesigned from scratch as native Ionic app
+  - [x] Inicio: hero section, quote card, stats grid, quick actions, latest news
+  - [x] Emociones: 4×2 emotion grid with color selection, notes, timeline history
+  - [x] Juegos: cards with emoji, type/difficulty badges, empty state
+  - [x] Agenda: clean form + appointment list with status badges
+  - [x] Más: profile card, push toggle, expandable quotes, services, web/WhatsApp buttons
+- [x] Android theme updated with web palette (primary #627eff, etc.)
+- [x] APK built and installed on device, push notifications verified working
 - [ ] Customizar icono y splash (assets PNGs fuente + `npx capacitor-assets generate`)
 - [x] Connect Capacitor to www-android/ (webDir changed, Android now shows tabs UI)

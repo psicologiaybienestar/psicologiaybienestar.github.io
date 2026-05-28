@@ -24,8 +24,11 @@ import { SupabaseService } from '../../core/services/supabase.service';
             @if (evento.imagen) {
               <img [src]="evento.imagen" [alt]="evento.titulo" class="w-full h-72 md:h-96 object-cover rounded-2xl mb-8 shadow-lg" />
             }
-            <span class="text-sm font-semibold text-white bg-primary px-3 py-1 rounded-full">{{ evento.modalidad || 'Presencial' }}</span>
-            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mt-4 mb-6">{{ evento.titulo }}</h1>
+            <div class="flex flex-wrap items-center gap-3 mt-4 mb-6">
+              <span class="text-sm font-semibold text-white bg-primary px-3 py-1 rounded-full">{{ evento.modalidad || 'Presencial' }}</span>
+              <span class="text-sm font-semibold px-3 py-1 rounded-full" [style]="statusStyle(evento.estado)">{{ eventLabel(evento.estado) }}</span>
+            </div>
+            <h1 class="text-3xl md:text-4xl font-bold text-gray-800 mb-6">{{ evento.titulo }}</h1>
             <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-8 p-6 bg-gray-50 rounded-2xl">
               <div>
                 <p class="text-sm text-gray-500">Inicio</p>
@@ -72,10 +75,28 @@ export class EventoDetailComponent implements OnInit {
   evento: any = null;
   loading = true;
 
+  STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
+    publicado: { label: 'Publicado', color: '#627eff', bg: '#eef2ff' },
+    proximo: { label: 'Proximo', color: '#60a5fa', bg: '#eff6ff' },
+    pospuesto: { label: 'Pospuesto', color: '#f59e0b', bg: '#fef3c7' },
+    finalizado: { label: 'Finalizado', color: '#10b981', bg: '#ecfdf5' },
+    cancelado: { label: 'Cancelado', color: '#ef4444', bg: '#fef2f2' },
+  };
+
   constructor(
     private route: ActivatedRoute,
     private supabase: SupabaseService
   ) {}
+
+  eventLabel(estado: string): string {
+    return this.STATUS_CONFIG[estado]?.label || estado || 'Evento';
+  }
+
+  statusStyle(estado: string): any {
+    const cfg = this.STATUS_CONFIG[estado];
+    if (!cfg) return {};
+    return { background: cfg.bg, color: cfg.color };
+  }
 
   async ngOnInit() {
     const id = this.route.snapshot.paramMap.get('id');

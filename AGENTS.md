@@ -169,7 +169,7 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 | `TestimoniosService` | ✅ | Testimonials (Google Sheets + Supabase) |
 | `WhatsAppService` | ✅ | WhatsApp sharing links |
 | `UserProfileService` | ✅ | User profile initialization |
-| `AgendaService` | ✅ | `appointments` CRUD |
+| `AgendaService` | ✅ | `appointments` CRUD. `getMyAppointments()` usa `supabase.rpc('get_my_appointments', { p_email })` — función `security definer` que bypasea RLS. NO usar `supabase.from('appointments').select('*')` directo porque la RLS policy solo permite SELECT si `email = auth.jwt() ->> 'email'` (NULL para usuarios anónimos). |
 | `QuotesService` | ✅ | `motivational_quotes` CRUD + local dataset fallback |
 | `EmotionalTipsService` | ✅ | `emotional_tips` CRUD + local dataset fallback |
 | `WellnessActivitiesService` | ✅ | `wellness_activities` CRUD + local dataset fallback |

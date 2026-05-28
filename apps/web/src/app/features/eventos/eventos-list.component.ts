@@ -3,6 +3,14 @@ import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SupabaseService } from '../../core/services/supabase.service';
 
+const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
+  publicado: { label: 'Publicado', color: '#627eff', bg: '#eef2ff' },
+  proximo: { label: 'Proximo', color: '#60a5fa', bg: '#eff6ff' },
+  pospuesto: { label: 'Pospuesto', color: '#f59e0b', bg: '#fef3c7' },
+  finalizado: { label: 'Finalizado', color: '#10b981', bg: '#ecfdf5' },
+  cancelado: { label: 'Cancelado', color: '#ef4444', bg: '#fef2f2' },
+};
+
 @Component({
   selector: 'app-eventos-list',
   standalone: true,
@@ -17,14 +25,30 @@ import { SupabaseService } from '../../core/services/supabase.service';
           <p class="text-center text-gray-500 py-10">Cargando eventos...</p>
         }
 
+        <div class="flex flex-wrap justify-center gap-3 mb-10">
+          <button (click)="filtroEstado = ''"
+            class="px-5 py-2 rounded-full text-sm font-semibold transition-all"
+            [class]="filtroEstado === '' ? 'bg-primary text-white shadow-lg' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+            Todos
+          </button>
+          @for (item of filtros; track item.key) {
+            <button (click)="filtroEstado = item.key"
+              class="px-5 py-2 rounded-full text-sm font-semibold transition-all"
+              [class]="filtroEstado === item.key ? 'bg-primary text-white shadow-lg' : 'bg-gray-100 text-gray-600 hover:bg-gray-200'">
+              {{ item.label }}
+            </button>
+          }
+        </div>
+
         <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-8">
-          @for (evento of eventos; track evento.id) {
+          @for (evento of filteredEventos; track evento.id) {
             <div class="bg-white rounded-2xl shadow-lg overflow-hidden hover:shadow-xl transition-shadow">
               @if (evento.imagen) {
                 <img [src]="evento.imagen" [alt]="evento.titulo" class="w-full h-48 object-cover" />
               }
               <div class="p-6">
-                <div class="flex items-center space-x-2 mb-3">
+                <div class="flex items-center flex-wrap gap-2 mb-3">
+                  <span class="text-xs font-semibold px-3 py-1 rounded-full" [style]="statusStyle(evento.estado)">{{ eventLabel(evento.estado) }}</span>
                   <span class="text-xs font-semibold text-white bg-primary px-3 py-1 rounded-full">{{ evento.modalidad || 'Presencial' }}</span>
                   @if (evento.cupos) {
                     <span class="text-xs text-gray-500">{{ evento.cupos }} cupos</span>
@@ -38,7 +62,7 @@ import { SupabaseService } from '../../core/services/supabase.service';
                     <p>Fin: {{ evento.fecha_fin | date:'dd/MM/yyyy HH:mm' }}</p>
                   }
                   @if (evento.ubicacion) {
-                    <p>Ubicación: {{ evento.ubicacion }}</p>
+                    <p>Ubicacion: {{ evento.ubicacion }}</p>
                   }
                 </div>
                 <div class="flex space-x-2">
@@ -50,8 +74,8 @@ import { SupabaseService } from '../../core/services/supabase.service';
           }
         </div>
 
-        @if (eventos.length === 0 && !loading) {
-          <p class="text-center text-gray-500 py-10">No hay eventos próximos.</p>
+        @if (filteredEventos.length === 0 && !loading) {
+          <p class="text-center text-gray-500 py-10">No hay eventos en esta categoria.</p>
         }
       </div>
     </div>
@@ -60,6 +84,19 @@ import { SupabaseService } from '../../core/services/supabase.service';
 export class EventosListComponent implements OnInit {
   eventos: any[] = [];
   loading = true;
+  filtroEstado = '';
+  filtros = [
+    { key: 'publicado', label: 'Activos' },
+    { key: 'proximo', label: 'Proximos' },
+    { key: 'finalizado', label: 'Finalizados' },
+    { key: 'pospuesto', label: 'Pospuestos' },
+    { key: 'cancelado', label: 'Cancelados' },
+  ];
+
+  get filteredEventos(): any[] {
+    if (!this.filtroEstado) return this.eventos;
+    return this.eventos.filter(e => e.estado === this.filtroEstado);
+  }
 
   constructor(private supabase: SupabaseService) {}
 
@@ -68,8 +105,8 @@ export class EventosListComponent implements OnInit {
       const { data, error } = await this.supabase.client
         .from('eventos')
         .select('*')
-        .eq('estado', 'publicado')
-        .order('fecha_inicio', { ascending: true });
+        .in('estado', ['publicado', 'proximo', 'finalizado', 'pospuesto', 'cancelado'])
+        .order('fecha_inicio', { ascending: false, nullsFirst: false });
       if (error) throw error;
       this.eventos = data || [];
     } catch {
@@ -77,6 +114,16 @@ export class EventosListComponent implements OnInit {
     } finally {
       this.loading = false;
     }
+  }
+
+  eventLabel(estado: string): string {
+    return STATUS_CONFIG[estado]?.label || estado || 'Evento';
+  }
+
+  statusStyle(estado: string): any {
+    const cfg = STATUS_CONFIG[estado];
+    if (!cfg) return {};
+    return { background: cfg.bg, color: cfg.color };
   }
 
   googleCalendarUrl(evento: any): string {

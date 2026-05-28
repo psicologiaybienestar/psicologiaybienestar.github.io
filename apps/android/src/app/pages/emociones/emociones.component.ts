@@ -113,47 +113,49 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
   `,
   styles: [`
     .page { background: #ffffff; min-height: 100%; }
-    .hero-section { position: relative; padding: 32px 20px 16px; overflow: hidden; text-align: center; }
+    .hero-section { position: relative; padding: 28px 20px 8px; overflow: hidden; text-align: center; }
     .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #627eff 0%, #53c6e4 50%, #66a6da 100%); opacity: 0.06; pointer-events: none; }
     .hero-content { position: relative; }
     .hero-icon { font-size: 48px; color: var(--ion-color-primary); display: block; margin: 0 auto 8px; }
     .hero-title { font-size: 26px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
     .hero-subtitle { font-size: 14px; color: #6b7280; max-width: 280px; margin: 0 auto; line-height: 1.5; }
-    .section { padding: 8px 20px 20px; }
+    .section { padding: 4px 20px 22px; }
     .section-title { font-size: 20px; font-weight: 700; color: #1f2937; margin: 0; }
     .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
     .count { background: #f3f4f6; color: #6b7280; padding: 2px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
-    .card { background: #F9FAFB; border: 1px solid #F3F4F6; border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 10px 24px rgba(31, 41, 55, 0.04); }
+    .card { background: #ffffff; border: 1px solid rgba(0,0,0,0.04); border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
     .emotion-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .emotion-card { display: flex; flex-direction: column; align-items: center; gap: 7px; min-height: 82px; padding: 12px 6px; background: white; border: 2px solid #f3f4f6; border-radius: 16px; transition: all 0.2s; }
-    .emotion-card.active { border-color: var(--c); background: color-mix(in srgb, var(--c) 5%, white); transform: scale(1.05); }
-    .emotion-icon { width: 34px; height: 34px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--c) 12%, white); color: var(--c); font-size: 24px; line-height: 1; }
-    .emotion-name { font-size: 10px; font-weight: 700; color: #6b7280; text-align: center; line-height: 1.1; }
+    .emotion-card { display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 84px; padding: 14px 6px; background: white; border: 2px solid #f0f0f5; border-radius: 16px; transition: all 0.2s ease; }
+    .emotion-card.active { border-color: var(--c); background: color-mix(in srgb, var(--c) 5%, white); transform: scale(1.04); box-shadow: 0 8px 20px color-mix(in srgb, var(--c) 12%, transparent); }
+    .emotion-card:active { transform: scale(0.96); }
+    .emotion-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--c) 12%, white); color: var(--c); font-size: 24px; line-height: 1; }
+    .emotion-name { font-size: 10px; font-weight: 700; color: #6b7280; text-align: center; line-height: 1.2; }
     .emotion-card.active .emotion-name { color: var(--c); font-weight: 700; }
     .card-detail { margin-top: 16px; }
     .detail-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
     .detail-icon { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 25px; line-height: 1; flex-shrink: 0; }
     .detail-row h3 { font-size: 17px; font-weight: 700; color: #1f2937; margin: 0; }
-    .detail-row p { font-size: 12px; color: #6b7280; margin: 2px 0 0; }
-    .form-group { margin-bottom: 12px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 6px; }
-    .form-group textarea { width: 100%; background: white; border: 1px solid #f3f4f6; border-radius: 10px; padding: 10px; font-size: 14px; color: #1f2937; outline: none; }
-    .btn-primary { background: var(--ion-color-primary); color: white; border: none; padding: 14px; border-radius: 12px; font-weight: 700; font-size: 15px; }
+    .detail-row p { font-size: 12px; color: #6b7280; margin: 2px 0 0; line-height: 1.4; }
+    .form-group { margin-bottom: 16px; }
+    .form-group label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.03em; }
+    .form-group textarea { width: 100%; background: white; border: 1px solid #e8e8ee; border-radius: 12px; padding: 12px; font-size: 14px; color: #1f2937; outline: none; transition: border-color 0.15s ease; }
+    .form-group textarea:focus { border-color: var(--ion-color-primary); }
+    .btn-primary { background: var(--ion-color-primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; font-size: 15px; }
     .btn-full { width: 100%; }
-    .empty-state { text-align: center; padding: 32px; color: #d1d5db; }
-    .empty-state ion-icon { font-size: 40px; margin-bottom: 8px; }
+    .empty-state { text-align: center; padding: 32px 24px; color: #d1d5db; }
+    .empty-state ion-icon { font-size: 40px; margin-bottom: 10px; }
     .empty-state p { font-size: 14px; color: #9ca3af; }
     .timeline { padding-left: 20px; position: relative; }
     .timeline-item { position: relative; padding-bottom: 20px; }
-    .timeline-line { position: absolute; left: -14px; top: 0; bottom: 0; width: 2px; background: #f3f4f6; }
+    .timeline-line { position: absolute; left: -14px; top: 0; bottom: 0; width: 2px; background: #edf0f5; }
     .timeline-dot { position: absolute; left: -20px; top: 18px; width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; z-index: 1; box-shadow: 0 0 0 3px rgba(98, 126, 255, 0.08); }
     .card-timeline { margin-bottom: 0; }
     .tl-row { display: flex; align-items: center; gap: 10px; }
     .tl-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; flex-shrink: 0; }
     .tl-info h3 { font-size: 14px; font-weight: 700; color: #1f2937; margin: 0; }
     .tl-time { font-size: 10px; color: #9ca3af; font-weight: 600; }
-    .tl-note { margin-top: 10px; font-size: 12px; color: #6b7280; padding-top: 10px; border-top: 1px solid #f3f4f6; }
-    .bottom-spacer { height: 90px; height: calc(80px + env(safe-area-inset-bottom, 0px)); }
+    .tl-note { margin-top: 10px; font-size: 12px; color: #6b7280; padding-top: 10px; border-top: 1px solid #edf0f5; }
+    .bottom-spacer { height: 80px; height: calc(80px + env(safe-area-inset-bottom, 0px)); }
   `],
 })
 export class EmocionesComponent implements OnInit {

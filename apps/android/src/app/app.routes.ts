@@ -28,6 +28,10 @@ export const routes: Routes = [
         path: 'configuracion',
         loadComponent: () => import('./pages/configuracion/configuracion.component').then(m => m.ConfiguracionComponent),
       },
+      {
+        path: 'evento/:id',
+        loadComponent: () => import('./pages/evento-detail/evento-detail.component').then(m => m.EventoDetailComponent),
+      },
       ...GAMES_REGISTRY.map(game => ({
         path: game.route.slice(1),
         loadComponent: game.component,

@@ -60,9 +60,10 @@ export class AgendaService {
   }
 
   async getMyAppointments(email: string): Promise<AppointmentRequest[]> {
+    if (!email?.trim()) return [];
     try {
       const { data, error } = await this.supabase
-        .rpc('get_my_appointments', { p_email: email });
+        .rpc('get_my_appointments', { p_email: email.trim() });
       if (error) throw error;
       return (data || []).map((a: any) => ({
         ...a,

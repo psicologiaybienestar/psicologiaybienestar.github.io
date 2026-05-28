@@ -34,7 +34,3 @@ app-affirmations-game, app-emotion-quiz-game {
   width: 100%;
 }
 
-.bottom-spacer {
-  height: 90px;
-  height: calc(80px + env(safe-area-inset-bottom, 0px));
-}

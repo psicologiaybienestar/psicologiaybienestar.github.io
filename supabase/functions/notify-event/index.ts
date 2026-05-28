@@ -58,7 +58,13 @@ async function sendNotifications(type: string, table: string, record: any) {
         notification: {
           channelId: 'eventos',
           priority: 'high',
+          tag: `evento-${record.id}`,
         },
+      },
+      data: {
+        table: 'eventos',
+        type: type.toLowerCase(),
+        route: '/evento/' + (record.id || ''),
       },
     }))
 

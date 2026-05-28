@@ -97,8 +97,6 @@ import { RouterOutlet, RouterLink, RouterLinkActive } from '@angular/router';
     }
     .nav-item.active .nav-icon-wrap {
       background: color-mix(in srgb, var(--nav-color) 12%, transparent);
-      width: 38px;
-      height: 32px;
     }
     .nav-item.active .nav-svg {
       color: var(--nav-color);

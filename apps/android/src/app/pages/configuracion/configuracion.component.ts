@@ -120,50 +120,51 @@ import { UserProfileService } from '@shared/services/user-profile.service';
   `,
   styles: [`
     .page { background: #ffffff; min-height: 100%; }
-    .hero-section { position: relative; padding: 32px 20px 16px; overflow: hidden; text-align: center; }
+    .hero-section { position: relative; padding: 28px 20px 8px; overflow: hidden; text-align: center; }
     .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #627eff 0%, #53c6e4 50%, #66a6da 100%); opacity: 0.06; pointer-events: none; }
     .hero-content { position: relative; }
     .profile-circle { width: 56px; height: 56px; border-radius: 16px; background: var(--pg-gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 800; margin: 0 auto 12px; }
     .hero-title { font-size: 26px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
     .hero-subtitle { font-size: 14px; color: #6b7280; max-width: 280px; margin: 0 auto; line-height: 1.5; }
-    .section { padding: 8px 20px 20px; }
+    .section { padding: 4px 20px 22px; }
     .section-title { font-size: 20px; font-weight: 700; color: #1f2937; margin: 0 0 12px; }
-    .card { background: #F9FAFB; border: 1px solid #F3F4F6; border-radius: 14px; padding: 16px; margin-bottom: 10px; }
+    .card { background: #ffffff; border: 1px solid rgba(0,0,0,0.04); border-radius: 16px; padding: 16px; margin-bottom: 10px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
     .card-about { }
     .about-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
-    .about-logo { width: 48px; height: 48px; border-radius: 14px; background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 1px solid #eef2ff; box-shadow: 0 8px 18px rgba(98, 126, 255, 0.12); }
+    .about-logo { width: 48px; height: 48px; border-radius: 14px; background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 1px solid rgba(0,0,0,0.04); box-shadow: 0 4px 12px rgba(98, 126, 255, 0.10); }
     .about-logo img { width: 100%; height: 100%; object-fit: contain; padding: 4px; display: block; }
     .about-row h3 { font-size: 15px; font-weight: 700; color: #1f2937; margin: 0; }
     .about-row p { font-size: 11px; color: #6b7280; margin: 1px 0 0; }
-    .about-desc { font-size: 13px; color: #6b7280; line-height: 1.5; margin: 0; }
+    .about-desc { font-size: 13px; color: #6b7280; line-height: 1.6; margin: 0; }
     .card-setting { }
-    .setting-row { display: flex; align-items: center; gap: 12px; }
-    .setting-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; flex-shrink: 0; }
+    .setting-row { display: flex; align-items: center; gap: 14px; }
+    .setting-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; flex-shrink: 0; }
     .icon-blue { background: #4a69bd; }
     .setting-text { flex: 1; }
     .setting-text h3 { font-size: 14px; font-weight: 700; color: #1f2937; margin: 0; }
-    .setting-text p { font-size: 11px; color: #6b7280; margin: 1px 0 0; }
+    .setting-text p { font-size: 11px; color: #6b7280; margin: 2px 0 0; }
     .links-list { }
     .card-link { cursor: pointer; }
     .link-row { display: flex; align-items: center; gap: 12px; }
-    .link-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; flex-shrink: 0; }
+    .link-icon { width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; flex-shrink: 0; }
     .icon-primary { background: #627eff; }
     .icon-whatsapp { background: #25d366; }
     .icon-services { background: #4a69bd; }
     .link-text { flex: 1; }
     .link-text h3 { font-size: 14px; font-weight: 700; color: #1f2937; margin: 0; }
-    .link-text p { font-size: 11px; color: #6b7280; margin: 1px 0 0; }
+    .link-text p { font-size: 11px; color: #6b7280; margin: 2px 0 0; }
     .arrow { color: #d1d5db; font-size: 18px; }
     .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 4px; }
-    .service-pill { background: #f3f4f6; border-radius: 10px; padding: 10px; text-align: center; font-size: 11px; font-weight: 700; color: #4b5563; }
-    .socials-row { display: flex; gap: 16px; justify-content: center; align-items: center; }
-    .social-btn { width: 54px; height: 54px; border-radius: 18px; border: none; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; box-shadow: 0 12px 24px rgba(31, 41, 55, 0.12); }
+    .service-pill { background: #f0f4ff; border-radius: 12px; padding: 12px; text-align: center; font-size: 11px; font-weight: 700; color: #4b5563; }
+    .socials-row { display: flex; gap: 20px; justify-content: center; align-items: center; }
+    .social-btn { width: 56px; height: 56px; border-radius: 18px; border: none; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; box-shadow: 0 12px 28px rgba(31, 41, 55, 0.14); transition: transform 0.15s ease; }
+    .social-btn:active { transform: scale(0.92); }
     .social-btn.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b 48%, #8134af); }
     .social-btn.facebook { background: #1877f2; }
     .footer-text { text-align: center; }
     .version { font-size: 12px; color: #9ca3af; font-weight: 600; margin: 0; }
-    .legal { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px; color: #d1d5db; margin: 8px 0; }
-    .legal button { border: none; background: transparent; padding: 4px 0; color: var(--ion-color-primary); font-size: 11px; font-weight: 700; }
+    .legal { display: flex; align-items: center; justify-content: center; gap: 10px; font-size: 11px; color: #d1d5db; margin: 10px 0; }
+    .legal button { border: none; background: transparent; padding: 6px 0; color: var(--ion-color-primary); font-size: 11px; font-weight: 700; }
     .copyright { font-size: 10px; color: #9ca3af; }
     .bottom-spacer { height: 80px; height: calc(80px + env(safe-area-inset-bottom, 0px)); }
   `],

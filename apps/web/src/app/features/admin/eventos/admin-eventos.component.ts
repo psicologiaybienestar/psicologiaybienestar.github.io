@@ -297,12 +297,19 @@ export class AdminEventosComponent implements OnInit {
 
   private toUtc(localStr: string): string | null {
     if (!localStr) return null;
-    return new Date(localStr).toISOString();
+    const [datePart, timePart] = localStr.split('T');
+    if (!datePart || !timePart) return null;
+    const [y, m, d] = datePart.split('-').map(Number);
+    const [h, min] = timePart.split(':').map(Number);
+    const date = new Date(y, m - 1, d, h, min);
+    if (isNaN(date.getTime())) return null;
+    return date.toISOString();
   }
 
   private toLocalDatetime(utcStr: string): string {
     if (!utcStr) return '';
     const d = new Date(utcStr);
+    if (isNaN(d.getTime())) return '';
     const y = d.getFullYear();
     const m = String(d.getMonth() + 1).padStart(2, '0');
     const day = String(d.getDate()).padStart(2, '0');

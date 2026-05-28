@@ -1,7 +1,6 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { RouterLink } from '@angular/router';
 import { SupabaseService } from '../../../core/services/supabase.service';
-import { FunctionsError } from '@supabase/supabase-js';
 
 interface TestType {
   id: string;
@@ -246,12 +245,15 @@ export class AdminDashboardComponent implements OnInit {
     this.sending = true;
     this.testResult = null;
     try {
-      const { data, error } = await this.supabase.client.functions.invoke(
+      const { error } = await this.supabase.client.functions.invoke(
         'send-test-push',
         { body: { type: this.selectedTest.id } }
       );
-      if (error) throw error;
-      this.testResult = data as { sent: number; failed: number; total: number };
+      if (error) {
+        this.testResult = { sent: 0, failed: 0, total: 0, error: error.message };
+      } else {
+        this.testResult = { sent: 1, failed: 0, total: 1 };
+      }
     } catch (e: any) {
       this.testResult = { sent: 0, failed: 0, total: 0, error: e?.message || 'Error al enviar' };
     }

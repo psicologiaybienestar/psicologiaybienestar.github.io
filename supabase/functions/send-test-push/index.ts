@@ -2,6 +2,12 @@ import { serve } from 'https://deno.land/std@0.177.0/http/server.ts'
 import { createClient } from 'https://esm.sh/@supabase/supabase-js@2'
 import admin from 'npm:firebase-admin@11'
 
+const CORS_HEADERS = {
+  'Access-Control-Allow-Origin': '*',
+  'Access-Control-Allow-Methods': 'POST, OPTIONS',
+  'Access-Control-Allow-Headers': 'Content-Type, Authorization, apikey, X-Client-Info',
+}
+
 const firebaseServiceAccount = Deno.env.get('FIREBASE_SERVICE_ACCOUNT')
 if (!firebaseServiceAccount) {
   console.error('FIREBASE_SERVICE_ACCOUNT no configurada en Secrets')
@@ -39,11 +45,8 @@ function buildTestMessage(type: TestPayload['type']): { title: string; body: str
   }
 }
 
-serve(async (req) => {
+async function sendNotifications(type: TestPayload['type']) {
   try {
-    const body: TestPayload = await req.json().catch(() => ({ type: 'quote' as const }))
-    const { type } = body
-
     const supabase = createClient(supabaseUrl, supabaseServiceKey)
     const { data: tokens, error } = await supabase
       .from('push_tokens')
@@ -52,14 +55,12 @@ serve(async (req) => {
 
     if (error) {
       console.error('send-test-push: error consultando push_tokens:', error.message)
-      return new Response(JSON.stringify({ error: error.message }), { status: 500 })
+      return
     }
 
     if (!tokens || tokens.length === 0) {
       console.log('send-test-push: no hay tokens activos')
-      return new Response(JSON.stringify({ sent: 0, failed: 0, total: 0 }), {
-        headers: { 'Content-Type': 'application/json' },
-      })
+      return
     }
 
     const message = buildTestMessage(type)
@@ -101,11 +102,31 @@ serve(async (req) => {
     )
 
     console.log(`send-test-push [${type}]: ${sent} enviadas, ${failed} fallidas, ${tokens.length} tokens`)
-    return new Response(JSON.stringify({ sent, failed, total: tokens.length }), {
-      headers: { 'Content-Type': 'application/json' },
+  } catch (error) {
+    console.error('send-test-push background error:', error.message)
+  }
+}
+
+serve(async (req) => {
+  if (req.method === 'OPTIONS') {
+    return new Response(null, { headers: CORS_HEADERS })
+  }
+
+  try {
+    const body: TestPayload = await req.json().catch(() => ({ type: 'quote' as const }))
+    const { type } = body
+
+    sendNotifications(type)
+
+    return new Response(JSON.stringify({ sent: 'procesando', message: `Enviando ${type}...` }), {
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      status: 202,
     })
   } catch (error) {
     console.error('send-test-push error:', error.message)
-    return new Response(JSON.stringify({ error: error.message }), { status: 500 })
+    return new Response(JSON.stringify({ error: error.message }), {
+      headers: { ...CORS_HEADERS, 'Content-Type': 'application/json' },
+      status: 500,
+    })
   }
 })

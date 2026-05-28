@@ -1,22 +1,25 @@
-import { Component, Input } from '@angular/core';
+import { Component, Input, inject, ViewEncapsulation } from '@angular/core';
+import { DomSanitizer, SafeHtml } from '@angular/platform-browser';
 import { ICON_SVGS } from './icon-map';
 
 @Component({
   selector: 'app-icon',
   standalone: true,
-  template: `<span [class]="'app-icon-inner' + (classNames ? ' ' + classNames : '')" [innerHTML]="svgContent"></span>`,
+  encapsulation: ViewEncapsulation.None,
+  template: `<span [class]="'app-icon-inner' + (classNames ? ' ' + classNames : '')" [innerHTML]="safeSvg"></span>`,
   styles: [`
-    :host { display: inline-block; line-height: 0; vertical-align: middle; }
+    app-icon { display: inline-block; line-height: 0; vertical-align: middle; }
     .app-icon-inner { display: inline-flex; align-items: center; justify-content: center; }
     .app-icon-inner svg { width: 1em; height: 1em; fill: currentColor; stroke: currentColor; display: block; flex-shrink: 0; }
   `],
 })
 export class AppIconComponent {
-  protected svgContent = '';
+  private sanitizer = inject(DomSanitizer);
+  protected safeSvg: SafeHtml = '';
   protected classNames = '';
 
   @Input() set name(v: string) {
-    this.svgContent = ICON_SVGS[v] || '';
+    this.safeSvg = this.sanitizer.bypassSecurityTrustHtml(ICON_SVGS[v] || '');
   }
 
   @Input() set class(v: string) {

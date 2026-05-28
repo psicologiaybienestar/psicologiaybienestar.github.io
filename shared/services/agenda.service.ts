@@ -1,5 +1,6 @@
 import { Injectable, inject } from '@angular/core';
 import { SupabaseService } from './supabase.service';
+import { UserProfileService } from './user-profile.service';
 import { AppointmentRequest } from '../interfaces';
 import { EMOTIONAL_STATES, TIME_SLOTS } from '../constants';
 import { getWeekDays } from '../utils';
@@ -7,6 +8,7 @@ import { getWeekDays } from '../utils';
 @Injectable({ providedIn: 'root' })
 export class AgendaService {
   private supabaseService = inject(SupabaseService);
+  private userProfileService = inject(UserProfileService);
 
   private get supabase() {
     return this.supabaseService.client;
@@ -23,19 +25,33 @@ export class AgendaService {
     consent: boolean;
   }): Promise<{ success: boolean; error?: string }> {
     try {
+      const payload = {
+        user_name: data.user_name,
+        email: data.email,
+        phone: data.phone || null,
+        requested_date: data.requested_date,
+        requested_time: data.requested_time,
+        message: data.message || null,
+        emotional_state: data.emotional_state || null,
+        consent: data.consent,
+        status: 'pendiente',
+      };
+
       const { error } = await this.supabase
         .from('appointments')
         .insert({
-          user_name: data.user_name,
-          email: data.email,
-          phone: data.phone || null,
-          requested_date: data.requested_date,
-          requested_time: data.requested_time,
-          message: data.message || null,
-          emotional_state: data.emotional_state || null,
-          consent: data.consent,
-          status: 'pendiente',
+          ...payload,
+          user_id: this.userProfileService.currentUserId || null,
         });
+
+      if (error && /user_id|schema cache|column/i.test(error.message)) {
+        const retry = await this.supabase
+          .from('appointments')
+          .insert(payload);
+        if (retry.error) return { success: false, error: retry.error.message };
+        return { success: true };
+      }
+
       if (error) return { success: false, error: error.message };
       return { success: true };
     } catch (e: any) {
@@ -53,7 +69,7 @@ export class AgendaService {
         status: a.status || 'pendiente',
       }));
     } catch (e) {
-      console.warn('⚠️ Error fetching appointments:', e);
+      console.warn('Error fetching appointments:', e);
       return [];
     }
   }
@@ -99,3 +115,5 @@ export class AgendaService {
     return EMOTIONAL_STATES;
   }
 }
+
+

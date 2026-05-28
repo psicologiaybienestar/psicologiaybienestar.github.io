@@ -1,200 +1,225 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { CommonModule } from '@angular/common';
 import { PushNotificationsService } from '@shared/services/push-notifications.service';
-import { QuotesService } from '@shared/services/quotes.service';
 import { WhatsAppService } from '@shared/services/whatsapp.service';
 import { UserProfileService } from '@shared/services/user-profile.service';
 
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [IonicModule, FormsModule],
+  imports: [IonicModule, FormsModule, CommonModule],
   template: `
-    <ion-header class="ion-no-border">
-      <ion-toolbar>
-        <ion-title>Más</ion-title>
-      </ion-toolbar>
-    </ion-header>
-    <ion-content class="ion-padding">
-      <div class="glass-card-strong profile-card">
-        <div class="avatar gradient-primary">{{ inicial }}</div>
-        <div class="profile-info">
-          <h2>{{ nickname || 'Invitado' }}</h2>
-          <p>ID: {{ userId?.substring(0, 8) || '---' }}</p>
-        </div>
-      </div>
-
-      <div class="glass-card section">
-        <div class="menu-item">
-          <div class="menu-left">
-            <div class="menu-icon bg-primary">
-              <ion-icon name="notifications" />
-            </div>
-            <div>
-              <p class="menu-label">Notificaciones push</p>
-              <p class="menu-desc">Recibe alertas de nuevos contenidos</p>
-            </div>
+    <ion-content [fullscreen]="true">
+      <div class="page">
+        <section class="hero-section">
+          <div class="hero-bg"></div>
+          <div class="hero-content">
+            <div class="profile-circle">{{ inicial }}</div>
+            <h1 class="hero-title">{{ nickname || 'Invitado' }}</h1>
+            <p class="hero-subtitle">Tu viaje al bienestar continua</p>
           </div>
-          <ion-toggle [(ngModel)]="pushActivo" (ionChange)="togglePush()" />
-        </div>
-      </div>
+        </section>
 
-      <div class="glass-card section">
-        <div class="menu-item" (click)="frasesAbiertas = !frasesAbiertas">
-          <div class="menu-left">
-            <div class="menu-icon bg-secondary">
-              <ion-icon name="chatbubble-quote" />
-            </div>
-            <div>
-              <p class="menu-label">Frases motivacionales</p>
-              <p class="menu-desc">{{ frases.length }} frases disponibles</p>
-            </div>
-          </div>
-          <ion-icon [name]="frasesAbiertas ? 'chevron-up' : 'chevron-down'" slot="end" />
-        </div>
-        @if (frasesAbiertas) {
-          <div class="sub-section">
-            @for (f of frases; track f.id) {
-              <div class="frase-item">
-                <p class="frase-text">&ldquo;{{ f.quote }}&rdquo;</p>
-                <p class="frase-author">&mdash; {{ f.author || 'Anónimo' }}</p>
+        <section class="section">
+          <div class="card card-about">
+            <div class="about-row">
+              <div class="about-logo"><img src="assets/img/logo.png" alt="Psicologia y Bienestar" /></div>
+              <div>
+                <h3>Psicologia & Bienestar</h3>
+                <p>Tu companero digital para la salud mental</p>
               </div>
-            }
+            </div>
+            <p class="about-desc">Nuestra app te brinda herramientas basadas en evidencia para manejar tus emociones, mejorar tu resiliencia y encontrar la paz interior.</p>
           </div>
-        }
-      </div>
+        </section>
 
-      <div class="glass-card section">
-        <div class="menu-item" (click)="serviciosAbiertos = !serviciosAbiertos">
-          <div class="menu-left">
-            <div class="menu-icon bg-tertiary">
-              <ion-icon name="heart" />
-            </div>
-            <div>
-              <p class="menu-label">Nuestros servicios</p>
-              <p class="menu-desc">Conoce más sobre nosotros</p>
-            </div>
-          </div>
-          <ion-icon [name]="serviciosAbiertos ? 'chevron-up' : 'chevron-down'" />
-        </div>
-        @if (serviciosAbiertos) {
-          <div class="sub-section">
-            <div class="glass-card servicio-card">
-              <h3>Terapia psicológica</h3>
-              <p>Atención profesional personalizada para tu bienestar emocional.</p>
-            </div>
-            <div class="glass-card servicio-card">
-              <h3>Talleres y eventos</h3>
-              <p>Actividades grupales para el crecimiento personal.</p>
-            </div>
-            <div class="glass-card servicio-card">
-              <h3>Recursos digitales</h3>
-              <p>Ejercicios, meditaciones y herramientas de autoayuda.</p>
+        <section class="section">
+          <h2 class="section-title">Configuracion</h2>
+          <div class="card card-setting">
+            <div class="setting-row">
+              <div class="setting-icon icon-blue"><ion-icon name="notifications-outline"></ion-icon></div>
+              <div class="setting-text">
+                <h3>Notificaciones Push</h3>
+                <p>Recibe recordatorios y frases diarias</p>
+              </div>
+              <ion-toggle [(ngModel)]="pushActivo" (ionChange)="togglePush()"></ion-toggle>
             </div>
           </div>
-        }
-      </div>
+        </section>
 
-      <div class="actions-section">
-        <button class="action-btn web-btn" (click)="abrirWeb()">
-          <ion-icon name="globe" />
-          <span>Abrir versión web</span>
-        </button>
-        <button class="action-btn wa-btn" (click)="abrirWhatsApp()">
-          <ion-icon name="logo-whatsapp" />
-          <span>Contactar por WhatsApp</span>
-        </button>
-      </div>
+        <section class="section">
+          <h2 class="section-title">Recursos y Ayuda</h2>
+          <div class="links-list">
+            <div class="card card-link" (click)="abrirWeb()">
+              <div class="link-row">
+                <div class="link-icon icon-primary"><ion-icon name="globe-outline"></ion-icon></div>
+                <div class="link-text">
+                  <h3>Version Web Extendida</h3>
+                  <p>Accede a todos los articulos y admin</p>
+                </div>
+                <ion-icon name="chevron-forward" class="arrow"></ion-icon>
+              </div>
+            </div>
+            <div class="card card-link" (click)="abrirWhatsApp()">
+              <div class="link-row">
+                <div class="link-icon icon-whatsapp"><ion-icon name="logo-whatsapp"></ion-icon></div>
+                <div class="link-text">
+                  <h3>Soporte via WhatsApp</h3>
+                  <p>Habla con nosotros directamente</p>
+                </div>
+                <ion-icon name="chevron-forward" class="arrow"></ion-icon>
+              </div>
+            </div>
+            <div class="card card-link" (click)="mostrarServicios = !mostrarServicios">
+              <div class="link-row">
+                <div class="link-icon icon-services"><ion-icon name="briefcase-outline"></ion-icon></div>
+                <div class="link-text">
+                  <h3>Nuestros Servicios</h3>
+                  <p>Terapia, talleres y mas</p>
+                </div>
+                <ion-icon [name]="mostrarServicios ? 'chevron-up' : 'chevron-down'" class="arrow"></ion-icon>
+              </div>
+            </div>
+          </div>
 
-      <div class="glass-card about">
-        <p class="version">Psicología & Bienestar v1.0.0</p>
-        <p class="copy">&copy; 2026 Todos los derechos reservados</p>
+          @if (mostrarServicios) {
+            <div class="services-grid">
+              <div class="service-pill">Terapia Individual</div>
+              <div class="service-pill">Terapia de Pareja</div>
+              <div class="service-pill">Talleres Mindfulness</div>
+              <div class="service-pill">Orientacion Vocacional</div>
+            </div>
+          }
+        </section>
+
+        <section class="section">
+          <h2 class="section-title">Siguenos</h2>
+          <div class="socials-row">
+            <button class="social-btn instagram" (click)="abrirInstagram()" aria-label="Instagram"><ion-icon name="logo-instagram"></ion-icon></button>
+            <button class="social-btn facebook" (click)="abrirFacebook()" aria-label="Facebook"><ion-icon name="logo-facebook"></ion-icon></button>
+          </div>
+        </section>
+
+        <section class="section footer-text">
+          <p class="version">Version 1.0.0</p>
+          <div class="legal">
+            <button (click)="abrirPrivacidad()">Privacidad</button>
+            <span>|</span>
+            <button (click)="abrirTerminos()">Terminos</button>
+            <span>|</span>
+            <button (click)="abrirAyuda()">Ayuda</button>
+          </div>
+          <p class="copyright">2026 Psicologia & Bienestar</p>
+        </section>
+
+        <div class="bottom-spacer"></div>
       </div>
     </ion-content>
   `,
-  styles: `
-    .profile-card { display: flex; align-items: center; gap: var(--pg-space-md); padding: var(--pg-space-lg); margin-bottom: var(--pg-space-xl); }
-    .avatar { width: 48px; height: 48px; border-radius: 50%; color: white; display: flex; align-items: center; justify-content: center; font-size: 20px; font-weight: 700; flex-shrink: 0; }
-    .profile-info h2 { font-size: 16px; font-weight: 700; margin: 0 0 2px; color: var(--ion-text-color); }
-    .profile-info p { font-size: 12px; color: var(--ion-color-medium); margin: 0; }
-
-    .section { margin-bottom: var(--pg-space-lg); overflow: hidden; }
-
-    .menu-item { display: flex; align-items: center; justify-content: space-between; padding: var(--pg-space-md) var(--pg-space-lg); cursor: pointer; }
-    .menu-item:active { background: var(--ion-color-light); }
-    .menu-left { display: flex; align-items: center; gap: var(--pg-space-md); }
-    .menu-icon { width: 36px; height: 36px; border-radius: var(--pg-radius-sm); display: flex; align-items: center; justify-content: center; flex-shrink: 0; }
-    .menu-icon ion-icon { font-size: 18px; color: white; }
-    .bg-primary { background: var(--ion-color-primary); }
-    .bg-secondary { background: var(--ion-color-secondary); }
-    .bg-tertiary { background: var(--ion-color-tertiary); }
-    .menu-label { font-size: 14px; font-weight: 600; color: var(--ion-text-color); margin: 0; }
-    .menu-desc { font-size: 12px; color: var(--ion-color-medium); margin: 1px 0 0; }
-
-    .sub-section { padding: 0 var(--pg-space-lg) var(--pg-space-md); }
-    .frase-item { padding: var(--pg-space-sm) 0; border-top: 1px solid var(--ion-color-light); }
-    .frase-text { font-size: 14px; font-style: italic; color: var(--ion-text-color); margin: 0 0 4px; line-height: 1.4; }
-    .frase-author { font-size: 12px; color: var(--ion-color-medium); margin: 0; }
-
-    .servicio-card { padding: var(--pg-space-md); margin-bottom: var(--pg-space-sm); }
-    .servicio-card h3 { font-size: 14px; font-weight: 600; margin: 0 0 4px; color: var(--ion-text-color); }
-    .servicio-card p { font-size: 13px; color: var(--ion-color-medium); margin: 0; line-height: 1.4; }
-
-    .actions-section { padding: 0; }
-    .action-btn { display: flex; align-items: center; justify-content: center; gap: var(--pg-space-sm); width: 100%; padding: var(--pg-space-md); border: none; border-radius: var(--pg-radius-md); font-size: 15px; font-weight: 600; cursor: pointer; font-family: inherit; margin-bottom: var(--pg-space-sm); transition: var(--pg-transition-fast); }
-    .action-btn:active { transform: scale(0.98); }
-    .action-btn ion-icon { font-size: 20px; }
-    .web-btn { background: var(--ion-color-primary); color: white; }
-    .wa-btn { background: #25D366; color: white; }
-
-    .about { text-align: center; padding: var(--pg-space-lg); }
-    .version { font-size: 13px; color: var(--ion-color-medium); margin: 0 0 4px; }
-    .copy { font-size: 11px; color: var(--ion-color-medium); margin: 0; }
-  `,
+  styles: [`
+    .page { background: #ffffff; min-height: 100%; }
+    .hero-section { position: relative; padding: 32px 20px 16px; overflow: hidden; text-align: center; }
+    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #627eff 0%, #53c6e4 50%, #66a6da 100%); opacity: 0.06; pointer-events: none; }
+    .hero-content { position: relative; }
+    .profile-circle { width: 56px; height: 56px; border-radius: 16px; background: var(--pg-gradient-primary); display: flex; align-items: center; justify-content: center; color: white; font-size: 24px; font-weight: 800; margin: 0 auto 12px; }
+    .hero-title { font-size: 26px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
+    .hero-subtitle { font-size: 14px; color: #6b7280; max-width: 280px; margin: 0 auto; line-height: 1.5; }
+    .section { padding: 8px 20px 20px; }
+    .section-title { font-size: 20px; font-weight: 700; color: #1f2937; margin: 0 0 12px; }
+    .card { background: #F9FAFB; border: 1px solid #F3F4F6; border-radius: 14px; padding: 16px; margin-bottom: 10px; }
+    .card-about { }
+    .about-row { display: flex; align-items: center; gap: 12px; margin-bottom: 12px; }
+    .about-logo { width: 48px; height: 48px; border-radius: 14px; background: white; display: flex; align-items: center; justify-content: center; flex-shrink: 0; overflow: hidden; border: 1px solid #eef2ff; box-shadow: 0 8px 18px rgba(98, 126, 255, 0.12); }
+    .about-logo img { width: 100%; height: 100%; object-fit: contain; padding: 4px; display: block; }
+    .about-row h3 { font-size: 15px; font-weight: 700; color: #1f2937; margin: 0; }
+    .about-row p { font-size: 11px; color: #6b7280; margin: 1px 0 0; }
+    .about-desc { font-size: 13px; color: #6b7280; line-height: 1.5; margin: 0; }
+    .card-setting { }
+    .setting-row { display: flex; align-items: center; gap: 12px; }
+    .setting-icon { width: 38px; height: 38px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 18px; flex-shrink: 0; }
+    .icon-blue { background: #4a69bd; }
+    .setting-text { flex: 1; }
+    .setting-text h3 { font-size: 14px; font-weight: 700; color: #1f2937; margin: 0; }
+    .setting-text p { font-size: 11px; color: #6b7280; margin: 1px 0 0; }
+    .links-list { }
+    .card-link { cursor: pointer; }
+    .link-row { display: flex; align-items: center; gap: 12px; }
+    .link-icon { width: 40px; height: 40px; border-radius: 10px; display: flex; align-items: center; justify-content: center; color: white; font-size: 20px; flex-shrink: 0; }
+    .icon-primary { background: #627eff; }
+    .icon-whatsapp { background: #25d366; }
+    .icon-services { background: #4a69bd; }
+    .link-text { flex: 1; }
+    .link-text h3 { font-size: 14px; font-weight: 700; color: #1f2937; margin: 0; }
+    .link-text p { font-size: 11px; color: #6b7280; margin: 1px 0 0; }
+    .arrow { color: #d1d5db; font-size: 18px; }
+    .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; padding: 0 4px; }
+    .service-pill { background: #f3f4f6; border-radius: 10px; padding: 10px; text-align: center; font-size: 11px; font-weight: 700; color: #4b5563; }
+    .socials-row { display: flex; gap: 16px; justify-content: center; align-items: center; }
+    .social-btn { width: 54px; height: 54px; border-radius: 18px; border: none; display: flex; align-items: center; justify-content: center; font-size: 26px; color: white; box-shadow: 0 12px 24px rgba(31, 41, 55, 0.12); }
+    .social-btn.instagram { background: linear-gradient(135deg, #f58529, #dd2a7b 48%, #8134af); }
+    .social-btn.facebook { background: #1877f2; }
+    .footer-text { text-align: center; }
+    .version { font-size: 12px; color: #9ca3af; font-weight: 600; margin: 0; }
+    .legal { display: flex; align-items: center; justify-content: center; gap: 8px; font-size: 11px; color: #d1d5db; margin: 8px 0; }
+    .legal button { border: none; background: transparent; padding: 4px 0; color: var(--ion-color-primary); font-size: 11px; font-weight: 700; }
+    .copyright { font-size: 10px; color: #9ca3af; }
+    .bottom-spacer { height: 80px; height: calc(80px + env(safe-area-inset-bottom, 0px)); }
+  `],
 })
 export class ConfiguracionComponent implements OnInit {
   private pushService = inject(PushNotificationsService);
-  private quotesService = inject(QuotesService);
   private whatsApp = inject(WhatsAppService);
   private userProfile = inject(UserProfileService);
 
   pushActivo = false;
-  frases: any[] = [];
-  frasesAbiertas = false;
-  serviciosAbiertos = false;
-  userId: string | null = null;
   nickname = '';
+  userId = '';
+  mostrarServicios = false;
+  private readonly webUrl = 'https://psicologiaybienestar.netlify.app';
 
   get inicial(): string {
-    if (this.nickname) return this.nickname.charAt(0).toUpperCase();
-    if (this.userId) return this.userId.charAt(0).toUpperCase();
-    return '?';
+    return (this.nickname || this.userId || '?').charAt(0).toUpperCase();
   }
 
   async ngOnInit() {
-    this.userId = this.userProfile.currentUserId;
+    this.userId = this.userProfile.currentUserId || '';
     const profile = this.userProfile.currentProfile;
     if (profile?.nickname) this.nickname = profile.nickname;
     this.pushActivo = !!this.pushService.getSavedToken();
-    try {
-      this.frases = await this.quotesService.getActivas(50);
-    } catch { /* ignore */ }
   }
 
   togglePush() {
-    if (this.pushActivo) {
-      this.pushService.register();
-    } else {
-      this.pushService.unregister();
-    }
+    if (this.pushActivo) this.pushService.register();
+    else this.pushService.unregister();
   }
 
   abrirWeb() {
-    window.open('https://psicologiaybienestar.netlify.app', '_blank');
+    window.open(this.webUrl, '_blank');
   }
 
   abrirWhatsApp() {
-    this.whatsApp.openChat('Hola, vengo desde la app de Psicología y Bienestar');
+    this.whatsApp.openChat('Hola, necesito informacion sobre los servicios de Psicologia & Bienestar');
+  }
+
+  abrirInstagram() {
+    window.open('https://www.instagram.com/psicologiaybienestarcol/', '_blank');
+  }
+
+  abrirFacebook() {
+    window.open('https://www.facebook.com/profile.php?id=100063475598042', '_blank');
+  }
+
+  abrirPrivacidad() {
+    window.open(`${this.webUrl}/privacidad`, '_blank');
+  }
+
+  abrirTerminos() {
+    window.open(`${this.webUrl}/terminos`, '_blank');
+  }
+
+  abrirAyuda() {
+    window.open(`${this.webUrl}/contacto`, '_blank');
   }
 }

@@ -124,7 +124,7 @@ export class BulkImportService {
       if (c.key === 'recommendation_title_5') return '';
       if (c.key === 'recommendation_text_5') return '';
       if (c.key === 'route') return '/ruta-ejemplo';
-      if (c.key === 'icon') return '🎮';
+      if (c.key === 'icon') return 'game-controller-outline';
       if (c.key === 'color') return '#627eff';
       return c.label === 'quote' ? 'Escribe aquí la frase...' :
              c.label === 'title' ? 'Título de ejemplo' :

@@ -70,14 +70,6 @@ function buildMessage(type: string, table: string, record: any): ContentMessage 
       return null
 
     case 'mini_games':
-      if (type === 'INSERT') {
-        return {
-          title: '🎮 Nuevo minijuego',
-          body: record.title || 'Nuevo minijuego disponible',
-          channelId: 'minijuegos',
-          data: { table },
-        }
-      }
       return null
 
     case 'emotions':

@@ -1,35 +1,35 @@
 :root {
-  --ion-color-primary: #627eff;
-  --ion-color-primary-rgb: 98, 126, 255;
+  --ion-color-primary: #4a69bd;
+  --ion-color-primary-rgb: 74, 105, 189;
   --ion-color-primary-contrast: #ffffff;
-  --ion-color-primary-shade: #566fe0;
-  --ion-color-primary-tint: #728bff;
+  --ion-color-primary-shade: #415ca6;
+  --ion-color-primary-tint: #5c78c4;
 
-  --ion-color-secondary: #53c6e4;
-  --ion-color-secondary-rgb: 83, 198, 228;
-  --ion-color-secondary-contrast: #ffffff;
-  --ion-color-secondary-shade: #49afc9;
-  --ion-color-secondary-tint: #64cce7;
+  --ion-color-secondary: #78e08f;
+  --ion-color-secondary-rgb: 120, 224, 143;
+  --ion-color-secondary-contrast: #000000;
+  --ion-color-secondary-shade: #6ac57e;
+  --ion-color-secondary-tint: #86e39a;
 
-  --ion-color-tertiary: #66a6da;
-  --ion-color-tertiary-rgb: 102, 166, 218;
+  --ion-color-tertiary: #60a5fa;
+  --ion-color-tertiary-rgb: 96, 165, 250;
   --ion-color-tertiary-contrast: #ffffff;
-  --ion-color-tertiary-shade: #5a92c0;
-  --ion-color-tertiary-tint: #75afde;
+  --ion-color-tertiary-shade: #5491dc;
+  --ion-color-tertiary-tint: #70aefb;
 
-  --ion-color-success: #10b981;
-  --ion-color-warning: #f59e0b;
-  --ion-color-danger: #ef4444;
+  --ion-color-success: #059669;
+  --ion-color-warning: #d97706;
+  --ion-color-danger: #dc2626;
 
-  --ion-background-color: #f5f7fa;
-  --ion-background-color-rgb: 245, 247, 250;
-  --ion-text-color: #1f2937;
-  --ion-text-color-rgb: 31, 41, 55;
+  --ion-background-color: #ffffff;
+  --ion-background-color-rgb: 255, 255, 255;
+  --ion-text-color: #0f172a;
+  --ion-text-color-rgb: 15, 23, 42;
 
-  --pg-glass-bg: rgba(255, 255, 255, 0.6);
-  --pg-glass-border: rgba(255, 255, 255, 0.3);
-  --pg-glass-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  --pg-glass-blur: 12px;
+  --pg-glass-bg: rgba(255, 255, 255, 0.75);
+  --pg-glass-border: rgba(255, 255, 255, 0.5);
+  --pg-glass-shadow: 0 8px 32px rgba(0, 0, 0, 0.04);
+  --pg-glass-blur: 16px;
 
   --pg-gradient-primary: linear-gradient(135deg, #627eff 0%, #53c6e4 100%);
   --pg-gradient-success: linear-gradient(135deg, #10b981 0%, #34d399 100%);
@@ -37,16 +37,21 @@
   --pg-gradient-danger: linear-gradient(135deg, #ef4444 0%, #f87171 100%);
   --pg-gradient-purple: linear-gradient(135deg, #8b5cf6 0%, #a78bfa 100%);
   --pg-gradient-pink: linear-gradient(135deg, #ec4899 0%, #f472b6 100%);
+  --pg-gradient-mesh: linear-gradient(135deg, #4a69bd 0%, #6a89cc 100%);
 
-  --pg-radius-sm: 10px;
-  --pg-radius-md: 14px;
-  --pg-radius-lg: 20px;
-  --pg-radius-xl: 28px;
+  --pg-radius-sm: 12px;
+  --pg-radius-md: 18px;
+  --pg-radius-lg: 24px;
+  --pg-radius-xl: 32px;
+  --pg-radius-full: 9999px;
 
-  --pg-font-heading: 700 22px/1.3 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --pg-font-subtitle: 600 16px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pg-font-hero: 800 32px/1.1 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pg-font-display: 700 24px/1.2 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pg-font-heading: 700 20px/1.3 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pg-font-subhead: 600 16px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --pg-font-body: 400 14px/1.5 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
-  --pg-font-small: 400 12px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pg-font-caption: 600 12px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --pg-font-meta: 400 11px/1.4 -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
 
   --pg-space-xs: 4px;
   --pg-space-sm: 8px;
@@ -54,7 +59,21 @@
   --pg-space-lg: 16px;
   --pg-space-xl: 24px;
   --pg-space-2xl: 32px;
+  --pg-space-3xl: 48px;
+
+  --pg-content-padding: 24px;
+
+  --pg-shadow-sm: 0 2px 4px rgba(0, 0, 0, 0.02);
+  --pg-shadow-md: 0 4px 12px rgba(0, 0, 0, 0.05);
+  --pg-shadow-lg: 0 12px 24px rgba(0, 0, 0, 0.08);
+  --pg-shadow-xl: 0 20px 40px rgba(0, 0, 0, 0.12);
+
+  --pg-elevation-1: 0 2px 8px rgba(98, 126, 255, 0.08);
+  --pg-elevation-2: 0 4px 16px rgba(98, 126, 255, 0.12);
+  --pg-elevation-3: 0 8px 32px rgba(98, 126, 255, 0.16);
 
   --pg-transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
-  --pg-transition-fast: all 0.15s ease;
+  --pg-transition-fast: all 0.2s ease;
+
+  --pg-tab-height: 65px;
 }

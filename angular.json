@@ -158,7 +158,8 @@
             "inlineStyleLanguage": "scss",
             "assets": [
               { "glob": "**/*", "input": "shared/assets", "output": "assets" },
-              { "glob": "**/*", "input": "apps/android/src/assets", "output": "assets" }
+              { "glob": "**/*", "input": "apps/android/src/assets", "output": "assets" },
+              { "glob": "**/*.svg", "input": "node_modules/ionicons/dist/ionicons/svg", "output": "./svg" }
             ],
             "styles": ["apps/android/src/global.scss", "apps/android/src/theme/variables.scss"],
             "scripts": [],

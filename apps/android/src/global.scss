@@ -1,55 +1,40 @@
-@use 'theme/variables.scss';
+@import 'theme/variables.scss';
+
+* {
+  -webkit-user-select: none;
+  user-select: none;
+  -webkit-touch-callout: none;
+}
+
+input, textarea, [contenteditable], ion-input, ion-textarea, ion-datetime, select {
+  -webkit-user-select: text;
+  user-select: text;
+}
 
 ion-content {
   --background: var(--ion-background-color);
 }
 
-.glass {
-  background: var(--pg-glass-bg);
-  backdrop-filter: blur(var(--pg-glass-blur));
-  -webkit-backdrop-filter: blur(var(--pg-glass-blur));
-  border: 1px solid var(--pg-glass-border);
-  box-shadow: var(--pg-glass-shadow);
+app-inicio, app-agenda, app-emociones, app-minijuegos, app-configuracion {
+  display: block;
+  height: 100%;
 }
 
-.glass-card {
-  background: var(--pg-glass-bg);
-  backdrop-filter: blur(var(--pg-glass-blur));
-  -webkit-backdrop-filter: blur(var(--pg-glass-blur));
-  border: 1px solid var(--pg-glass-border);
-  box-shadow: var(--pg-glass-shadow);
-  border-radius: var(--pg-radius-md);
+app-memory-game, app-breathing-game, app-gratitude-game, app-wordsearch-game,
+app-puzzle-game, app-coloring-game, app-reaction-game, app-calm-count-game,
+app-affirmations-game, app-emotion-quiz-game {
+  display: flex;
+  flex-direction: column;
+  position: absolute;
+  inset: 0;
+  contain: layout size style;
+  overflow: hidden;
+  z-index: 0;
+  height: 100%;
+  width: 100%;
 }
 
-.glass-card-strong {
-  background: rgba(255, 255, 255, 0.85);
-  backdrop-filter: blur(20px);
-  -webkit-backdrop-filter: blur(20px);
-  border: 1px solid rgba(255, 255, 255, 0.5);
-  box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
-  border-radius: var(--pg-radius-md);
-}
-
-.gradient-primary {
-  background: var(--pg-gradient-primary);
-}
-
-.gradient-success {
-  background: var(--pg-gradient-success);
-}
-
-.gradient-purple {
-  background: var(--pg-gradient-purple);
-}
-
-.section-title {
-  font: var(--pg-font-subtitle);
-  color: var(--ion-text-color);
-  margin: 0 0 var(--pg-space-md);
-}
-
-.page-intro {
-  font: var(--pg-font-body);
-  color: var(--ion-color-medium);
-  margin-bottom: var(--pg-space-lg);
+.bottom-spacer {
+  height: 90px;
+  height: calc(80px + env(safe-area-inset-bottom, 0px));
 }

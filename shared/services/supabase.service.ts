@@ -70,8 +70,8 @@ export class SupabaseService {
     const { data: recientes, error: err2 } = await this.supabase
       .from('eventos')
       .select('*')
-      .in('estado', ['publicado', 'finalizado'])
-      .order('created_at', { ascending: false })
+      .eq('estado', 'pospuesto')
+      .order('fecha_inicio', { ascending: false })
       .limit(limit - (proximos?.length || 0));
 
     if (err1 || err2) throw err1 || err2;

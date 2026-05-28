@@ -72,10 +72,54 @@ export class ContentEngineService {
       this.quotes = quotes || [];
       this.tips = tips || [];
       this.activities = activities || [];
-      this.loaded = true;
     } catch {
-      this.loaded = true;
+      try {
+        const [emotions, quotes, tips, activities] = await Promise.all([
+          fetch('assets/data/emotions.json').then(r => r.json()),
+          fetch('assets/data/quotes.json').then(r => r.json()),
+          fetch('assets/data/tips.json').then(r => r.json()),
+          fetch('assets/data/activities.json').then(r => r.json()),
+        ]);
+        this.emotions = emotions || [];
+        this.quotes = quotes || [];
+        this.tips = tips || [];
+        this.activities = activities || [];
+      } catch {
+        this.emotions = [];
+        this.quotes = this.getDefaultQuotes();
+        this.tips = this.getDefaultTips();
+        this.activities = this.getDefaultActivities();
+      }
     }
+    this.loaded = true;
+  }
+
+  private getDefaultQuotes(): LocalQuote[] {
+    return [
+      { id: 1, quote: 'Cada dia es una nueva oportunidad para empezar', author: 'Anonimo', category: 'motivacion' },
+      { id: 2, quote: 'La calma es tu superpoder', author: 'Anonimo', category: 'relajacion' },
+      { id: 3, quote: 'Respira, suelta, confia', author: 'Anonimo', category: 'mindfulness' },
+      { id: 4, quote: 'Tu bienestar es primero', author: 'Anonimo', category: 'bienestar' },
+      { id: 5, quote: 'No estas solo, estamos contigo', author: 'Anonimo', category: 'general' },
+    ];
+  }
+
+  private getDefaultTips(): LocalTip[] {
+    return [
+      { id: 1, title: 'Respira profundo', description: 'Inhala 4 segundos, aguanta 4, exhala 4', emotion_type: 'ansiedad' },
+      { id: 2, title: 'Tomate una pausa', description: 'Alejate 5 minutos de lo que te estresa', emotion_type: 'estres' },
+      { id: 3, title: 'Escribe lo que sientes', description: 'Poner tus emociones en papel ayuda a procesarlas', emotion_type: 'general' },
+      { id: 4, title: 'Valorate', description: 'Reconoce tus logros, por pequeños que sean', emotion_type: 'autoestima' },
+      { id: 5, title: 'Conecta contigo', description: 'Cierra los ojos y siente tu respiracion por un minuto', emotion_type: 'mindfulness' },
+    ];
+  }
+
+  private getDefaultActivities(): LocalActivity[] {
+    return [
+      { id: 1, title: 'Respiracion 4-7-8', description: 'Inhala 4s, reten 7s, exhala 8s', activity_type: 'respiracion', duration: 1 },
+      { id: 2, title: 'Escaneo corporal', description: 'Recorre tu cuerpo con atencion de cabeza a pies', activity_type: 'mindfulness', duration: 5 },
+      { id: 3, title: 'Diario de gratitud', description: 'Escribe 3 cosas por las que agradeces hoy', activity_type: 'meditacion', duration: 5 },
+    ];
   }
 
   getEmotions(): LocalEmotion[] {

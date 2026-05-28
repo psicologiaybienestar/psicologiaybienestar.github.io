@@ -487,6 +487,8 @@ alter table appointments add column if not exists emotional_state text;
 alter table appointments add column if not exists consent boolean default false;
 alter table appointments add column if not exists reagendada_date timestamptz;
 alter table appointments add column if not exists updated_at timestamptz default now();
+alter table appointments add column if not exists user_id uuid;
+create index if not exists idx_appointments_user_id on appointments(user_id);
 
 create trigger handle_updated_at_appointments before update on appointments
   for each row execute procedure moddatetime (updated_at);
@@ -704,6 +706,18 @@ create policy "Select anon push_tokens upsert" on push_tokens
 create trigger trg_webhook_emotions after insert on emotions
   for each row execute function supabase_functions.http_request(
     'https://nwmewlnwcmsdswmxynvj.functions.supabase.co/notify-content',
+    'POST',
+    '{"Content-type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53bWV3bG53Y21zZHN3bXh5bnZqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTQ5NTQ0NywiZXhwIjoyMDk1MDcxNDQ3fQ.V1KsvR6HnLxPaxdwR4ijN3l-9jPldiBMziYJwRcyYdo"}',
+    '{}',
+    '5000'
+  );
+
+-- ============================================
+-- 25. WEBHOOK — appointments → notify-appointment
+-- ============================================
+create trigger trg_webhook_appointments after insert or update on appointments
+  for each row execute function supabase_functions.http_request(
+    'https://nwmewlnwcmsdswmxynvj.functions.supabase.co/notify-appointment',
     'POST',
     '{"Content-type":"application/json","Authorization":"Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6Im53bWV3bG53Y21zZHN3bXh5bnZqIiwicm9sZSI6InNlcnZpY2Vfcm9sZSIsImlhdCI6MTc3OTQ5NTQ0NywiZXhwIjoyMDk1MDcxNDQ3fQ.V1KsvR6HnLxPaxdwR4ijN3l-9jPldiBMziYJwRcyYdo"}',
     '{}',

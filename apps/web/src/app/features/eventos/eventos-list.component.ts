@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { RouterLink } from '@angular/router';
 import { SupabaseService } from '../../core/services/supabase.service';
+import { EventosService } from '../../core/services/eventos.service';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string }> = {
   publicado: { label: 'Publicado', color: '#627eff', bg: '#eef2ff' },
@@ -98,9 +99,13 @@ export class EventosListComponent implements OnInit {
     return this.eventos.filter(e => e.estado === this.filtroEstado);
   }
 
-  constructor(private supabase: SupabaseService) {}
+  constructor(
+    private supabase: SupabaseService,
+    private eventosService: EventosService
+  ) {}
 
   async ngOnInit() {
+    await this.eventosService.autoFinalize();
     try {
       const { data, error } = await this.supabase.client
         .from('eventos')

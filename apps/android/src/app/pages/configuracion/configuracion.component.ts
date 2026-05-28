@@ -108,13 +108,11 @@ import { UserProfileService } from '@shared/services/user-profile.service';
         <section class="section">
           <h2 class="section-title">Síguenos en Redes</h2>
           <div class="socials-row">
-            <button class="social-btn btn-insta" (click)="abrirInstagram()" aria-label="Instagram">
+            <button class="social-circle btn-insta" (click)="abrirInstagram()" aria-label="Instagram">
               <app-icon name="logo-instagram"></app-icon>
-              // <span>Instagram</span>
             </button>
-            <button class="social-btn btn-fb" (click)="abrirFacebook()" aria-label="Facebook">
+            <button class="social-circle btn-fb" (click)="abrirFacebook()" aria-label="Facebook">
               <app-icon name="logo-facebook"></app-icon>
-              // <span>Facebook</span>
             </button>
           </div>
         </section>
@@ -196,10 +194,10 @@ import { UserProfileService } from '@shared/services/user-profile.service';
     .services-grid { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 4px; }
     .service-pill { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 12px; text-align: center; font-size: 12px; font-weight: 600; color: #4b5563; }
     
-    .socials-row { display: flex; gap: 12px; }
-    .social-btn { flex: 1; display: flex; align-items: center; justify-content: center; gap: 8px; padding: 14px; border-radius: 16px; border: none; font-size: 15px; font-weight: 700; color: white; transition: transform 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.05); }
-    .social-btn:active { transform: scale(0.97); }
-    .social-btn ion-icon { font-size: 20px; }
+    .socials-row { display: flex; gap: 16px; justify-content: center; padding: 8px 0; }
+    .social-circle { width: 56px; height: 56px; border-radius: 50%; display: flex; align-items: center; justify-content: center; border: none; color: white; font-size: 24px; transition: transform 0.2s, box-shadow 0.2s; box-shadow: 0 4px 12px rgba(0,0,0,0.1); cursor: pointer; }
+    .social-circle:active { transform: scale(0.92); box-shadow: 0 2px 6px rgba(0,0,0,0.08); }
+    .social-circle app-icon { font-size: 24px; }
     .btn-insta { background: linear-gradient(135deg, #f58529, #dd2a7b 48%, #8134af); }
     .btn-fb { background: #1877f2; }
     

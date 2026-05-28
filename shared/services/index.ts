@@ -16,4 +16,5 @@ export { PushNotificationsService } from './push-notifications.service';
 export { ContentEngineService, type LocalEmotion, type LocalQuote, type LocalTip, type LocalActivity } from './content-engine.service';
 export { EmotionsService, type EmotionCheckIn } from './emotions.service';
 export { ScheduledNotificationsService } from './scheduled-notifications.service';
+export { EventosService } from './eventos.service';
 export { OfflineService } from './offline.service';

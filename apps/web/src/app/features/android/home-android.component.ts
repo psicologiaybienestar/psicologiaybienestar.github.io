@@ -12,8 +12,6 @@ import { EmotionalTipsService } from '../../core/services/emotional-tips.service
 import { WellnessActivitiesService } from '../../core/services/wellness-activities.service';
 import { MiniGamesService } from '../../core/services/mini-games.service';
 import { IonIcon } from '@ionic/angular/standalone';
-import { InternalNotificationsService } from '../../core/services/internal-notifications.service';
-
 const WELLNESS_COLORS = ['#EEF2FF', '#F0FDF4', '#FFF7ED', '#FDF2F8', '#FEF2F2', '#F5F3FF', '#ECFDF5', '#FFF1F2'];
 const TIP_ICONS: Record<string, string> = {
   ansiedad: 'pulse-outline', autoestima: 'heart-outline', relajación: 'body-outline', estrés: 'chatbubble-ellipses-outline',
@@ -34,51 +32,12 @@ const ACTIVITY_ICONS: Record<string, string> = {
     <section class="hero-section">
       <div class="hero-bg"></div>
       <div class="hero-content">
-        <button class="notif-pill" (click)="toggleNotifications()" aria-label="Novedades">
-          <svg xmlns="http://www.w3.org/2000/svg" class="notif-pill-icon" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
-            <path stroke-linecap="round" stroke-linejoin="round" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"/>
-          </svg>
-          @if (unreadCount > 0) {
-            <span class="notif-pill-badge">{{ unreadCount > 99 ? '99+' : unreadCount }}</span>
-          }
-        </button>
         <div class="hero-logo">
           <img src="assets/img/logo.png" alt="Psicología & Bienestar" class="hero-logo-img" />
         </div>
         <h1 class="hero-title">Bienvenido</h1>
         <p class="hero-subtitle">Tu espacio seguro para el bienestar emocional</p>
       </div>
-      @if (showNotifications) {
-        <div class="notif-overlay" (click)="toggleNotifications()"></div>
-        <div class="notif-panel">
-          <div class="notif-panel-header">
-            <span class="notif-panel-title">Novedades</span>
-            @if (unreadCount > 0) {
-              <button class="notif-mark-read" (click)="markAllAsRead(); $event.stopPropagation()">Leer todo</button>
-            }
-            @if (notificationsList.length > 0) {
-              <button class="notif-delete-all" (click)="deleteAllRead(); $event.stopPropagation()"><ion-icon name="trash-outline"></ion-icon></button>
-            }
-            <button class="notif-close" (click)="toggleNotifications()"><ion-icon name="close-outline"></ion-icon></button>
-          </div>
-          @if (notificationsList.length === 0) {
-            <div class="notif-empty">Sin novedades aún</div>
-          }
-          @for (n of notificationsList; track n.id) {
-            <div class="notif-item" [class.notif-unread]="!n.is_read">
-              <ion-icon class="notif-item-icon" [name]="getNotifIcon(n.type)"></ion-icon>
-              <div class="notif-item-body" (click)="markAsRead(n.id)">
-                <p class="notif-item-title">{{ n.title }}</p>
-                @if (n.body) {
-                  <p class="notif-item-text">{{ n.body }}</p>
-                }
-                <span class="notif-item-time">{{ n.created_at | date:'dd MMM HH:mm' }}</span>
-              </div>
-              <button class="notif-delete-one" (click)="deleteOne(n.id); $event.stopPropagation()"><ion-icon name="close-outline"></ion-icon></button>
-            </div>
-          }
-        </div>
-      }
     </section>
 
     <!-- Consejos diarios -->
@@ -633,194 +592,6 @@ const ACTIVITY_ICONS: Record<string, string> = {
       color: #9ca3af;
     }
 
-    /* ===== Notification Pill in Hero ===== */
-    .notif-pill {
-      position: absolute;
-      top: max(12px, env(safe-area-inset-top, 12px));
-      right: 16px;
-      background: rgba(255,255,255,0.9);
-      backdrop-filter: blur(8px);
-      border: 1px solid rgba(255,255,255,0.5);
-      border-radius: 24px;
-      width: 40px;
-      height: 40px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      cursor: pointer;
-      transition: all 0.2s ease;
-      z-index: 10;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .notif-pill:active {
-      transform: scale(0.92);
-      background: rgba(255,255,255,1);
-    }
-    .notif-pill-icon {
-      width: 20px;
-      height: 20px;
-      color: #627eff;
-    }
-    .notif-pill-badge {
-      position: absolute;
-      top: -4px;
-      right: -4px;
-      background: #ef4444;
-      color: #fff;
-      font-size: 10px;
-      font-weight: 700;
-      min-width: 18px;
-      height: 18px;
-      border-radius: 9px;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      padding: 0 4px;
-      box-shadow: 0 2px 4px rgba(239,68,68,0.3);
-    }
-    .notif-overlay {
-      position: fixed;
-      inset: 0;
-      background: rgba(0,0,0,0.3);
-      z-index: 98;
-    }
-    .notif-panel {
-      position: fixed;
-      bottom: 0;
-      left: 0;
-      right: 0;
-      max-height: 75vh;
-      background: #ffffff;
-      border-radius: 20px 20px 0 0;
-      z-index: 99;
-      overflow-y: auto;
-      -webkit-overflow-scrolling: touch;
-      box-shadow: 0 -4px 24px rgba(0,0,0,0.12);
-      padding-bottom: calc(72px + env(safe-area-inset-bottom, 24px));
-    }
-    .notif-panel-header {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      padding: 16px 20px 12px;
-      border-bottom: 1px solid #F3F4F6;
-      position: sticky;
-      top: 0;
-      background: #fff;
-      z-index: 1;
-    }
-    .notif-panel-title {
-      font-size: 16px;
-      font-weight: 700;
-      color: #1f2937;
-      flex: 1;
-    }
-    .notif-mark-read {
-      font-size: 12px;
-      color: #627eff;
-      background: none;
-      border: none;
-      cursor: pointer;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 8px;
-    }
-    .notif-mark-read:active {
-      background: #EEF2FF;
-    }
-    .notif-close {
-      background: none;
-      border: none;
-      color: #9ca3af;
-      font-size: 18px;
-      cursor: pointer;
-      padding: 4px 8px;
-      border-radius: 8px;
-    }
-    .notif-close:active {
-      background: #F3F4F6;
-    }
-    .notif-delete-all {
-      background: none;
-      border: none;
-      font-size: 14px;
-      cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 8px;
-      opacity: 0.6;
-    }
-    .notif-delete-all:active {
-      opacity: 1;
-      background: #FEF2F2;
-    }
-    .notif-delete-one {
-      background: none;
-      border: none;
-      color: #d1d5db;
-      font-size: 12px;
-      cursor: pointer;
-      padding: 4px 6px;
-      border-radius: 8px;
-      flex-shrink: 0;
-      align-self: flex-start;
-      margin-top: 2px;
-    }
-    .notif-delete-one:active {
-      color: #ef4444;
-      background: #FEF2F2;
-    }
-    .notif-empty {
-      padding: 32px 20px;
-      text-align: center;
-      color: #9ca3af;
-      font-size: 14px;
-    }
-    .notif-item {
-      display: flex;
-      gap: 12px;
-      padding: 14px 20px;
-      border-bottom: 1px solid #F9FAFB;
-      cursor: pointer;
-      transition: background 0.15s ease;
-    }
-    .notif-item:last-child {
-      border-bottom: none;
-    }
-    .notif-item:active {
-      background: #F9FAFB;
-    }
-    .notif-unread {
-      background: #F0F4FF;
-    }
-    .notif-item-icon {
-      font-size: 22px;
-      flex-shrink: 0;
-      margin-top: 2px;
-    }
-    .notif-item-body {
-      flex: 1;
-      min-width: 0;
-    }
-    .notif-item-title {
-      font-size: 14px;
-      font-weight: 600;
-      color: #1f2937;
-      margin-bottom: 2px;
-    }
-    .notif-item-text {
-      font-size: 13px;
-      color: #6b7280;
-      line-height: 1.3;
-      display: -webkit-box;
-      -webkit-line-clamp: 2;
-      -webkit-box-orient: vertical;
-      overflow: hidden;
-    }
-    .notif-item-time {
-      font-size: 11px;
-      color: #9ca3af;
-    }
-
     /* ===== Bottom spacer ===== */
     .bottom-spacer {
       height: 80px;
@@ -848,10 +619,6 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
   dynamicGames: any[] = [];
   latestNoticias: any[] = [];
   proximosEventos: any[] = [];
-  unreadCount = 0;
-  notificationsList: any[] = [];
-  showNotifications = false;
-
   private supabaseService = inject(SupabaseService);
   private userProfileService = inject(UserProfileService);
   private notificationsService = inject(NotificationsService);
@@ -859,9 +626,7 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
   private tipsService = inject(EmotionalTipsService);
   private wellnessService = inject(WellnessActivitiesService);
   private gamesService = inject(MiniGamesService);
-  private internalNotificationsService = inject(InternalNotificationsService);
   private homeRealtimeChannel: any;
-  private notifRealtimeChannel: any;
   private realtimeChannels: any[] = [];
 
   openWebVersion() {
@@ -879,11 +644,6 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
       }
       this.loadDynamicContent();
     });
-
-    this.notifRealtimeChannel = this.internalNotificationsService.subscribeToNew(() => {
-      this.loadUnreadCount();
-    });
-    this.loadUnreadCount();
   }
 
   ngAfterViewInit() {
@@ -893,7 +653,6 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
   ngOnDestroy() {
     this.subscriptions.forEach(s => s.unsubscribe());
     this.homeRealtimeChannel?.unsubscribe();
-    this.notifRealtimeChannel?.unsubscribe();
     this.realtimeChannels.forEach(ch => ch?.unsubscribe());
   }
 
@@ -952,45 +711,6 @@ export class HomeAndroidComponent implements OnInit, OnDestroy, AfterViewInit {
     } catch {
       // silent
     }
-  }
-
-  private async loadUnreadCount() {
-    try {
-      this.unreadCount = await this.internalNotificationsService.getUnreadCount();
-      this.notificationsList = await this.internalNotificationsService.getLatest(10);
-    } catch { /* ignore */ }
-  }
-
-  toggleNotifications() {
-    this.showNotifications = !this.showNotifications;
-  }
-
-  async markAsRead(id: string) {
-    await this.internalNotificationsService.markAsRead(id);
-    this.loadUnreadCount();
-  }
-
-  async markAllAsRead() {
-    await this.internalNotificationsService.markAllAsRead();
-    this.loadUnreadCount();
-  }
-
-  async deleteOne(id: string) {
-    await this.internalNotificationsService.deleteNotification(id);
-    this.loadUnreadCount();
-  }
-
-  async deleteAllRead() {
-    await this.internalNotificationsService.deleteAllRead();
-    this.loadUnreadCount();
-  }
-
-  getNotifIcon(type: string): string {
-    const icons: Record<string, string> = {
-      eventos: 'calendar-outline', noticias: 'newspaper-outline', motivational_quotes: 'chatbubbles-outline',
-      emotional_tips: 'bulb-outline', wellness_activities: 'body-outline', mini_games: 'game-controller-outline',
-    };
-    return icons[type] || 'notifications-outline';
   }
 
   private gradients = [

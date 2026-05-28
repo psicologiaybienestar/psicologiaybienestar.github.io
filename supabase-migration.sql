@@ -464,19 +464,7 @@ as $$
 $$;
 
 -- ============================================
--- 17. NOTAS PARA GOOGLE PLAY CONSOLE (Data Safety)
--- ============================================
--- Datos recolectados por la app:
--- · Información personal: email (solo si agenda cita)
--- · Actividad en app: emociones registradas, minijuegos completados
--- · Diagnósticos: crash reports (Android nativo)
--- No se comparten datos con terceros.
--- Cifrado en tránsito: HTTPS + Supabase TLS.
--- El permiso POST_NOTIFICATIONS se solicita en tiempo de ejecución (Android 13+).
--- No se recolecta ubicación, contactos, fotos ni micrófono.
-
--- ============================================
--- 18. ACTUALIZACIONES — AGENDA Y CITAS
+-- 17. ACTUALIZACIONES — AGENDA Y CITAS
 -- ============================================
 
 alter table appointments drop constraint if exists appointments_status_check;
@@ -494,7 +482,7 @@ create trigger handle_updated_at_appointments before update on appointments
   for each row execute procedure moddatetime (updated_at);
 
 -- ============================================
--- 19. USUARIO PERSISTENTE + PERFILES
+-- 18. USUARIO PERSISTENTE + PERFILES
 -- ============================================
 
 create table if not exists profiles (
@@ -535,7 +523,7 @@ create trigger handle_updated_at_user_progress before update on user_progress
   for each row execute procedure moddatetime (updated_at);
 
 -- ============================================
--- 20. TABLA — TOKENS DE NOTIFICACIONES PUSH
+-- 19. TABLA — TOKENS DE NOTIFICACIONES PUSH
 -- ============================================
 create table if not exists push_tokens (
   id uuid default gen_random_uuid() primary key,
@@ -558,7 +546,7 @@ create policy "Update propio tokens" on push_tokens
   for update using (true) with check (true);
 
 -- ============================================
--- 21. VISTA — ESTADÍSTICAS DE CITAS
+-- 20. VISTA — ESTADÍSTICAS DE CITAS
 -- ============================================
 create or replace view admin_stats_appointments with (security_invoker = true) as
 select
@@ -569,31 +557,13 @@ from appointments
 group by status;
 
 -- ============================================
--- 22. NOTAS PARA SUPABASE EDGE FUNCTIONS
--- ============================================
--- Para activar notificaciones push reales:
---
--- 1. Crear proyecto en Firebase Console
--- 2. Descargar google-services.json → android/app/
--- 3. En Supabase Dashboard → Edge Functions:
---    - Crear función 'notify-event'
---    - Crear función 'notify-appointment'
--- 4. En Supabase Dashboard → Database → Webhooks:
---    - Crear webhook para tabla 'eventos' (INSERT, UPDATE)
---      → URL: {project-ref}.functions.supabase.co/notify-event
---    - Crear webhook para tabla 'appointments' (INSERT, UPDATE)
---      → URL: {project-ref}.functions.supabase.co/notify-appointment
--- 5. Las Edge Functions deben usar firebase-admin SDK para enviar
---    notificaciones a los tokens registrados en push_tokens
-
--- ============================================
--- 23. POLÍTICA INSERT PÚBLICO — APPOINTMENTS
+-- 21. POLÍTICA INSERT PÚBLICO — APPOINTMENTS
 -- ============================================
 create policy "Appointments insert public" on appointments
   for insert with check (true);
 
 -- ============================================
--- 24. RPC — VER CITAS PROPIAS (SIN AUTH)
+-- 22. RPC — VER CITAS PROPIAS (SIN AUTH)
 -- ============================================
 -- Permite que usuarios anónimos (sin JWT) vean sus citas por email
 -- usando security definer para bypassear RLS
@@ -606,7 +576,7 @@ as $$
 $$;
 
 -- ============================================
--- 25. TABLA — NOTIFICACIONES INTERNAS
+-- 23. TABLA — NOTIFICACIONES INTERNAS
 -- ============================================
 create table if not exists notifications (
   id uuid default gen_random_uuid() primary key,
@@ -679,7 +649,7 @@ create trigger trg_notify_games after insert on mini_games
   for each row execute function notify_on_content_insert();
 
 -- ============================================
--- 26. TABLA — ACUSE DE LECTURA POR DISPOSITIVO
+-- 24. TABLA — ACUSE DE LECTURA POR DISPOSITIVO
 -- ============================================
 create table if not exists notification_ack (
   notification_id uuid not null references notifications(id) on delete cascade,
@@ -701,7 +671,7 @@ create policy "Select anon push_tokens upsert" on push_tokens
   for select using (true);
 
 -- ============================================
--- 24. WEBHOOK — emotions → notify-content
+-- 25. WEBHOOK — emotions → notify-content
 -- ============================================
 create trigger trg_webhook_emotions after insert on emotions
   for each row execute function supabase_functions.http_request(
@@ -713,7 +683,7 @@ create trigger trg_webhook_emotions after insert on emotions
   );
 
 -- ============================================
--- 25. WEBHOOK — appointments → notify-appointment
+-- 26. WEBHOOK — appointments → notify-appointment
 -- ============================================
 create trigger trg_webhook_appointments after insert or update on appointments
   for each row execute function supabase_functions.http_request(
@@ -724,8 +694,65 @@ create trigger trg_webhook_appointments after insert or update on appointments
     '5000'
   );
 
+-- ============================================
+-- 27. FUNCIÓN — AUTO-FINALIZAR EVENTOS VENCIDOS
+-- ============================================
+-- Se ejecuta desde el frontend (EventosService.autoFinalize())
+-- y desde un cron opcional en Supabase.
+-- Solo afecta eventos en estado 'publicado' o 'borrador'
+-- que ya hayan superado su fecha_fin.
+-- NO sobreescribe estados manuales: cancelado, pospuesto.
+create or replace function auto_finalize_eventos()
+returns integer
+language plpgsql
+security definer
+as $$
+declare
+  v_updated integer;
+begin
+  update eventos
+  set estado = 'finalizado'
+  where fecha_fin < now()
+    and estado in ('publicado', 'borrador')
+    and fecha_fin is not null;
+  get diagnostics v_updated = row_count;
+  return v_updated;
+end;
+$$;
+
 -- NOTA: Si aparece 504 Gateway Timeout al crear eventos desde admin:
 -- 1. Ir a Supabase Dashboard → Edge Functions → notify-event / notify-appointment
 -- 2. Settings → aumentar timeout de 60s a 120s
 -- 3. Verificar que FIREBASE_SERVICE_ACCOUNT esté configurado en Secrets
 -- 4. Si el error persiste, desconectar temporalmente el webhook en Database → Webhooks
+
+-- ============================================
+-- NOTAS GENERALES (no ejecutar como SQL)
+-- ============================================
+
+-- GOOGLE PLAY CONSOLE — DATA SAFETY
+-- ---------------------------------
+-- Datos recolectados por la app:
+-- · Información personal: email (solo si agenda cita)
+-- · Actividad en app: emociones registradas, minijuegos completados
+-- · Diagnósticos: crash reports (Android nativo)
+-- No se comparten datos con terceros.
+-- Cifrado en tránsito: HTTPS + Supabase TLS.
+-- El permiso POST_NOTIFICATIONS se solicita en tiempo de ejecución (Android 13+).
+-- No se recolecta ubicación, contactos, fotos ni micrófono.
+
+-- SUPABASE EDGE FUNCTIONS — CONFIGURACIÓN
+-- ----------------------------------------
+-- Para activar notificaciones push push:
+-- 1. Crear proyecto en Firebase Console
+-- 2. Descargar google-services.json → android/app/
+-- 3. En Supabase Dashboard → Edge Functions:
+--    - Crear función 'notify-event'
+--    - Crear función 'notify-appointment'
+-- 4. En Supabase Dashboard → Database → Webhooks:
+--    - Crear webhook para tabla 'eventos' (INSERT, UPDATE)
+--      → URL: {project-ref}.functions.supabase.co/notify-event
+--    - Crear webhook para tabla 'appointments' (INSERT, UPDATE)
+--      → URL: {project-ref}.functions.supabase.co/notify-appointment
+-- 5. Las Edge Functions deben usar firebase-admin SDK para enviar
+--    notificaciones a los tokens registrados en push_tokens

@@ -180,7 +180,8 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 | `PushNotificationsService` | ✅ | FCM registration + token upsert |
 | `ContentEngineService` | ✅ | Local dataset loader, mixer, rotator with history tracking |
 | `EmotionsService` | ✅ | Emotion check-in, daily rotation (8/30), local + Supabase sync |
-| `ScheduledNotificationsService` | ✅ | 3 daily local notifications (9AM quote, 2PM activity, 8PM tip) |
+| `ScheduledNotificationsService` | ✅ | 3 daily local notifications (9AM quote, 2PM activity, 8PM tip). `scheduleDaily()` se ejecuta DESPUÉS de `pushService.register()` (con 1s timeout) para que el permiso ya esté concedido. |
+| `EventosService` | ✅ | Centraliza `autoFinalize()` que llama a `supabase.rpc('auto_finalize_eventos')` — función PL/pgSQL `security definer` que actualiza eventos con `fecha_fin < now()` y `estado in ('publicado','borrador')` a `'finalizado'`. NO sobreescribe estados manuales (`cancelado`, `pospuesto`). |
 | `OfflineService` | ✅ | Online/offline detection via `navigator.onLine` + events |
 
 ## Filtros emocionales
@@ -218,7 +219,8 @@ Creados via SQL en `supabase-migration.sql` (secciones 23 y 24):
 | `trg_webhook_emotions` | emotions | INSERT |
 
 ### Auto-registro en AppComponent (web y Android)
-- `AppComponent.ngOnInit()` → `await this.userProfileService.init()` → 1s timeout → `this.pushService.register()`
+- `AppComponent.ngOnInit()` → `this.userProfileService.init()` → `this.eventosService.autoFinalize()` → 1s timeout → `pushService.register()` → `scheduledNotifications.scheduleDaily()`
+- `scheduleDaily()` se ejecuta DESPUÉS de `pushService.register()` para asegurar que el permiso de notificaciones ya esté concedido
 - Solo se ejecuta en Android (`PlatformService.isAndroid` → `Capacitor.getPlatform() === 'android'`)
 - Service worker auto-update también se ejecuta en Android
 

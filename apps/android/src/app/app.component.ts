@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { PushNotificationsService } from '@shared/services/push-notifications.service';
 import { UserProfileService } from '@shared/services/user-profile.service';
 import { ScheduledNotificationsService } from '@shared/services/scheduled-notifications.service';
+import { EventosService } from '@shared/services/eventos.service';
 import { addIcons } from 'ionicons';
 import {
   chevronForward, chevronUp, chevronDown,
@@ -31,6 +32,7 @@ export class AppComponent implements OnInit {
   private userProfileService = inject(UserProfileService);
   private pushService = inject(PushNotificationsService);
   private scheduledNotifications = inject(ScheduledNotificationsService);
+  private eventosService = inject(EventosService);
 
   constructor() {
     addIcons({
@@ -90,9 +92,12 @@ export class AppComponent implements OnInit {
 
   async ngOnInit() {
     await this.userProfileService.init();
-    await this.scheduledNotifications.scheduleDaily();
-    setTimeout(() => {
-      this.pushService.register();
+
+    this.eventosService.autoFinalize();
+
+    setTimeout(async () => {
+      await this.pushService.register();
+      await this.scheduledNotifications.scheduleDaily();
     }, 1000);
   }
 }

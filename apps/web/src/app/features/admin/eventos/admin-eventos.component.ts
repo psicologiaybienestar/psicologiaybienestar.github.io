@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { DatePipe } from '@angular/common';
 import { FormBuilder, FormGroup, ReactiveFormsModule, Validators } from '@angular/forms';
 import { SupabaseService } from '../../../core/services/supabase.service';
+import { EventosService } from '../../../core/services/eventos.service';
 
 @Component({
   selector: 'app-admin-eventos',
@@ -208,7 +209,8 @@ export class AdminEventosComponent implements OnInit {
 
   constructor(
     private fb: FormBuilder,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
+    private eventosService: EventosService
   ) {
     this.eventoForm = this.fb.group({
       titulo: ['', Validators.required],
@@ -224,7 +226,10 @@ export class AdminEventosComponent implements OnInit {
     });
   }
 
-  ngOnInit() { this.cargarEventos(); }
+  async ngOnInit() {
+    await this.eventosService.autoFinalize();
+    this.cargarEventos();
+  }
 
   private async cargarEventos() {
     try {

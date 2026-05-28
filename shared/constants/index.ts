@@ -32,12 +32,4 @@ export const TIME_SLOTS = ['09:00', '10:00', '11:00', '14:00', '15:00', '16:00',
 
 export const CONTENT_TABLES = ['eventos', 'noticias', 'motivational_quotes', 'emotional_tips', 'mini_games', 'wellness_activities', 'emotions'];
 
-export const CHANNEL_CONFIGS = [
-  { id: 'eventos', name: 'Eventos', description: 'Nuevos eventos y cambios' },
-  { id: 'consejos', name: 'Consejos', description: 'Tips de bienestar emocional' },
-  { id: 'frases', name: 'Frases', description: 'Frases motivacionales diarias' },
-  { id: 'citas', name: 'Citas', description: 'Estado de tus solicitudes de cita' },
-  { id: 'recordatorios', name: 'Recordatorios', description: 'Alertas emocionales programadas' },
-];
-
 export const WEEKDAY_LABELS = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];

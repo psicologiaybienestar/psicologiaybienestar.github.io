@@ -70,7 +70,7 @@ export class SupabaseService {
     const { data: recientes, error: err2 } = await this.supabase
       .from('eventos')
       .select('*')
-      .eq('estado', 'publicado')
+      .in('estado', ['publicado', 'finalizado'])
       .order('created_at', { ascending: false })
       .limit(limit - (proximos?.length || 0));
 

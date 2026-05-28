@@ -5,7 +5,6 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AppIconComponent } from '@shared/components/app-icon.component';
 import { SupabaseService } from '@shared/services/supabase.service';
-import { EventosService } from '@shared/services/eventos.service';
 import { ContentEngineService, LocalQuote, LocalActivity, LocalTip } from '@shared/services/content-engine.service';
 import { EmotionsService, EmotionCheckIn } from '@shared/services/emotions.service';
 
@@ -394,7 +393,6 @@ export class InicioComponent implements OnInit {
   private emotionsService = inject(EmotionsService);
   private supabase = inject(SupabaseService);
   private router = inject(Router);
-  private eventosService = inject(EventosService);
 
   checkinHoy: EmotionCheckIn | undefined;
   dailyQuote: LocalQuote | undefined;
@@ -449,7 +447,6 @@ export class InicioComponent implements OnInit {
     
     // Load Events
     try {
-      await this.eventosService.autoFinalize();
       this.eventos = await this.supabase.getProximosEventos(3);
     } catch (e) {
       console.error('Error loading events:', e);

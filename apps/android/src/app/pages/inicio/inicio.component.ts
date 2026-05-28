@@ -149,12 +149,12 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
         </section>
 
         <!-- EVENTOS -->
-        @if (eventos.length > 0) {
-          <section class="section">
-            <div class="section-header">
-              <h2 class="section-title">Eventos próximos</h2>
-              <a class="section-link" routerLink="/eventos">Ver todos</a>
-            </div>
+        <section class="section">
+          <div class="section-header">
+            <h2 class="section-title">Eventos próximos</h2>
+            <a class="section-link" routerLink="/eventos">Ver todos</a>
+          </div>
+          @if (eventos.length > 0) {
             <div class="eventos-list">
               @for (evento of eventos; track evento.id) {
                 <div class="card event-card" [routerLink]="['/evento', evento.id]">
@@ -187,8 +187,13 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                 </div>
               }
             </div>
-          </section>
-        }
+          } @else {
+            <div class="empty-eventos">
+              <app-icon name="calendar-outline"></app-icon>
+              <span>No hay eventos próximos</span>
+            </div>
+          }
+        </section>
         
         <div class="bottom-spacer"></div>
       </div>
@@ -301,6 +306,8 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
     .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
     .section-link { font-size: 13px; font-weight: 700; color: #627eff; text-decoration: none; padding: 6px 12px; border-radius: 8px; background: #eff6ff; transition: background 0.2s; }
     .section-link:active { background: #dbeafe; }
+    .empty-eventos { display: flex; align-items: center; gap: 8px; padding: 16px 20px; background: #f9fafb; border-radius: 16px; color: #9ca3af; font-size: 14px; font-weight: 600; }
+    .empty-eventos app-icon { font-size: 20px; }
     
     .card-quote { position: relative; overflow: hidden; padding: 24px; border-radius: var(--pg-radius-lg); box-shadow: var(--pg-shadow-md); margin-bottom: 8px; }
     .quote-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }

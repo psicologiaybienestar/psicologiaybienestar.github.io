@@ -97,7 +97,7 @@ create policy "Noticias públicas lectura" on noticias
   for select using (estado = 'publicado');
 
 create policy "Eventos públicos lectura" on eventos
-  for select using (estado = 'publicado');
+  for select using (estado in ('publicado', 'finalizado', 'cancelado', 'pospuesto'));
 
 create policy "Galería pública lectura" on galeria
   for select using (true);

@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1779945377356,
+  "timestamp": 1779945676851,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -40,7 +40,7 @@
         "/669.37559062adcfff99.js",
         "/675.faf3540958708624.js",
         "/704.b775985c33fd9b0d.js",
-        "/706.27429ae76bf93f70.js",
+        "/706.46d798fd300f038a.js",
         "/807.3848f74d7975a7a4.js",
         "/812.c87e72eda24832ca.js",
         "/825.2b2d0d004596d5aa.js",
@@ -57,7 +57,7 @@
         "/main.37d4bcd8d30ad9eb.js",
         "/manifest.webmanifest",
         "/polyfills.76ed0f0e63d5e642.js",
-        "/runtime.0f204b30b3df7ce9.js",
+        "/runtime.e600d967790197ea.js",
         "/styles.9d6b274b590b6609.css"
       ],
       "patterns": []
@@ -146,7 +146,7 @@
     "/669.37559062adcfff99.js": "e82539f0628fb1992f6b5b300741199628a421f2",
     "/675.faf3540958708624.js": "91a9bd034290d0415e297aa65be25f60faf87b3f",
     "/704.b775985c33fd9b0d.js": "cc365862c698ea94f0477b38db6522cb01c2ce60",
-    "/706.27429ae76bf93f70.js": "ec7cdc4770d700a560b9c49657b1ac560480adfe",
+    "/706.46d798fd300f038a.js": "783125e61045f5c95fbbe4513160c75d07154701",
     "/807.3848f74d7975a7a4.js": "7a088dbc3b803d2c82a1c247fc24d310a31e7217",
     "/812.c87e72eda24832ca.js": "986d6cc9bc4ec26533e8e7a6663d2bc719d68c6e",
     "/825.2b2d0d004596d5aa.js": "a066e8367a7f705db6e08c155006e0df1bf248b0",
@@ -185,11 +185,11 @@
     "/assets/team/sindy_team.png": "069a472024b60b408c3a26f159f0922d2a9227db",
     "/assets/team/viviana_team.png": "3b4f727073b4fd04ad5aaea5a964a7c3e3556080",
     "/common.20781ed5740a1b80.js": "65b2a70ffa06bbfcab3ac2364219a5b8b5cf8fd6",
-    "/index.html": "e9dfc3792c8ad979f4d661ce1505b5214964adb9",
+    "/index.html": "d6ef0303706b6379befd2724d6b00571139edbdb",
     "/main.37d4bcd8d30ad9eb.js": "298d4d363ab7554303b02416a575ee657ae3908d",
     "/manifest.webmanifest": "6577c79e94818cfe9ac0d555b6cee44f2e1bc1b8",
     "/polyfills.76ed0f0e63d5e642.js": "58c9cdb9a251255e7e9d3f107859e136788c41aa",
-    "/runtime.0f204b30b3df7ce9.js": "087dc306017248930303cc0d4df6008f2387c612",
+    "/runtime.e600d967790197ea.js": "5f19d1f42a0b89a53bdfb4ceed093a1a3f54ba80",
     "/styles.9d6b274b590b6609.css": "3753d9d9082c23b0a23e00befb0f673dee6e85a2"
   },
   "navigationUrls": [

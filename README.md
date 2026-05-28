@@ -28,6 +28,14 @@ Plataforma integral que ofrece recursos de bienestar emocional, gestión de cita
 
 **Ionic Angular** — UI híbrida y navegación móvil · **Angular 20** — standalone components · **Supabase** — Auth, base de datos, almacenamiento, tiempo real · **Capacitor** — Android nativo · **TailwindCSS v3** · **TipTap** — editor de texto enriquecido · **Swiper** — sliders · **Google Sheets** — fuente de testimonios · **Formspree** — formulario de contacto · **Firebase Cloud Messaging** — notificaciones push · **Lucide** — iconos
 
+## Colores corporativos
+
+| Color | Código |
+|---|---|
+| Primary | `#627eff` |
+| Secondary | `#53c6e4` |
+| Accent | `#66a6da` |
+
 ## Proyecto
 
 Desarrollado por JGSoftworks.

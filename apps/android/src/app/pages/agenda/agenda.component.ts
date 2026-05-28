@@ -47,12 +47,15 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                 <div class="form-group">
                   <label>Tus datos</label>
                   <div class="input-row">
+                    <ion-icon name="person-outline"></ion-icon>
                     <input [(ngModel)]="formData.user_name" placeholder="Nombre completo" />
                   </div>
                   <div class="input-row">
+                    <ion-icon name="mail-outline"></ion-icon>
                     <input type="email" [(ngModel)]="formData.email" (change)="cargarCitas()" placeholder="Email" />
                   </div>
                   <div class="input-row">
+                    <ion-icon name="phone-portrait-outline"></ion-icon>
                     <input type="tel" [(ngModel)]="formData.phone" placeholder="Teléfono / WhatsApp" />
                   </div>
                 </div>
@@ -61,9 +64,11 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                   <label>Fecha y hora deseada</label>
                   <div class="datetime-row">
                     <div class="dt-box">
+                      <ion-icon name="calendar-outline"></ion-icon>
                       <input type="date" class="native-dt" [(ngModel)]="formData.requested_date" />
                     </div>
                     <div class="dt-box">
+                      <ion-icon name="time-outline"></ion-icon>
                       <input type="time" class="native-dt" [(ngModel)]="formData.requested_time" />
                     </div>
                   </div>
@@ -103,12 +108,13 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             <input type="email" [(ngModel)]="formData.email" placeholder="Correo para consultar citas..." (keyup.enter)="cargarCitas()" />
             <button type="button" (click)="cargarCitas()" [disabled]="cargandoCitas" class="lookup-btn">
               @if (cargandoCitas) { <ion-spinner name="crescent" style="width:16px;height:16px"></ion-spinner> }
-              @else { <ion-icon name="search"></ion-icon> }
+              @else { <ion-icon name="search-outline"></ion-icon> }
             </button>
           </div>
 
           <div class="tabs-container">
             <div class="tabs-scroll">
+              <button class="tab-btn" [class.active]="currentTab === 'todas'" (click)="currentTab = 'todas'">Todas</button>
               <button class="tab-btn" [class.active]="currentTab === 'proximas'" (click)="currentTab = 'proximas'">Próximas</button>
               <button class="tab-btn" [class.active]="currentTab === 'pasadas'" (click)="currentTab = 'pasadas'">Pasadas</button>
               <button class="tab-btn" [class.active]="currentTab === 'canceladas'" (click)="currentTab = 'canceladas'">Canceladas</button>
@@ -130,7 +136,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
           } @else if (filteredCitas.length === 0) {
             <div class="empty-state">
               <div class="empty-icon-circle"><ion-icon name="calendar-clear-outline"></ion-icon></div>
-              <p>No tienes citas {{ currentTab }}</p>
+              <p>No tienes citas {{ currentTab === 'todas' ? 'registradas' : currentTab }}</p>
             </div>
           }
 
@@ -153,12 +159,18 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                 <div class="cita-body">
                   <div class="cita-detail">
                     <ion-icon name="calendar-outline"></ion-icon> 
-                    <span>{{ cita.requested_date | date:"dd 'de' MMMM, yyyy" }}</span>
+                    <span>{{ cita.requested_date | date:'dd MMM yyyy' }}</span>
                   </div>
                   <div class="cita-detail">
                     <ion-icon name="time-outline"></ion-icon> 
                     <span>{{ cita.requested_time || 'Hora por confirmar' }}</span>
                   </div>
+                  @if (cita.message) {
+                    <div class="cita-note">
+                      <ion-icon name="document-text-outline"></ion-icon>
+                      <span>{{ cita.message }}</span>
+                    </div>
+                  }
                 </div>
               </div>
             }
@@ -189,13 +201,16 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
     
     .form-group { margin-bottom: 20px; }
     .form-group label { display: block; font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 10px; letter-spacing: 0.05em; }
-    .input-row { display: flex; align-items: center; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; padding: 0 16px; margin-bottom: 12px; transition: border-color 0.2s ease, background 0.2s ease; }
+    
+    .input-row { display: flex; align-items: center; gap: 8px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; padding: 0 16px; margin-bottom: 12px; transition: border-color 0.2s ease, background 0.2s ease; }
     .input-row:focus-within { border-color: #627eff; background: white; box-shadow: 0 0 0 3px rgba(98,126,255,0.1); }
+    .input-row ion-icon { color: #9ca3af; font-size: 18px; }
     .input-row input { background: none; border: none; padding: 14px 0; width: 100%; font-size: 15px; color: #1f2937; outline: none; }
     
     .datetime-row { display: flex; gap: 12px; }
-    .dt-box { flex: 1; display: flex; align-items: center; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; padding: 0 16px; transition: border-color 0.2s ease, background 0.2s ease; }
+    .dt-box { flex: 1; display: flex; align-items: center; gap: 8px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; padding: 0 16px; transition: border-color 0.2s ease, background 0.2s ease; }
     .dt-box:focus-within { border-color: #627eff; background: white; box-shadow: 0 0 0 3px rgba(98,126,255,0.1); }
+    .dt-box ion-icon { color: #9ca3af; font-size: 18px; }
     .native-dt { background: none; border: none; font-size: 15px; color: #1f2937; width: 100%; outline: none; padding: 14px 0; }
     
     .form-group textarea { width: 100%; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; padding: 16px; font-size: 15px; color: #1f2937; outline: none; transition: border-color 0.2s ease, background 0.2s ease; resize: vertical; }
@@ -244,9 +259,11 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
     .cita-info p { font-size: 12px; font-weight: 600; color: #6b7280; margin: 0; }
     .status-badge { font-size: 10px; font-weight: 800; text-transform: uppercase; padding: 4px 10px; border-radius: 8px; letter-spacing: 0.05em; }
     
-    .cita-body { display: flex; flex-direction: column; gap: 8px; padding-left: 60px; }
+    .cita-body { display: flex; flex-direction: column; gap: 10px; padding-left: 60px; }
     .cita-detail { display: flex; align-items: center; gap: 8px; font-size: 14px; font-weight: 600; color: #4b5563; }
     .cita-detail ion-icon { font-size: 18px; color: #9ca3af; }
+    .cita-note { background: #f9fafb; padding: 12px; border-radius: 12px; font-size: 13px; color: #6b7280; display: flex; align-items: flex-start; gap: 8px; line-height: 1.4; margin-top: 4px; }
+    .cita-note ion-icon { color: #9ca3af; font-size: 16px; margin-top: 2px; flex-shrink: 0; }
     
     .bottom-spacer { height: 80px; height: calc(80px + env(safe-area-inset-bottom, 0px)); }
   `],
@@ -270,7 +287,7 @@ export class AgendaComponent implements OnInit {
   misCitas: any[] = [];
   mostrarFormulario = false;
   
-  currentTab = 'proximas'; // proximas, pasadas, canceladas, pospuestas
+  currentTab = 'todas';
 
   emotionalStates = [
     { value: 'feliz', label: 'Feliz', emoji: '😊', color: '#10b981' },
@@ -284,13 +301,13 @@ export class AgendaComponent implements OnInit {
   get filteredCitas() {
     return this.misCitas.filter(c => {
       const s = (c.status || '').toLowerCase();
+      if (this.currentTab === 'todas') return true;
       if (this.currentTab === 'proximas') return s === 'pendiente' || s === 'confirmada';
       if (this.currentTab === 'pasadas') return s === 'completada';
       if (this.currentTab === 'canceladas') return s === 'cancelada';
       if (this.currentTab === 'pospuestas') return s === 'reagendada';
       return false;
     }).sort((a, b) => {
-      // Sort desc by requested date mostly
       const da = new Date(a.requested_date || a.created_at).getTime();
       const db = new Date(b.requested_date || b.created_at).getTime();
       return db - da;
@@ -319,7 +336,7 @@ export class AgendaComponent implements OnInit {
         this.mensajeExito = 'Cita solicitada con éxito. Te contactaremos pronto.';
         this.formData = { user_name: '', email: this.formData.email, phone: '', requested_date: new Date().toISOString().slice(0, 10), requested_time: '', emotional_state: '', message: '' };
         this.mostrarFormulario = false;
-        this.currentTab = 'proximas';
+        this.currentTab = 'todas';
         this.cargarCitas();
         setTimeout(() => this.mensajeExito = '', 5000);
       }
@@ -373,11 +390,11 @@ export class AgendaComponent implements OnInit {
   statusIcon(status: string): string {
     switch (status?.toLowerCase()) {
       case 'pendiente': return 'time-outline';
-      case 'confirmada': return 'checkmark-circle-outline';
+      case 'confirmada': return 'checkmark-circle';
       case 'reagendada': return 'calendar-outline';
-      case 'completada': return 'ribbon-outline';
-      case 'cancelada': return 'close-circle-outline';
-      default: return 'ellipse-outline';
+      case 'completada': return 'trophy-outline';
+      case 'cancelada': return 'close-circle';
+      default: return 'help-outline';
     }
   }
 

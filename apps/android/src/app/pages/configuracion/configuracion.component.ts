@@ -20,18 +20,26 @@ import { UserProfileService } from '@shared/services/user-profile.service';
             </div>
             
             @if (editandoNombre) {
-              <div class="edit-name-row">
-                <input type="text" [(ngModel)]="tempNickname" placeholder="Tu nombre..." class="edit-input" maxlength="25" (keyup.enter)="guardarNombre()">
-                <button class="btn-save" (click)="guardarNombre()"><ion-icon name="checkmark-outline"></ion-icon></button>
-                <button class="btn-cancel" (click)="editandoNombre = false"><ion-icon name="close-outline"></ion-icon></button>
+              <div class="edit-name-container">
+                <div class="edit-input-wrapper">
+                  <ion-icon name="person-outline"></ion-icon>
+                  <input type="text" [(ngModel)]="tempNickname" placeholder="Escribe tu nombre" class="edit-input" maxlength="25" (keyup.enter)="guardarNombre()" autofocus>
+                </div>
+                <div class="edit-actions">
+                  <button class="btn-cancel" (click)="editandoNombre = false">Cancelar</button>
+                  <button class="btn-save" (click)="guardarNombre()">Guardar</button>
+                </div>
               </div>
             } @else {
-              <div class="name-row" (click)="editarNombre()">
+              <div class="name-display">
                 <h1 class="hero-title">{{ nickname || 'Invitado' }}</h1>
-                <ion-icon name="pencil-outline" class="edit-icon"></ion-icon>
+                <p class="hero-subtitle">Tu viaje al bienestar continúa</p>
+                <button class="btn-edit-profile" (click)="editarNombre()">
+                  <ion-icon name="pencil-outline"></ion-icon>
+                  Editar perfil
+                </button>
               </div>
             }
-            <p class="hero-subtitle">Tu viaje al bienestar continúa</p>
           </div>
         </section>
 
@@ -134,21 +142,29 @@ import { UserProfileService } from '@shared/services/user-profile.service';
     .hero-section { padding: 40px 24px 24px; text-align: center; }
     .hero-content { display: flex; flex-direction: column; align-items: center; }
     
-    .profile-logo-container { width: 88px; height: 88px; border-radius: 28px; background: white; display: flex; align-items: center; justify-content: center; margin-bottom: 20px; box-shadow: 0 12px 32px rgba(98, 126, 255, 0.2); border: 2px solid #eff6ff; overflow: hidden; padding: 12px; }
+    .profile-logo-container { width: 96px; height: 96px; border-radius: 32px; background: white; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 16px 40px rgba(98, 126, 255, 0.15); border: 4px solid white; overflow: hidden; padding: 14px; }
     .profile-logo { width: 100%; height: 100%; object-fit: contain; }
     
-    .name-row { display: flex; align-items: center; justify-content: center; gap: 8px; cursor: pointer; padding: 4px 12px; border-radius: 12px; transition: background 0.2s; margin-bottom: 4px; }
-    .name-row:active { background: rgba(0,0,0,0.03); }
-    .hero-title { font-size: 26px; font-weight: 800; color: #111827; margin: 0; }
-    .edit-icon { color: #9ca3af; font-size: 18px; }
+    .name-display { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.3s ease; }
+    @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }
     
-    .edit-name-row { display: flex; align-items: center; gap: 8px; margin-bottom: 8px; }
-    .edit-input { background: white; border: 1px solid #e5e7eb; border-radius: 12px; padding: 10px 16px; font-size: 18px; font-weight: 700; color: #111827; outline: none; width: 180px; text-align: center; box-shadow: 0 4px 12px rgba(0,0,0,0.02); transition: border-color 0.2s; }
-    .edit-input:focus { border-color: #627eff; }
-    .btn-save { background: #10b981; color: white; border: none; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; box-shadow: 0 4px 12px rgba(16,185,129,0.3); }
-    .btn-cancel { background: #f3f4f6; color: #6b7280; border: none; width: 40px; height: 40px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; }
+    .hero-title { font-size: 26px; font-weight: 800; color: #111827; margin: 0 0 4px; }
+    .hero-subtitle { font-size: 14px; color: #6b7280; margin: 0 0 16px; }
     
-    .hero-subtitle { font-size: 15px; color: #6b7280; margin: 0; }
+    .btn-edit-profile { background: white; border: 1px solid #e5e7eb; padding: 10px 20px; border-radius: 999px; font-size: 14px; font-weight: 700; color: #4b5563; display: flex; align-items: center; gap: 8px; box-shadow: 0 4px 12px rgba(0,0,0,0.03); transition: transform 0.2s, box-shadow 0.2s; }
+    .btn-edit-profile:active { transform: scale(0.96); box-shadow: 0 2px 6px rgba(0,0,0,0.02); }
+    .btn-edit-profile ion-icon { font-size: 16px; color: #9ca3af; }
+    
+    .edit-name-container { background: white; padding: 16px; border-radius: 20px; box-shadow: 0 8px 24px rgba(0,0,0,0.06); border: 1px solid #f3f4f6; width: 100%; max-width: 320px; animation: fadeIn 0.3s ease; }
+    .edit-input-wrapper { display: flex; align-items: center; gap: 12px; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 12px; padding: 0 16px; margin-bottom: 12px; transition: border-color 0.2s; }
+    .edit-input-wrapper:focus-within { border-color: #627eff; background: white; }
+    .edit-input-wrapper ion-icon { color: #9ca3af; font-size: 18px; }
+    .edit-input { background: none; border: none; padding: 14px 0; width: 100%; font-size: 16px; font-weight: 600; color: #111827; outline: none; }
+    .edit-actions { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; }
+    .btn-cancel { background: #f3f4f6; color: #6b7280; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; transition: background 0.2s; }
+    .btn-cancel:active { background: #e5e7eb; }
+    .btn-save { background: #10b981; color: white; border: none; padding: 12px; border-radius: 12px; font-weight: 700; font-size: 14px; box-shadow: 0 4px 12px rgba(16,185,129,0.2); transition: transform 0.2s; }
+    .btn-save:active { transform: scale(0.96); }
     
     .section { padding: 0 24px 24px; }
     .section-title { font-size: 14px; font-weight: 800; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.05em; margin: 0 0 12px; padding-left: 4px; }
@@ -226,7 +242,7 @@ export class ConfiguracionComponent implements OnInit {
 
   async guardarNombre() {
     const newName = this.tempNickname.trim();
-    if (newName) {
+    if (newName && newName !== this.nickname) {
       await this.userProfile.updateProfile({ nickname: newName });
       this.nickname = newName;
     }

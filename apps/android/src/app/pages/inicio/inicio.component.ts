@@ -57,7 +57,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             </div>
             <p class="quote-text">{{ dailyQuote?.quote || 'La paz comienza con una sonrisa y se fortalece con cada respiración.' }}</p>
             <p class="quote-author">— {{ dailyQuote?.author || 'Cuida tu mente, cuida tu vida.' }}</p>
-            <ion-icon name="quote" class="quote-icon-bg"></ion-icon>
+            <ion-icon name="chatbubble" class="quote-icon-bg"></ion-icon>
           </div>
         </section>
 
@@ -126,7 +126,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
           
           @if (dailyTip) {
             <div class="suggestion-card" (click)="mostrarConsejos = true">
-              <div class="sugg-icon sugg-tip"><ion-icon name="flower-outline"></ion-icon></div>
+              <div class="sugg-icon sugg-tip"><ion-icon name="star-outline"></ion-icon></div>
               <div class="sugg-content">
                 <h3>{{ dailyTip.title }}</h3>
                 <p>{{ dailyTip.description | slice:0:60 }}...</p>
@@ -212,7 +212,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             <div class="modal-body">
               @for (tip of filteredTips; track tip.id) {
                 <div class="modal-item">
-                  <div class="modal-item-icon tips"><ion-icon name="flower-outline"></ion-icon></div>
+                  <div class="modal-item-icon tips"><ion-icon name="star-outline"></ion-icon></div>
                   <div class="modal-item-content">
                     <strong>{{ tip.title }}</strong>
                     <p>{{ tip.description }}</p>

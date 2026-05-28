@@ -17,7 +17,9 @@ import { UserProfileService } from '@shared/services/user-profile.service';
         <section class="hero-section">
           <div class="hero-content">
             <div class="profile-logo-container">
-              <img src="assets/icon/icon.png" alt="Logo" class="profile-logo" onerror="this.src='assets/icon/icon.png'">
+              <div class="avatar-gradient">
+                <app-icon name="person-circle"></app-icon>
+              </div>
             </div>
             
             @if (editandoNombre) {
@@ -108,11 +110,11 @@ import { UserProfileService } from '@shared/services/user-profile.service';
           <div class="socials-row">
             <button class="social-btn btn-insta" (click)="abrirInstagram()" aria-label="Instagram">
               <app-icon name="logo-instagram"></app-icon>
-              <span>Instagram</span>
+              // <span>Instagram</span>
             </button>
             <button class="social-btn btn-fb" (click)="abrirFacebook()" aria-label="Facebook">
               <app-icon name="logo-facebook"></app-icon>
-              <span>Facebook</span>
+              // <span>Facebook</span>
             </button>
           </div>
         </section>
@@ -143,8 +145,9 @@ import { UserProfileService } from '@shared/services/user-profile.service';
     .hero-section { padding: 40px 24px 24px; text-align: center; }
     .hero-content { display: flex; flex-direction: column; align-items: center; }
     
-    .profile-logo-container { width: 96px; height: 96px; border-radius: 32px; background: white; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; box-shadow: 0 16px 40px rgba(98, 126, 255, 0.15); border: 4px solid white; overflow: hidden; padding: 14px; }
-    .profile-logo { width: 100%; height: 100%; object-fit: contain; }
+    .profile-logo-container { width: 96px; height: 96px; display: flex; align-items: center; justify-content: center; margin-bottom: 16px; }
+    .avatar-gradient { width: 88px; height: 88px; border-radius: 50%; background: linear-gradient(135deg, #627eff, #53c6e4); display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(98,126,255,0.25); border: 3px solid white; }
+    .avatar-gradient app-icon { font-size: 48px; color: white; }
     
     .name-display { display: flex; flex-direction: column; align-items: center; animation: fadeIn 0.3s ease; }
     @keyframes fadeIn { from { opacity: 0; transform: scale(0.95); } to { opacity: 1; transform: scale(1); } }

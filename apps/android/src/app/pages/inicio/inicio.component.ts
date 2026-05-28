@@ -44,7 +44,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             </div>
             <div class="hero-illustration">
               <div class="illustration-circle">
-                <app-icon name="leaf"></app-icon>
+                <app-icon name="person-circle"></app-icon>
               </div>
             </div>
           </div>
@@ -290,7 +290,8 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
     .hero-title { font-size: 28px; font-weight: 800; color: #111827; margin: 0 0 4px; }
     .hero-subtitle { font-size: 16px; font-weight: 700; color: #374151; margin: 0 0 4px; }
     .hero-date { font-size: 14px; color: #6b7280; margin: 0; }
-    .illustration-circle { width: 64px; height: 64px; background: linear-gradient(135deg, #fdfbfb 0%, #ebedee 100%); border-radius: 50%; display: flex; align-items: center; justify-content: center; font-size: 32px; color: #10b981; box-shadow: 0 8px 16px rgba(0,0,0,0.06); border: 2px solid white; }
+    .illustration-circle { width: 64px; height: 64px; background: linear-gradient(135deg, #627eff, #53c6e4); border-radius: 50%; display: flex; align-items: center; justify-content: center; box-shadow: 0 8px 24px rgba(98,126,255,0.25); border: 2px solid white; }
+    .illustration-circle app-icon { font-size: 32px; color: white; }
     
     .section { padding: 0 24px 24px; }
     .section-title { font-size: 18px; font-weight: 700; color: #1f2937; margin: 0 0 16px; }

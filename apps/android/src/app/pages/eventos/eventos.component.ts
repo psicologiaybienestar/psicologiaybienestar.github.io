@@ -136,13 +136,10 @@ export class EventosListComponent implements OnInit {
   currentTab = 'todos';
 
   get filteredEventos(): any[] {
-    const now = new Date();
     return this.todosEventos.filter(e => {
       const s = (e.estado || '').toLowerCase();
       if (this.currentTab === 'todos') return true;
-      if (this.currentTab === 'proximos') {
-        return s === 'publicado' && new Date(e.fecha_inicio) >= now;
-      }
+      if (this.currentTab === 'proximos') return s === 'publicado';
       if (this.currentTab === 'finalizados') return s === 'finalizado';
       if (this.currentTab === 'pospuestos') return s === 'pospuesto';
       if (this.currentTab === 'cancelados') return s === 'cancelado';

@@ -336,3 +336,15 @@ Para generar: `npx capacitor-assets generate --iconBackgroundColor "#627eff" --s
 - [x] ALL emojis removed across codebase — replaced with ion-icon names, SVGs, text labels
 - [x] Premium Android design system — glassmorphism, gradient backgrounds, CSS variable tokens, global classes
 - [x] ngsw-config updated with dataset caching (performance strategy, 30d TTL, 1s timeout)
+- [x] Android EventosListComponent with filter tabs (Todos, Próximos, Finalizados, Pospuestos, Cancelados)
+- [x] Inicio "Eventos próximos" section always visible with "Ver todos" link
+- [x] RLS policy updated for eventos to include finalizado/cancelado/pospuesto in SELECT
+- [x] getProximosEventos simplified to single query for publicado + pospuesto
+- [x] Eventos filter "Próximos" shows all published events without date filter
+
+## Relevant Files
+- `apps/android/src/app/pages/eventos/eventos.component.ts` — Android eventos list page with filters
+- `apps/android/src/app/pages/inicio/inicio.component.ts` — "Ver todos" link + always-visible eventos section
+- `shared/services/supabase.service.ts` — `getProximosEventos()` simplified query
+- `apps/android/src/app/app.routes.ts` — `/eventos` lazy route
+- `supabase-migration.sql` — RLS policy for eventos

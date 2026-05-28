@@ -1,10 +1,11 @@
 import { Component, Input } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 
 @Component({
   selector: 'app-games-placeholder',
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, AppIconComponent],
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar>
@@ -16,7 +17,7 @@ import { IonicModule } from '@ionic/angular';
     </ion-header>
     <ion-content class="ion-padding">
       <div class="placeholder">
-        <ion-icon [name]="icon" class="ph-icon" [style.color]="color"></ion-icon>
+        <app-icon [name]="icon" class="ph-icon" [style.color]="color"></app-icon>
         <h2>{{ title }}</h2>
         <p>{{ description }}</p>
         <ion-button fill="outline" routerLink="/minijuegos">Volver a minijuegos</ion-button>

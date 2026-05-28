@@ -3,6 +3,7 @@ import { IonicModule } from '@ionic/angular';
 import { CommonModule, SlicePipe, DatePipe } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 import { SupabaseService } from '@shared/services/supabase.service';
 import { ContentEngineService, LocalQuote, LocalActivity, LocalTip } from '@shared/services/content-engine.service';
 import { EmotionsService, EmotionCheckIn } from '@shared/services/emotions.service';
@@ -29,7 +30,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
 @Component({
   selector: 'app-inicio',
   standalone: true,
-  imports: [IonicModule, CommonModule, SlicePipe, DatePipe, FormsModule, RouterModule],
+  imports: [IonicModule, CommonModule, SlicePipe, DatePipe, FormsModule, RouterModule, AppIconComponent],
   template: `
     <ion-content [fullscreen]="true" [scrollEvents]="true">
       <div class="page">
@@ -43,7 +44,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             </div>
             <div class="hero-illustration">
               <div class="illustration-circle">
-                <ion-icon name="leaf"></ion-icon>
+                <app-icon name="leaf"></app-icon>
               </div>
             </div>
           </div>
@@ -57,7 +58,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             </div>
             <p class="quote-text">{{ dailyQuote?.quote || 'La paz comienza con una sonrisa y se fortalece con cada respiración.' }}</p>
             <p class="quote-author">— {{ dailyQuote?.author || 'Cuida tu mente, cuida tu vida.' }}</p>
-            <ion-icon name="chatbubble" class="quote-icon-bg"></ion-icon>
+            <app-icon name="chatbubble" class="quote-icon-bg"></app-icon>
           </div>
         </section>
 
@@ -66,19 +67,19 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
           <h2 class="section-title">Acciones rápidas</h2>
           <div class="quick-actions">
             <button class="action-btn" (click)="irJuegos()">
-              <div class="action-icon action-respirar"><ion-icon name="leaf-outline"></ion-icon></div>
+              <div class="action-icon action-respirar"><app-icon name="leaf-outline"></app-icon></div>
               <span>Respirar</span>
             </button>
             <button class="action-btn" (click)="mostrarConsejos = true">
-              <div class="action-icon action-consejos"><ion-icon name="bulb-outline"></ion-icon></div>
+              <div class="action-icon action-consejos"><app-icon name="bulb-outline"></app-icon></div>
               <span>Consejos</span>
             </button>
             <button class="action-btn" (click)="mostrarActividades = true">
-              <div class="action-icon action-actividades"><ion-icon name="heart-outline"></ion-icon></div>
+              <div class="action-icon action-actividades"><app-icon name="heart-outline"></app-icon></div>
               <span>Actividades</span>
             </button>
             <button class="action-btn" (click)="irAgenda()">
-              <div class="action-icon action-agenda"><ion-icon name="calendar-outline"></ion-icon></div>
+              <div class="action-icon action-agenda"><app-icon name="calendar-outline"></app-icon></div>
               <span>Agenda</span>
             </button>
           </div>
@@ -126,23 +127,23 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
           
           @if (dailyTip) {
             <div class="suggestion-card" (click)="mostrarConsejos = true">
-              <div class="sugg-icon sugg-tip"><ion-icon name="star-outline"></ion-icon></div>
+              <div class="sugg-icon sugg-tip"><app-icon name="star-outline"></app-icon></div>
               <div class="sugg-content">
                 <h3>{{ dailyTip.title }}</h3>
                 <p>{{ dailyTip.description | slice:0:60 }}...</p>
               </div>
-              <ion-icon name="chevron-forward" class="sugg-arrow"></ion-icon>
+              <app-icon name="chevron-forward" class="sugg-arrow"></app-icon>
             </div>
           }
 
           @if (dailyActivity) {
             <div class="suggestion-card mt-2" (click)="mostrarActividades = true">
-              <div class="sugg-icon sugg-act"><ion-icon name="leaf-outline"></ion-icon></div>
+              <div class="sugg-icon sugg-act"><app-icon name="leaf-outline"></app-icon></div>
               <div class="sugg-content">
                 <h3>{{ dailyActivity.title }}</h3>
                 <p>{{ dailyActivity.description | slice:0:60 }}...</p>
               </div>
-              <ion-icon name="chevron-forward" class="sugg-arrow"></ion-icon>
+              <app-icon name="chevron-forward" class="sugg-arrow"></app-icon>
             </div>
           }
         </section>
@@ -159,7 +160,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                       <img [src]="getPublicUrl(evento.imagen_url)" class="event-img" alt="Evento" onerror="this.style.display='none'">
                     } @else {
                       <div class="event-img-placeholder">
-                        <ion-icon name="calendar"></ion-icon>
+                        <app-icon name="calendar"></app-icon>
                       </div>
                     }
                     <div class="event-date-badge">
@@ -173,10 +174,10 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                     </span>
                     <h3>{{ evento.titulo }}</h3>
                     <p class="event-meta">
-                      <ion-icon name="time-outline"></ion-icon> {{ evento.fecha_inicio | date:'shortTime' }}
+                      <app-icon name="time-outline"></app-icon> {{ evento.fecha_inicio | date:'shortTime' }}
                       @if (evento.ubicacion) {
                         <span class="meta-dot">•</span>
-                        <ion-icon name="location-outline"></ion-icon> {{ evento.ubicacion }}
+                        <app-icon name="location-outline"></app-icon> {{ evento.ubicacion }}
                       }
                     </p>
                   </div>
@@ -195,10 +196,10 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
           <div class="modal-content glass-card-strong" (click)="$event.stopPropagation()">
             <div class="modal-header">
               <h2>Consejos para ti <span class="modal-count">{{ filteredTips.length }}</span></h2>
-              <button class="btn-icon" (click)="mostrarConsejos = false"><ion-icon name="close-circle"></ion-icon></button>
+              <button class="btn-icon" (click)="mostrarConsejos = false"><app-icon name="close-circle"></app-icon></button>
             </div>
             <div class="modal-search">
-              <ion-icon name="search-outline"></ion-icon>
+              <app-icon name="search-outline"></app-icon>
               <input [(ngModel)]="tipsSearch" placeholder="Buscar consejos..." class="search-input" />
             </div>
             <div class="modal-tabs-container">
@@ -212,20 +213,20 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             <div class="modal-body">
               @for (tip of filteredTips; track tip.id) {
                 <div class="modal-item">
-                  <div class="modal-item-icon tips"><ion-icon name="star-outline"></ion-icon></div>
+                  <div class="modal-item-icon tips"><app-icon name="star-outline"></app-icon></div>
                   <div class="modal-item-content">
                     <strong>{{ tip.title }}</strong>
                     <p>{{ tip.description }}</p>
                     <div class="modal-item-footer">
                       <span class="modal-tag">{{ getCategoryLabel(tip.emotion_type) }}</span>
-                      <ion-icon name="bookmark-outline" class="bookmark-icon"></ion-icon>
+                      <app-icon name="bookmark-outline" class="bookmark-icon"></app-icon>
                     </div>
                   </div>
                 </div>
               }
               @if (filteredTips.length === 0) {
                 <div class="empty-state">
-                  <ion-icon name="search-outline"></ion-icon>
+                  <app-icon name="search-outline"></app-icon>
                   <p>No se encontraron consejos.</p>
                 </div>
               }
@@ -240,10 +241,10 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
           <div class="modal-content glass-card-strong" (click)="$event.stopPropagation()">
             <div class="modal-header">
               <h2>Actividades <span class="modal-count">{{ filteredActivities.length }}</span></h2>
-              <button class="btn-icon" (click)="mostrarActividades = false"><ion-icon name="close-circle"></ion-icon></button>
+              <button class="btn-icon" (click)="mostrarActividades = false"><app-icon name="close-circle"></app-icon></button>
             </div>
             <div class="modal-search">
-              <ion-icon name="search-outline"></ion-icon>
+              <app-icon name="search-outline"></app-icon>
               <input [(ngModel)]="actsSearch" placeholder="Buscar actividades..." class="search-input" />
             </div>
             <div class="modal-tabs-container">
@@ -257,7 +258,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             <div class="modal-body">
               @for (act of filteredActivities; track act.id) {
                 <div class="modal-item">
-                  <div class="modal-item-icon activities"><ion-icon name="leaf"></ion-icon></div>
+                  <div class="modal-item-icon activities"><app-icon name="leaf"></app-icon></div>
                   <div class="modal-item-content">
                     <div class="act-header">
                       <strong>{{ act.title }}</strong>
@@ -265,14 +266,14 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                     <p>{{ act.description }}</p>
                     <div class="modal-item-footer">
                       <span class="modal-tag">{{ act.duration }} min | {{ getCategoryLabel(act.activity_type) }}</span>
-                      <button class="play-btn"><ion-icon name="play"></ion-icon></button>
+                      <button class="play-btn"><app-icon name="play"></app-icon></button>
                     </div>
                   </div>
                 </div>
               }
               @if (filteredActivities.length === 0) {
                 <div class="empty-state">
-                  <ion-icon name="search-outline"></ion-icon>
+                  <app-icon name="search-outline"></app-icon>
                   <p>No se encontraron actividades.</p>
                 </div>
               }

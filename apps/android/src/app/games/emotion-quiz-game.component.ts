@@ -1,11 +1,12 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 import { ContentEngineService, LocalEmotion } from '@shared/services/content-engine.service';
 
 @Component({
   selector: 'app-emotion-quiz-game',
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, AppIconComponent],
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar>
@@ -25,7 +26,7 @@ import { ContentEngineService, LocalEmotion } from '@shared/services/content-eng
       @if (gameOver) {
         <div class="result animate-scaleIn">
           <div class="result-icon-wrap">
-            <ion-icon name="trophy-outline" class="trophy-icon"></ion-icon>
+            <app-icon name="trophy-outline" class="trophy-icon"></app-icon>
           </div>
           <h2>Completado!</h2>
           <p class="result-score">{{ correctas }} de {{ total }} aciertos</p>
@@ -33,7 +34,7 @@ import { ContentEngineService, LocalEmotion } from '@shared/services/content-eng
             <p class="result-msg">Conoces todas las emociones!</p>
           }
           <ion-button expand="block" (click)="startGame()" class="play-again-btn gradient-primary">
-            <ion-icon slot="start" name="refresh-outline"></ion-icon>
+            <app-icon name="refresh-outline"></app-icon>
             Jugar de nuevo
           </ion-button>
         </div>
@@ -41,7 +42,7 @@ import { ContentEngineService, LocalEmotion } from '@shared/services/content-eng
         <div class="question-section">
           <p class="q-label">Como se llama esta emocion?</p>
           <div class="q-emotion-wrap">
-            <ion-icon [name]="currentEmotion?.icon || ''" [style.color]="currentEmotion?.color" class="q-icon"></ion-icon>
+            <app-icon [name]="currentEmotion?.icon || ''" [style.color]="currentEmotion?.color" class="q-icon"></app-icon>
           </div>
         </div>
 

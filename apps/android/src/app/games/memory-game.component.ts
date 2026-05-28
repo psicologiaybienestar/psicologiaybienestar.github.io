@@ -1,6 +1,7 @@
 import { Component, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { Router } from '@angular/router';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 
 interface Card {
   id: number;
@@ -24,7 +25,7 @@ const CARD_SET = [
 @Component({
   selector: 'app-memory-game',
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, AppIconComponent],
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar>
@@ -34,7 +35,7 @@ const CARD_SET = [
         <ion-title>Memoria Emocional</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="reiniciar()">
-            <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+            <app-icon name="refresh-outline"></app-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -51,10 +52,10 @@ const CARD_SET = [
           <button class="card" [class.flipped]="card.flipped || card.matched" [class.matched]="card.matched"
                   (click)="flipCard(card)" [disabled]="blocked || card.flipped || card.matched">
             @if (card.flipped || card.matched) {
-              <ion-icon [name]="card.icon" [style.color]="card.color" class="card-icon"></ion-icon>
+              <app-icon [name]="card.icon" [style.color]="card.color" class="card-icon"></app-icon>
             } @else {
               <div class="card-back">
-                <ion-icon name="help-outline" class="card-back-icon"></ion-icon>
+                <app-icon name="help-outline" class="card-back-icon"></app-icon>
               </div>
             }
           </button>
@@ -64,7 +65,7 @@ const CARD_SET = [
       @if (completado) {
         <div class="overlay">
           <div class="modal glass-card-strong animate-scaleIn">
-            <ion-icon name="trophy-outline" class="trophy"></ion-icon>
+            <app-icon name="trophy-outline" class="trophy"></app-icon>
             <h2>Completado!</h2>
             <p>Lo lograste en {{ intentos }} intentos</p>
             <ion-button expand="block" (click)="reiniciar()" class="modal-btn gradient-primary">Jugar de nuevo</ion-button>

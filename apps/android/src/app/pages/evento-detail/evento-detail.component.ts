@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 import { SupabaseService } from '@shared/services/supabase.service';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: string }> = {
@@ -15,14 +16,14 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 @Component({
   selector: 'app-evento-detail',
   standalone: true,
-  imports: [IonicModule, CommonModule, RouterModule],
+  imports: [IonicModule, CommonModule, RouterModule, AppIconComponent],
   template: `
     <ion-content [fullscreen]="true">
       <div class="page">
         <section class="hero-section">
           <div class="hero-bg"></div>
           <div class="hero-content">
-            <ion-icon name="calendar" class="hero-icon"></ion-icon>
+            <app-icon name="calendar" class="hero-icon"></app-icon>
             <h1 class="hero-title">{{ evento?.titulo || 'Evento' }}</h1>
           </div>
         </section>
@@ -39,7 +40,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
             <div class="card card-evento">
               <div class="status-header">
                 <span class="status-badge" [style.background]="statusConfig.bg" [style.color]="statusConfig.color">
-                  <ion-icon [name]="statusConfig.icon"></ion-icon>
+                  <app-icon [name]="statusConfig.icon"></app-icon>
                   {{ statusConfig.label }}
                 </span>
               </div>
@@ -53,30 +54,30 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
               <div class="evento-body">
                 <div class="evento-meta">
                   <div class="meta-row">
-                    <ion-icon name="calendar-outline"></ion-icon>
+                    <app-icon name="calendar-outline"></app-icon>
                     <span>Inicio: {{ evento.fecha_inicio | date:'dd MMM yyyy, HH:mm' }}</span>
                   </div>
                   @if (evento.fecha_fin) {
                     <div class="meta-row">
-                      <ion-icon name="calendar-outline"></ion-icon>
+                      <app-icon name="calendar-outline"></app-icon>
                       <span>Fin: {{ evento.fecha_fin | date:'dd MMM yyyy, HH:mm' }}</span>
                     </div>
                   }
                   @if (evento.ubicacion) {
                     <div class="meta-row">
-                      <ion-icon name="location-outline"></ion-icon>
+                      <app-icon name="location-outline"></app-icon>
                       <span>{{ evento.ubicacion }}</span>
                     </div>
                   }
                   @if (evento.modalidad) {
                     <div class="meta-row">
-                      <ion-icon name="globe-outline"></ion-icon>
+                      <app-icon name="globe-outline"></app-icon>
                       <span>{{ evento.modalidad }}</span>
                     </div>
                   }
                   @if (evento.cupos) {
                     <div class="meta-row">
-                      <ion-icon name="people-outline"></ion-icon>
+                      <app-icon name="people-outline"></app-icon>
                       <span>{{ evento.cupos }} cupos disponibles</span>
                     </div>
                   }
@@ -91,7 +92,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 
                 @if (evento.enlace) {
                   <a [href]="evento.enlace" target="_blank" rel="noopener noreferrer" class="btn-outline btn-full">
-                    <ion-icon name="link-outline"></ion-icon>
+                    <app-icon name="link-outline"></app-icon>
                     Enlace del evento
                   </a>
                 }
@@ -101,7 +102,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 
           @if (!evento && !loading) {
             <div class="empty-state">
-              <ion-icon name="calendar-outline"></ion-icon>
+              <app-icon name="calendar-outline"></app-icon>
               <p>Evento no encontrado.</p>
             </div>
           }

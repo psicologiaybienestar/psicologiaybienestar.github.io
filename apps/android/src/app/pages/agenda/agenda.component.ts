@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { DatePipe, CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 import { AgendaService } from '@shared/services/agenda.service';
 
 const EMOTION_EMOJI_MAP: Record<string, string> = {
@@ -16,7 +17,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
 @Component({
   selector: 'app-agenda',
   standalone: true,
-  imports: [IonicModule, CommonModule, FormsModule],
+  imports: [IonicModule, CommonModule, FormsModule, AppIconComponent],
   template: `
     <ion-content [fullscreen]="true">
       <div class="page">
@@ -31,14 +32,14 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
         <section class="section">
           @if (mensajeExito) {
             <div class="alert alert-success">
-              <ion-icon name="checkmark-done-circle"></ion-icon>
+              <app-icon name="checkmark-done-circle"></app-icon>
               <p>{{ mensajeExito }}</p>
             </div>
           }
 
           <div class="card card-form glass-card">
             <button class="btn-primary btn-full btn-large" (click)="mostrarFormulario = !mostrarFormulario">
-              <ion-icon [name]="mostrarFormulario ? 'close-outline' : 'add-outline'"></ion-icon> 
+              <app-icon [name]="mostrarFormulario ? 'close-outline' : 'add-outline'"></app-icon> 
               {{ mostrarFormulario ? 'Cancelar' : 'Solicitar nueva cita' }}
             </button>
             
@@ -47,15 +48,15 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                 <div class="form-group">
                   <label>Tus datos</label>
                   <div class="input-row">
-                    <ion-icon name="person-outline"></ion-icon>
+                    <app-icon name="person-outline"></app-icon>
                     <input [(ngModel)]="formData.user_name" placeholder="Nombre completo" />
                   </div>
                   <div class="input-row">
-                    <ion-icon name="mail-outline"></ion-icon>
+                    <app-icon name="mail-outline"></app-icon>
                     <input type="email" [(ngModel)]="formData.email" (change)="cargarCitas()" placeholder="Email" />
                   </div>
                   <div class="input-row">
-                    <ion-icon name="phone-portrait-outline"></ion-icon>
+                    <app-icon name="phone-portrait-outline"></app-icon>
                     <input type="tel" [(ngModel)]="formData.phone" placeholder="Teléfono / WhatsApp" />
                   </div>
                 </div>
@@ -64,11 +65,11 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                   <label>Fecha y hora deseada</label>
                   <div class="datetime-row">
                     <div class="dt-box">
-                      <ion-icon name="calendar-outline"></ion-icon>
+                      <app-icon name="calendar-outline"></app-icon>
                       <input type="date" class="native-dt" [(ngModel)]="formData.requested_date" />
                     </div>
                     <div class="dt-box">
-                      <ion-icon name="time-outline"></ion-icon>
+                      <app-icon name="time-outline"></app-icon>
                       <input type="time" class="native-dt" [(ngModel)]="formData.requested_time" />
                     </div>
                   </div>
@@ -108,7 +109,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             <input type="email" [(ngModel)]="formData.email" placeholder="Correo para consultar citas..." (keyup.enter)="cargarCitas()" />
             <button type="button" (click)="cargarCitas()" [disabled]="cargandoCitas" class="lookup-btn">
               @if (cargandoCitas) { <ion-spinner name="crescent" style="width:16px;height:16px"></ion-spinner> }
-              @else { <ion-icon name="search-outline"></ion-icon> }
+              @else { <app-icon name="search-outline"></app-icon> }
             </button>
           </div>
 
@@ -129,13 +130,13 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
             </div>
           } @else if (errorCitas && filteredCitas.length === 0 && misCitas.length === 0) {
             <div class="empty-state">
-              <ion-icon name="calendar-outline"></ion-icon>
+              <app-icon name="calendar-outline"></app-icon>
               <p>{{ errorCitas }}</p>
               <span class="empty-hint">Ingresa tu correo para ver tus citas.</span>
             </div>
           } @else if (filteredCitas.length === 0) {
             <div class="empty-state">
-              <div class="empty-icon-circle"><ion-icon name="calendar-clear-outline"></ion-icon></div>
+              <div class="empty-icon-circle"><app-icon name="calendar-clear-outline"></app-icon></div>
               <p>No tienes citas {{ currentTab === 'todas' ? 'registradas' : currentTab }}</p>
             </div>
           }
@@ -145,7 +146,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
               <div class="card card-cita" [style.--status-color]="badgeColor(cita.status)">
                 <div class="cita-header">
                   <div class="cita-icon" [style.background]="badgeBg(cita.status)" [style.color]="badgeColor(cita.status)">
-                    <ion-icon [name]="statusIcon(cita.status)"></ion-icon>
+                    <app-icon [name]="statusIcon(cita.status)"></app-icon>
                   </div>
                   <div class="cita-info">
                     <h3>{{ cita.user_name }}</h3>
@@ -158,16 +159,16 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                 
                 <div class="cita-body">
                   <div class="cita-detail">
-                    <ion-icon name="calendar-outline"></ion-icon> 
+                    <app-icon name="calendar-outline"></app-icon> 
                     <span>{{ cita.requested_date | date:'dd MMM yyyy' }}</span>
                   </div>
                   <div class="cita-detail">
-                    <ion-icon name="time-outline"></ion-icon> 
+                    <app-icon name="time-outline"></app-icon> 
                     <span>{{ cita.requested_time || 'Hora por confirmar' }}</span>
                   </div>
                   @if (cita.message) {
                     <div class="cita-note">
-                      <ion-icon name="document-text-outline"></ion-icon>
+                      <app-icon name="document-text-outline"></app-icon>
                       <span>{{ cita.message }}</span>
                     </div>
                   }

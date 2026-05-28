@@ -1,23 +1,24 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { CommonModule } from '@angular/common';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 
 @Component({
   selector: 'app-minijuegos',
   standalone: true,
-  imports: [IonicModule, CommonModule],
+  imports: [IonicModule, CommonModule, AppIconComponent],
   template: `
     <ion-content [fullscreen]="true">
       <div class="page gradient-bg">
         <div class="content-wrapper">
           <div class="illustration-container">
             <div class="icon-circle">
-              <ion-icon name="game-controller"></ion-icon>
+              <app-icon name="game-controller"></app-icon>
             </div>
             <!-- decorative sparkles -->
-            <ion-icon name="sparkles" class="sparkle s1"></ion-icon>
-            <ion-icon name="star" class="sparkle s2"></ion-icon>
-            <ion-icon name="planet" class="sparkle s3"></ion-icon>
+            <app-icon name="sparkles" class="sparkle s1"></app-icon>
+            <app-icon name="star" class="sparkle s2"></app-icon>
+            <app-icon name="planet" class="sparkle s3"></app-icon>
           </div>
           
           <h1 class="title">Próximamente</h1>
@@ -27,14 +28,14 @@ import { CommonModule } from '@angular/common';
 
         <div class="support-card glass-card-strong">
           <div class="support-header">
-            <div class="support-icon"><ion-icon name="settings"></ion-icon></div>
+            <div class="support-icon"><app-icon name="settings"></app-icon></div>
             <div class="support-text">
               <h3>Apoya el desarrollo de la app</h3>
               <p>Tu apoyo nos ayuda a seguir mejorando y creando nuevas herramientas para ti.</p>
             </div>
           </div>
           <button class="btn-support">
-            <ion-icon name="heart-outline"></ion-icon> Apoyar con compra
+            <app-icon name="heart-outline"></app-icon> Apoyar con compra
           </button>
         </div>
       </div>

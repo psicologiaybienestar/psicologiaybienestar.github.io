@@ -1,12 +1,13 @@
 import { Component, OnInit, OnDestroy } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 
 type Phase = 'inhala' | 'sostiene' | 'exhala' | 'espera';
 
 @Component({
   selector: 'app-breathing-game',
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, AppIconComponent],
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar>
@@ -32,11 +33,11 @@ type Phase = 'inhala' | 'sostiene' | 'exhala' | 'espera';
 
         <div class="controls">
           <ion-button fill="clear" (click)="toggle()" class="control-btn">
-            <ion-icon slot="start" [name]="running ? 'pause-outline' : 'play-outline'"></ion-icon>
+            <app-icon [name]="running ? 'pause-outline' : 'play-outline'"></app-icon>
             {{ running ? 'Pausar' : 'Iniciar' }}
           </ion-button>
           <ion-button fill="clear" (click)="reset()" class="control-btn">
-            <ion-icon slot="start" name="refresh-outline"></ion-icon>
+            <app-icon name="refresh-outline"></app-icon>
             Reiniciar
           </ion-button>
         </div>

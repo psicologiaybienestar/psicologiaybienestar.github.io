@@ -1,11 +1,12 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 
 @Component({
   selector: 'app-gratitude-game',
   standalone: true,
-  imports: [IonicModule, FormsModule],
+  imports: [IonicModule, FormsModule, AppIconComponent],
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar>
@@ -18,7 +19,7 @@ import { FormsModule } from '@angular/forms';
     <ion-content class="ion-padding">
       <div class="header-section">
         <div class="header-icon-wrap">
-          <ion-icon name="heart-outline" class="main-icon"></ion-icon>
+          <app-icon name="heart-outline" class="main-icon"></app-icon>
         </div>
         <h2>Escribe 3 cosas por las que estas agradecido hoy</h2>
         <p class="hint">Concentrate en lo positivo, por pequeno que sea</p>
@@ -36,7 +37,7 @@ import { FormsModule } from '@angular/forms';
 
       @if (allFilled) {
         <ion-button expand="block" (click)="guardar()" class="save-btn gradient-primary">
-          <ion-icon slot="start" name="checkmark-outline"></ion-icon>
+          <app-icon name="checkmark-outline"></app-icon>
           Guardar y reflexionar
         </ion-button>
       }
@@ -44,7 +45,7 @@ import { FormsModule } from '@angular/forms';
       @if (saved) {
         <div class="saved-section animate-scaleIn">
           <div class="saved-icon-wrap">
-            <ion-icon name="checkmark-circle" class="saved-icon"></ion-icon>
+            <app-icon name="checkmark-circle" class="saved-icon"></app-icon>
           </div>
           <p>Gracias por tomarte un momento para apreciar lo bueno.</p>
           <ion-button expand="block" fill="outline" (click)="reset()" class="reset-btn">Escribir de nuevo</ion-button>

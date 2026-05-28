@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule, DatePipe } from '@angular/common';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 import { EmotionsService, EmotionCheckIn } from '@shared/services/emotions.service';
 import { LocalEmotion } from '@shared/services/content-engine.service';
 
@@ -21,13 +22,13 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
 @Component({
   selector: 'app-emociones',
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule, DatePipe],
+  imports: [IonicModule, FormsModule, CommonModule, DatePipe, AppIconComponent],
   template: `
     <ion-content [fullscreen]="true">
       <div class="page">
         <section class="hero-section">
           <div class="hero-content">
-            <div class="hero-icon-wrap"><ion-icon name="heart" class="hero-icon"></ion-icon></div>
+            <div class="hero-icon-wrap"><app-icon name="heart" class="hero-icon"></app-icon></div>
             <h1 class="hero-title">Cómo te sientes</h1>
             <p class="hero-subtitle">Registra tu estado emocional para ver tu progreso.</p>
           </div>
@@ -77,7 +78,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
 
           @if (historial.length === 0) {
             <div class="empty-state">
-              <ion-icon name="happy-outline"></ion-icon>
+              <app-icon name="happy-outline"></app-icon>
               <p>Aún no has registrado emociones.</p>
             </div>
           }

@@ -1,10 +1,11 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 
 @Component({
   selector: 'app-calm-count-game',
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, AppIconComponent],
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar>
@@ -16,7 +17,7 @@ import { IonicModule } from '@ionic/angular';
     </ion-header>
     <ion-content class="ion-padding">
       <div class="coming-soon">
-        <ion-icon name="calculator-outline" class="cs-icon"></ion-icon>
+        <app-icon name="calculator-outline" class="cs-icon"></app-icon>
         <h2>Cuenta Calma</h2>
         <p>Concéntrate en contar mientras te relajas. Próximamente.</p>
         <ion-button fill="outline" routerLink="/minijuegos">Volver</ion-button>

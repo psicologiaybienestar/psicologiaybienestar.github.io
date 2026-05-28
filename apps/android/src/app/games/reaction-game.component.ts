@@ -1,10 +1,11 @@
 import { Component, OnDestroy } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 
 @Component({
   selector: 'app-reaction-game',
   standalone: true,
-  imports: [IonicModule],
+  imports: [IonicModule, AppIconComponent],
   template: `
     <ion-header class="ion-no-border">
       <ion-toolbar>
@@ -14,7 +15,7 @@ import { IonicModule } from '@ionic/angular';
         <ion-title>Reflejos</ion-title>
         <ion-buttons slot="end">
           <ion-button (click)="reset()">
-            <ion-icon slot="icon-only" name="refresh-outline"></ion-icon>
+            <app-icon name="refresh-outline"></app-icon>
           </ion-button>
         </ion-buttons>
       </ion-toolbar>
@@ -29,7 +30,7 @@ import { IonicModule } from '@ionic/angular';
       <div class="game-area" (click)="onAreaClick()">
         @if (gameState === 'waiting') {
           <div class="state-msg">
-            <ion-icon name="hand-left-outline" class="state-icon"></ion-icon>
+            <app-icon name="hand-left-outline" class="state-icon"></app-icon>
             <p>Toca cuando el circulo se ponga verde</p>
             <ion-button (click)="startRound()" class="start-btn gradient-primary">Comenzar</ion-button>
           </div>
@@ -39,16 +40,16 @@ import { IonicModule } from '@ionic/angular';
           </div>
         } @else if (gameState === 'ready') {
           <div class="target" [style.--c]="targetColor" (click)="onTargetClick(); $event.stopPropagation()">
-            <ion-icon [name]="targetIcon" class="target-icon"></ion-icon>
+            <app-icon [name]="targetIcon" class="target-icon"></app-icon>
           </div>
         } @else if (gameState === 'too-soon') {
           <div class="state-msg error">
-            <ion-icon name="alert-circle-outline" class="error-icon"></ion-icon>
+            <app-icon name="alert-circle-outline" class="error-icon"></app-icon>
             <p>Muy pronto! Espera al verde</p>
           </div>
         } @else if (gameState === 'result') {
           <div class="state-msg">
-            <ion-icon name="time-outline" class="time-icon"></ion-icon>
+            <app-icon name="time-outline" class="time-icon"></app-icon>
             <p class="result-ms">{{ lastTime }}ms</p>
             <p class="result-label">{{ resultLabel }}</p>
             <ion-button (click)="startRound()" class="start-btn gradient-primary">Siguiente</ion-button>

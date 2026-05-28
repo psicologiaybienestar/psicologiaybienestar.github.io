@@ -2,6 +2,7 @@ import { Component, OnInit, inject } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
 import { FormsModule } from '@angular/forms';
 import { CommonModule } from '@angular/common';
+import { AppIconComponent } from '@shared/components/app-icon.component';
 import { PushNotificationsService } from '@shared/services/push-notifications.service';
 import { WhatsAppService } from '@shared/services/whatsapp.service';
 import { UserProfileService } from '@shared/services/user-profile.service';
@@ -9,7 +10,7 @@ import { UserProfileService } from '@shared/services/user-profile.service';
 @Component({
   selector: 'app-configuracion',
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule],
+  imports: [IonicModule, FormsModule, CommonModule, AppIconComponent],
   template: `
     <ion-content [fullscreen]="true">
       <div class="page">
@@ -22,7 +23,7 @@ import { UserProfileService } from '@shared/services/user-profile.service';
             @if (editandoNombre) {
               <div class="edit-name-container">
                 <div class="edit-input-wrapper">
-                  <ion-icon name="person-outline"></ion-icon>
+                  <app-icon name="person-outline"></app-icon>
                   <input type="text" [(ngModel)]="tempNickname" placeholder="Escribe tu nombre" class="edit-input" maxlength="25" (keyup.enter)="guardarNombre()" autofocus>
                 </div>
                 <div class="edit-actions">
@@ -35,7 +36,7 @@ import { UserProfileService } from '@shared/services/user-profile.service';
                 <h1 class="hero-title">{{ nickname || 'Invitado' }}</h1>
                 <p class="hero-subtitle">Tu viaje al bienestar continúa</p>
                 <button class="btn-edit-profile" (click)="editarNombre()">
-                  <ion-icon name="pencil-outline"></ion-icon>
+                  <app-icon name="pencil-outline"></app-icon>
                   Editar perfil
                 </button>
               </div>
@@ -47,7 +48,7 @@ import { UserProfileService } from '@shared/services/user-profile.service';
           <h2 class="section-title">Configuración</h2>
           <div class="card card-setting">
             <div class="setting-row">
-              <div class="setting-icon soft-blue"><ion-icon name="notifications"></ion-icon></div>
+              <div class="setting-icon soft-blue"><app-icon name="notifications"></app-icon></div>
               <div class="setting-text">
                 <h3>Notificaciones Push</h3>
                 <p>Recibe recordatorios y frases diarias</p>
@@ -62,32 +63,32 @@ import { UserProfileService } from '@shared/services/user-profile.service';
           <div class="links-list">
             <div class="card card-link" (click)="abrirWeb()">
               <div class="link-row">
-                <div class="link-icon soft-purple"><ion-icon name="globe"></ion-icon></div>
+                <div class="link-icon soft-purple"><app-icon name="globe"></app-icon></div>
                 <div class="link-text">
                   <h3>Versión Web Extendida</h3>
                   <p>Accede a todos los artículos y admin</p>
                 </div>
-                <ion-icon name="chevron-forward" class="arrow"></ion-icon>
+                <app-icon name="chevron-forward" class="arrow"></app-icon>
               </div>
             </div>
             <div class="card card-link" (click)="abrirWhatsApp()">
               <div class="link-row">
-                <div class="link-icon soft-green"><ion-icon name="logo-whatsapp"></ion-icon></div>
+                <div class="link-icon soft-green"><app-icon name="logo-whatsapp"></app-icon></div>
                 <div class="link-text">
                   <h3>Soporte vía WhatsApp</h3>
                   <p>Habla con nosotros directamente</p>
                 </div>
-                <ion-icon name="chevron-forward" class="arrow"></ion-icon>
+                <app-icon name="chevron-forward" class="arrow"></app-icon>
               </div>
             </div>
             <div class="card card-link" (click)="mostrarServicios = !mostrarServicios">
               <div class="link-row">
-                <div class="link-icon soft-orange"><ion-icon name="briefcase"></ion-icon></div>
+                <div class="link-icon soft-orange"><app-icon name="briefcase"></app-icon></div>
                 <div class="link-text">
                   <h3>Nuestros Servicios</h3>
                   <p>Terapia, talleres y más</p>
                 </div>
-                <ion-icon [name]="mostrarServicios ? 'chevron-up' : 'chevron-down'" class="arrow"></ion-icon>
+                <app-icon [name]="mostrarServicios ? 'chevron-up' : 'chevron-down'" class="arrow"></app-icon>
               </div>
             </div>
           </div>
@@ -106,11 +107,11 @@ import { UserProfileService } from '@shared/services/user-profile.service';
           <h2 class="section-title">Síguenos en Redes</h2>
           <div class="socials-row">
             <button class="social-btn btn-insta" (click)="abrirInstagram()" aria-label="Instagram">
-              <ion-icon name="logo-instagram"></ion-icon>
+              <app-icon name="logo-instagram"></app-icon>
               <span>Instagram</span>
             </button>
             <button class="social-btn btn-fb" (click)="abrirFacebook()" aria-label="Facebook">
-              <ion-icon name="logo-facebook"></ion-icon>
+              <app-icon name="logo-facebook"></app-icon>
               <span>Facebook</span>
             </button>
           </div>

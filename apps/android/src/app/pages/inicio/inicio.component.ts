@@ -151,7 +151,10 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
         <!-- EVENTOS -->
         @if (eventos.length > 0) {
           <section class="section">
-            <h2 class="section-title">Eventos próximos</h2>
+            <div class="section-header">
+              <h2 class="section-title">Eventos próximos</h2>
+              <a class="section-link" routerLink="/eventos">Ver todos</a>
+            </div>
             <div class="eventos-list">
               @for (evento of eventos; track evento.id) {
                 <div class="card event-card" [routerLink]="['/evento', evento.id]">
@@ -294,7 +297,10 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
     .illustration-circle app-icon { font-size: 32px; color: white; }
     
     .section { padding: 0 24px 24px; }
-    .section-title { font-size: 18px; font-weight: 700; color: #1f2937; margin: 0 0 16px; }
+    .section-title { font-size: 18px; font-weight: 700; color: #1f2937; margin: 0; }
+    .section-header { display: flex; align-items: center; justify-content: space-between; margin-bottom: 16px; }
+    .section-link { font-size: 13px; font-weight: 700; color: #627eff; text-decoration: none; padding: 6px 12px; border-radius: 8px; background: #eff6ff; transition: background 0.2s; }
+    .section-link:active { background: #dbeafe; }
     
     .card-quote { position: relative; overflow: hidden; padding: 24px; border-radius: var(--pg-radius-lg); box-shadow: var(--pg-shadow-md); margin-bottom: 8px; }
     .quote-header { display: flex; align-items: center; gap: 8px; margin-bottom: 12px; }

@@ -25,6 +25,10 @@ export const routes: Routes = [
         loadComponent: () => import('./pages/minijuegos/minijuegos.component').then(m => m.MinijuegosComponent),
       },
       {
+        path: 'eventos',
+        loadComponent: () => import('./pages/eventos/eventos.component').then(m => m.EventosListComponent),
+      },
+      {
         path: 'configuracion',
         loadComponent: () => import('./pages/configuracion/configuracion.component').then(m => m.ConfiguracionComponent),
       },

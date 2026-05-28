@@ -57,27 +57,13 @@ export class SupabaseService {
   }
 
   async getProximosEventos(limit = 3) {
-    const { data: proximos, error: err1 } = await this.supabase
+    const { data, error } = await this.supabase
       .from('eventos')
       .select('*')
-      .eq('estado', 'publicado')
-      .gte('fecha_inicio', new Date().toISOString())
-      .order('fecha_inicio', { ascending: true })
-      .limit(limit);
-
-    if (!err1 && proximos && proximos.length >= limit) return proximos;
-
-    const { data: recientes, error: err2 } = await this.supabase
-      .from('eventos')
-      .select('*')
-      .eq('estado', 'pospuesto')
+      .in('estado', ['publicado', 'pospuesto'])
       .order('fecha_inicio', { ascending: false })
-      .limit(limit - (proximos?.length || 0));
-
-    if (err1 || err2) throw err1 || err2;
-
-    const existingIds = new Set(proximos?.map(e => e.id) || []);
-    const combined = [...(proximos || []), ...(recientes || []).filter(e => !existingIds.has(e.id))];
-    return combined.slice(0, limit);
+      .limit(limit);
+    if (error) throw error;
+    return data || [];
   }
 }

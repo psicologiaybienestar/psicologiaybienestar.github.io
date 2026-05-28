@@ -4,6 +4,7 @@ import { CommonModule, DatePipe } from '@angular/common';
 import { ActivatedRoute, RouterModule } from '@angular/router';
 import { AppIconComponent } from '@shared/components/app-icon.component';
 import { SupabaseService } from '@shared/services/supabase.service';
+import { EventosService } from '@shared/services/eventos.service';
 
 const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; icon: string }> = {
   publicado: { label: 'Publicado', color: '#627eff', bg: '#eef2ff', icon: 'checkmark-circle' },
@@ -147,6 +148,7 @@ const STATUS_CONFIG: Record<string, { label: string; color: string; bg: string; 
 export class EventoDetailComponent implements OnInit {
   private supabase = inject(SupabaseService);
   private route = inject(ActivatedRoute);
+  private eventosService = inject(EventosService);
 
   evento: any = null;
   loading = true;
@@ -163,6 +165,7 @@ export class EventoDetailComponent implements OnInit {
       return;
     }
     try {
+      await this.eventosService.autoFinalize();
       const { data, error } = await this.supabase.client
         .from('eventos')
         .select('*')

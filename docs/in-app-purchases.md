@@ -132,9 +132,16 @@ export class PurchaseService {
 }
 ```
 
-### 4.2 Botón en Configuración
+### 4.2 Botón en Configuración y Minijuegos
 
-Agregar en `configuracion.component.ts`:
+El botón "Apoyar compra" aparece en **dos** secciones de la app Android:
+
+1. **Configuración** (`configuracion.component.ts`) — en la sección de estadísticas
+2. **Minijuegos** (`minijuegos.component.ts`) — como tarjeta `support-card` debajo del "Próximamente"
+
+Ambos botones llaman al mismo método `buySupport()`.
+
+#### Configuración
 
 ```html
 <button class="support-btn" (click)="buySupport()">
@@ -142,6 +149,25 @@ Agregar en `configuracion.component.ts`:
   Apoyar con 1 USD
 </button>
 ```
+
+#### Minijuegos
+
+```html
+<div class="support-card glass-card-strong">
+  <div class="support-header">
+    <div class="support-icon"><app-icon name="settings"></app-icon></div>
+    <div class="support-text">
+      <h3>Apoya el desarrollo de la app</h3>
+      <p>Tu apoyo nos ayuda a seguir mejorando y creando nuevas herramientas para ti.</p>
+    </div>
+  </div>
+  <button class="btn-support" (click)="buySupport()">
+    <app-icon name="heart-outline"></app-icon> Apoyar con compra
+  </button>
+</div>
+```
+
+#### Método compartido
 
 ```typescript
 async buySupport() {
@@ -258,10 +284,11 @@ Usuario → click "Apoyar con 1 USD"
 ## 10. Resumen de archivos a modificar
 
 | Archivo | Acción |
-|---|---|
+|---|---|---|
 | `shared/services/purchase.service.ts` | Crear (código de compra) |
 | `shared/services/index.ts` | Agregar export |
 | `apps/android/src/app/pages/configuracion/configuracion.component.ts` | Agregar botón + método |
+| `apps/android/src/app/pages/minijuegos/minijuegos.component.ts` | Conectar botón existente a `buySupport()` |
 | `apps/web/src/app/core/services/purchase.service.ts` | Re-export (opcional) |
 | `apps/android/src/app/app.component.ts` | Inyectar PurchaseService |
 

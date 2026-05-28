@@ -181,7 +181,7 @@ Full CI pipeline from `ionic.starter.json`: `npm run lint && npm run build && np
 | `ContentEngineService` | ✅ | Local dataset loader, mixer, rotator with history tracking |
 | `EmotionsService` | ✅ | Emotion check-in, daily rotation (8/30), local + Supabase sync |
 | `ScheduledNotificationsService` | ✅ | 3 daily local notifications (9AM quote, 2PM activity, 8PM tip). `scheduleDaily()` se ejecuta DESPUÉS de `pushService.register()` (con 1s timeout) para que el permiso ya esté concedido. |
-| `EventosService` | ✅ | Centraliza `autoFinalize()` que llama a `supabase.rpc('auto_finalize_eventos')` — función PL/pgSQL `security definer` que actualiza eventos con `fecha_fin < now()` y `estado in ('publicado','borrador')` a `'finalizado'`. NO sobreescribe estados manuales (`cancelado`, `pospuesto`). |
+| `EventosService` | ✅ | Centraliza `autoFinalize()` que llama a `supabase.rpc('auto_finalize_eventos')` — función PL/pgSQL `security definer` que actualiza eventos con `fecha_fin < now()` y `estado in ('publicado','borrador')` a `'finalizado'`. NO sobreescribe estados manuales (`cancelado`, `pospuesto`). Llamado en: Android `InicioComponent`, Android `EventoDetailComponent`, web `EventosListComponent`, web `EventoDetailComponent`, web `AdminEventosComponent`. |
 | `OfflineService` | ✅ | Online/offline detection via `navigator.onLine` + events |
 
 ## Filtros emocionales

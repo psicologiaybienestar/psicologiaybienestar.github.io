@@ -290,9 +290,25 @@ export class AdminEventosComponent implements OnInit {
     this.imgPreview = evento.imagen || null;
     this.eventoForm.patchValue({
       ...evento,
-      fecha_inicio: evento.fecha_inicio ? evento.fecha_inicio.substring(0, 16) : '',
-      fecha_fin: evento.fecha_fin ? evento.fecha_fin.substring(0, 16) : '',
+      fecha_inicio: this.toLocalDatetime(evento.fecha_inicio),
+      fecha_fin: this.toLocalDatetime(evento.fecha_fin),
     });
+  }
+
+  private toUtc(localStr: string): string | null {
+    if (!localStr) return null;
+    return new Date(localStr).toISOString();
+  }
+
+  private toLocalDatetime(utcStr: string): string {
+    if (!utcStr) return '';
+    const d = new Date(utcStr);
+    const y = d.getFullYear();
+    const m = String(d.getMonth() + 1).padStart(2, '0');
+    const day = String(d.getDate()).padStart(2, '0');
+    const h = String(d.getHours()).padStart(2, '0');
+    const min = String(d.getMinutes()).padStart(2, '0');
+    return `${y}-${m}-${day}T${h}:${min}`;
   }
 
   async guardar() {
@@ -301,6 +317,8 @@ export class AdminEventosComponent implements OnInit {
     this.formError = '';
     try {
       const data = { ...this.eventoForm.value };
+      data.fecha_inicio = this.toUtc(data.fecha_inicio);
+      data.fecha_fin = this.toUtc(data.fecha_fin);
       if (this.editandoId) {
         const { error } = await this.supabase.client.from('eventos').update(data).eq('id', this.editandoId);
         if (error) throw error;

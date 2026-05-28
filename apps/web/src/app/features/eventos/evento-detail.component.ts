@@ -2,6 +2,7 @@ import { Component, OnInit } from '@angular/core';
 import { ActivatedRoute, RouterLink } from '@angular/router';
 import { DatePipe } from '@angular/common';
 import { SupabaseService } from '../../core/services/supabase.service';
+import { EventosService } from '../../core/services/eventos.service';
 
 @Component({
   selector: 'app-evento-detail',
@@ -85,7 +86,8 @@ export class EventoDetailComponent implements OnInit {
 
   constructor(
     private route: ActivatedRoute,
-    private supabase: SupabaseService
+    private supabase: SupabaseService,
+    private eventosService: EventosService
   ) {}
 
   eventLabel(estado: string): string {
@@ -105,6 +107,7 @@ export class EventoDetailComponent implements OnInit {
       return;
     }
     try {
+      await this.eventosService.autoFinalize();
       const { data, error } = await this.supabase.client
         .from('eventos')
         .select('*')

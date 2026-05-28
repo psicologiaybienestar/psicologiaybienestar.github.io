@@ -5,6 +5,7 @@ import { FormsModule } from '@angular/forms';
 import { Router, RouterModule } from '@angular/router';
 import { AppIconComponent } from '@shared/components/app-icon.component';
 import { SupabaseService } from '@shared/services/supabase.service';
+import { EventosService } from '@shared/services/eventos.service';
 import { ContentEngineService, LocalQuote, LocalActivity, LocalTip } from '@shared/services/content-engine.service';
 import { EmotionsService, EmotionCheckIn } from '@shared/services/emotions.service';
 
@@ -393,6 +394,7 @@ export class InicioComponent implements OnInit {
   private emotionsService = inject(EmotionsService);
   private supabase = inject(SupabaseService);
   private router = inject(Router);
+  private eventosService = inject(EventosService);
 
   checkinHoy: EmotionCheckIn | undefined;
   dailyQuote: LocalQuote | undefined;
@@ -447,6 +449,7 @@ export class InicioComponent implements OnInit {
     
     // Load Events
     try {
+      await this.eventosService.autoFinalize();
       this.eventos = await this.supabase.getProximosEventos(3);
     } catch (e) {
       console.error('Error loading events:', e);
@@ -501,7 +504,8 @@ export class InicioComponent implements OnInit {
 
   badgeColor(estado: string): string {
     switch (estado?.toLowerCase()) {
-      case 'activo': return '#10b981';
+      case 'activo':
+      case 'publicado': return '#10b981';
       case 'proximo':
       case 'próximo': return '#3b82f6';
       case 'finalizado': return '#6b7280';
@@ -513,7 +517,8 @@ export class InicioComponent implements OnInit {
 
   badgeBg(estado: string): string {
     switch (estado?.toLowerCase()) {
-      case 'activo': return '#ecfdf5';
+      case 'activo':
+      case 'publicado': return '#ecfdf5';
       case 'proximo':
       case 'próximo': return '#eff6ff';
       case 'finalizado': return '#f3f4f6';

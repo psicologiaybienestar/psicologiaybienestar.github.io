@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1779957772546,
+  "timestamp": 1779958126257,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -31,7 +31,7 @@
         "/449.e08c16e8dd1f26ba.js",
         "/47.fbde9b0a92ca6be9.js",
         "/490.18e7c81541022326.js",
-        "/494.97ed3c70d09a37ad.js",
+        "/494.ffb494c1de3a7777.js",
         "/56.683c25645977e727.js",
         "/617.481e9ebe55760b86.js",
         "/625.cfb030821cba4ca3.js",
@@ -57,7 +57,7 @@
         "/main.02400551e6e179b5.js",
         "/manifest.webmanifest",
         "/polyfills.76ed0f0e63d5e642.js",
-        "/runtime.59675b7cdd6bed3d.js",
+        "/runtime.5539bab1f97d7be2.js",
         "/styles.9d6b274b590b6609.css"
       ],
       "patterns": []
@@ -137,7 +137,7 @@
     "/449.e08c16e8dd1f26ba.js": "614c3d4b9679b1c58b79cae1b306b34e73f59543",
     "/47.fbde9b0a92ca6be9.js": "75dc7570e9066b8fdeaa5631f00699f15c908a81",
     "/490.18e7c81541022326.js": "e6aebd3447a1ddec86655d113202b85fda1a60be",
-    "/494.97ed3c70d09a37ad.js": "30ddf20bb2f9b78c19c8f6f85c7edd686b71b385",
+    "/494.ffb494c1de3a7777.js": "b5f18f55bb83b7703dcc6723f3bb5752077aa382",
     "/56.683c25645977e727.js": "765d7854ecde5b9f65de6594bb8de542d19eef96",
     "/617.481e9ebe55760b86.js": "538e4cbce30f3ff45de51d491004cce103c9aaec",
     "/625.cfb030821cba4ca3.js": "738e0bcc7ce097588cdffb871f5300131cfa34b9",
@@ -185,11 +185,11 @@
     "/assets/team/sindy_team.png": "069a472024b60b408c3a26f159f0922d2a9227db",
     "/assets/team/viviana_team.png": "3b4f727073b4fd04ad5aaea5a964a7c3e3556080",
     "/common.fcf542baaa4ede5e.js": "c3c7cc959f2d1816921e3482bfc22789a4096cef",
-    "/index.html": "e70af687277cebe27cc739b955ae785f92d6986d",
+    "/index.html": "acd45235ee79847006dab525b438d47093331501",
     "/main.02400551e6e179b5.js": "a0c4784da935c46fd398dc7da9a47e81b3263e16",
     "/manifest.webmanifest": "6577c79e94818cfe9ac0d555b6cee44f2e1bc1b8",
     "/polyfills.76ed0f0e63d5e642.js": "58c9cdb9a251255e7e9d3f107859e136788c41aa",
-    "/runtime.59675b7cdd6bed3d.js": "94c0ccb94c96568823e75b767cde476299a31b92",
+    "/runtime.5539bab1f97d7be2.js": "7cf7fa93abd0947a36fdf4cf2f6e4806874050c5",
     "/styles.9d6b274b590b6609.css": "3753d9d9082c23b0a23e00befb0f673dee6e85a2"
   },
   "navigationUrls": [

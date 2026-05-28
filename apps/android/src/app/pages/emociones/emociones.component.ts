@@ -21,15 +21,14 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
 @Component({
   selector: 'app-emociones',
   standalone: true,
-  imports: [IonicModule, FormsModule, CommonModule],
+  imports: [IonicModule, FormsModule, CommonModule, DatePipe],
   template: `
     <ion-content [fullscreen]="true">
       <div class="page">
         <section class="hero-section">
-          <div class="hero-bg"></div>
           <div class="hero-content">
-            <ion-icon name="heart" class="hero-icon"></ion-icon>
-            <h1 class="hero-title">Como te sientes</h1>
+            <div class="hero-icon-wrap"><ion-icon name="heart" class="hero-icon"></ion-icon></div>
+            <h1 class="hero-title">Cómo te sientes</h1>
             <p class="hero-subtitle">Registra tu estado emocional para ver tu progreso.</p>
           </div>
         </section>
@@ -57,12 +56,12 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                 </div>
               </div>
               <div class="form-group">
-                <label>Que provoco esta emocion? (Opcional)</label>
-                <textarea [(ngModel)]="nota" placeholder="Escribe algo aqui..." rows="2"></textarea>
+                <label>¿Qué provocó esta emoción? (Opcional)</label>
+                <textarea [(ngModel)]="nota" placeholder="Escribe algo aquí..." rows="2"></textarea>
               </div>
               <button class="btn-primary btn-full" (click)="guardar()" [disabled]="guardando">
                 @if (guardando) { <ion-spinner name="crescent"></ion-spinner> }
-                @else { Registrar Emocion }
+                @else { Registrar Emoción }
               </button>
             </div>
           }
@@ -79,7 +78,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
           @if (historial.length === 0) {
             <div class="empty-state">
               <ion-icon name="happy-outline"></ion-icon>
-              <p>Aun no has registrado emociones.</p>
+              <p>Aún no has registrado emociones.</p>
             </div>
           }
 
@@ -95,7 +94,7 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
                     </span>
                     <div class="tl-info">
                       <h3>{{ item.emotion_name }}</h3>
-                      <span class="tl-time">{{ item.created_at | date:'shortTime' }} | {{ item.created_at | date:'dd MMM' }}</span>
+                      <span class="tl-time">{{ item.created_at | date:'shortTime' }} • {{ item.created_at | date:'dd MMM' }}</span>
                     </div>
                   </div>
                   @if (item.note) {
@@ -112,51 +111,66 @@ const EMOTION_EMOJI_MAP: Record<string, string> = {
     </ion-content>
   `,
   styles: [`
-    .page { background: #ffffff; min-height: 100%; }
-    .hero-section { position: relative; padding: 28px 20px 8px; overflow: hidden; text-align: center; }
-    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #627eff 0%, #53c6e4 50%, #66a6da 100%); opacity: 0.06; pointer-events: none; }
-    .hero-content { position: relative; }
-    .hero-icon { font-size: 48px; color: var(--ion-color-primary); display: block; margin: 0 auto 8px; }
-    .hero-title { font-size: 26px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
-    .hero-subtitle { font-size: 14px; color: #6b7280; max-width: 280px; margin: 0 auto; line-height: 1.5; }
-    .section { padding: 4px 20px 22px; }
-    .section-title { font-size: 20px; font-weight: 700; color: #1f2937; margin: 0; }
-    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 12px; }
-    .count { background: #f3f4f6; color: #6b7280; padding: 2px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
-    .card { background: #ffffff; border: 1px solid rgba(0,0,0,0.04); border-radius: 16px; padding: 16px; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
+    .page { background: #fafafa; min-height: 100%; font-family: var(--pg-font-body); }
+    .hero-section { padding: 40px 24px 20px; text-align: center; }
+    .hero-content { display: flex; flex-direction: column; align-items: center; }
+    .hero-icon-wrap { width: 64px; height: 64px; border-radius: 20px; background: #fff1f2; display: flex; align-items: center; justify-content: center; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(225, 29, 72, 0.1); }
+    .hero-icon { font-size: 32px; color: #e11d48; }
+    .hero-title { font-size: 26px; font-weight: 800; color: #111827; margin: 0 0 4px; }
+    .hero-subtitle { font-size: 15px; color: #6b7280; max-width: 280px; margin: 0; line-height: 1.5; }
+    
+    .section { padding: 0 24px 24px; }
+    .section-title { font-size: 18px; font-weight: 800; color: #111827; margin: 0; }
+    .section-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px; }
+    .count { background: #e5e7eb; color: #4b5563; padding: 2px 10px; border-radius: 8px; font-size: 12px; font-weight: 700; }
+    
+    .card { background: #ffffff; border: 1px solid #f3f4f6; border-radius: 24px; padding: 20px; margin-bottom: 12px; box-shadow: 0 4px 12px rgba(0,0,0,0.02); }
+    
     .emotion-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 10px; }
-    .emotion-card { display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 84px; padding: 14px 6px; background: white; border: 2px solid #f0f0f5; border-radius: 16px; transition: all 0.2s ease; }
-    .emotion-card.active { border-color: var(--c); background: color-mix(in srgb, var(--c) 5%, white); transform: scale(1.04); box-shadow: 0 8px 20px color-mix(in srgb, var(--c) 12%, transparent); }
+    .emotion-card { display: flex; flex-direction: column; align-items: center; gap: 8px; min-height: 84px; padding: 14px 6px; background: white; border: 2px solid transparent; border-radius: 20px; box-shadow: 0 4px 10px rgba(0,0,0,0.03); transition: transform 0.2s ease, box-shadow 0.2s ease, border-color 0.2s ease; }
+    .emotion-card.active { border-color: var(--c); background: color-mix(in srgb, var(--c) 5%, white); transform: scale(1.04); box-shadow: 0 8px 24px color-mix(in srgb, var(--c) 20%, transparent); }
     .emotion-card:active { transform: scale(0.96); }
-    .emotion-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--c) 12%, white); color: var(--c); font-size: 24px; line-height: 1; }
-    .emotion-name { font-size: 10px; font-weight: 700; color: #6b7280; text-align: center; line-height: 1.2; }
-    .emotion-card.active .emotion-name { color: var(--c); font-weight: 700; }
-    .card-detail { margin-top: 16px; }
-    .detail-row { display: flex; align-items: center; gap: 12px; margin-bottom: 16px; }
-    .detail-icon { width: 46px; height: 46px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 25px; line-height: 1; flex-shrink: 0; }
-    .detail-row h3 { font-size: 17px; font-weight: 700; color: #1f2937; margin: 0; }
-    .detail-row p { font-size: 12px; color: #6b7280; margin: 2px 0 0; line-height: 1.4; }
-    .form-group { margin-bottom: 16px; }
-    .form-group label { display: block; font-size: 11px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.03em; }
-    .form-group textarea { width: 100%; background: white; border: 1px solid #e8e8ee; border-radius: 12px; padding: 12px; font-size: 14px; color: #1f2937; outline: none; transition: border-color 0.15s ease; }
-    .form-group textarea:focus { border-color: var(--ion-color-primary); }
-    .btn-primary { background: var(--ion-color-primary); color: white; border: none; padding: 15px; border-radius: 12px; font-weight: 700; font-size: 15px; }
+    .emotion-icon { width: 40px; height: 40px; border-radius: 14px; display: flex; align-items: center; justify-content: center; background: color-mix(in srgb, var(--c) 10%, white); color: var(--c); font-size: 26px; line-height: 1; }
+    .emotion-name { font-size: 11px; font-weight: 600; color: #6b7280; text-align: center; line-height: 1.2; }
+    .emotion-card.active .emotion-name { color: var(--c); font-weight: 800; }
+    
+    .card-detail { margin-top: 20px; animation: slideUp 0.3s ease; }
+    @keyframes slideUp { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    .detail-row { display: flex; align-items: center; gap: 16px; margin-bottom: 20px; }
+    .detail-icon { width: 56px; height: 56px; border-radius: 16px; display: flex; align-items: center; justify-content: center; font-size: 32px; flex-shrink: 0; }
+    .detail-row h3 { font-size: 18px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
+    .detail-row p { font-size: 13px; color: #6b7280; margin: 0; line-height: 1.4; }
+    
+    .form-group { margin-bottom: 20px; }
+    .form-group label { display: block; font-size: 12px; font-weight: 700; color: #9ca3af; text-transform: uppercase; margin-bottom: 8px; letter-spacing: 0.05em; }
+    .form-group textarea { width: 100%; background: #f9fafb; border: 1px solid #e5e7eb; border-radius: 16px; padding: 14px; font-size: 15px; color: #111827; outline: none; transition: border-color 0.2s ease, background 0.2s ease; resize: vertical; }
+    .form-group textarea:focus { border-color: #627eff; background: white; box-shadow: 0 0 0 3px rgba(98, 126, 255, 0.1); }
+    
+    .btn-primary { background: linear-gradient(135deg, #627eff 0%, #53c6e4 100%); color: white; border: none; padding: 16px; border-radius: 16px; font-weight: 800; font-size: 16px; box-shadow: 0 8px 20px rgba(98, 126, 255, 0.25); transition: transform 0.2s ease; }
+    .btn-primary:active { transform: scale(0.98); }
+    .btn-primary:disabled { opacity: 0.7; transform: none; }
     .btn-full { width: 100%; }
-    .empty-state { text-align: center; padding: 32px 24px; color: #d1d5db; }
-    .empty-state ion-icon { font-size: 40px; margin-bottom: 10px; }
-    .empty-state p { font-size: 14px; color: #9ca3af; }
-    .timeline { padding-left: 20px; position: relative; }
-    .timeline-item { position: relative; padding-bottom: 20px; }
-    .timeline-line { position: absolute; left: -14px; top: 0; bottom: 0; width: 2px; background: #edf0f5; }
-    .timeline-dot { position: absolute; left: -20px; top: 18px; width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; z-index: 1; box-shadow: 0 0 0 3px rgba(98, 126, 255, 0.08); }
-    .card-timeline { margin-bottom: 0; }
-    .tl-row { display: flex; align-items: center; gap: 10px; }
-    .tl-icon { width: 36px; height: 36px; border-radius: 12px; display: flex; align-items: center; justify-content: center; font-size: 20px; line-height: 1; flex-shrink: 0; }
-    .tl-info h3 { font-size: 14px; font-weight: 700; color: #1f2937; margin: 0; }
-    .tl-time { font-size: 10px; color: #9ca3af; font-weight: 600; }
-    .tl-note { margin-top: 10px; font-size: 12px; color: #6b7280; padding-top: 10px; border-top: 1px solid #edf0f5; }
+    
+    .empty-state { text-align: center; padding: 40px 24px; color: #d1d5db; }
+    .empty-state ion-icon { font-size: 48px; margin-bottom: 12px; }
+    .empty-state p { font-size: 15px; color: #9ca3af; }
+    
+    .timeline { padding-left: 24px; position: relative; margin-top: 12px; }
+    .timeline-item { position: relative; padding-bottom: 24px; }
+    .timeline-item:last-child { padding-bottom: 0; }
+    .timeline-item:last-child .timeline-line { display: none; }
+    .timeline-line { position: absolute; left: -12px; top: 24px; bottom: 0; width: 2px; background: #e5e7eb; }
+    .timeline-dot { position: absolute; left: -17px; top: 20px; width: 12px; height: 12px; border-radius: 50%; border: 3px solid white; z-index: 1; box-shadow: 0 0 0 3px rgba(0,0,0,0.05); }
+    
+    .card-timeline { margin-bottom: 0; padding: 16px; }
+    .tl-row { display: flex; align-items: center; gap: 12px; }
+    .tl-icon { width: 44px; height: 44px; border-radius: 14px; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .tl-info h3 { font-size: 15px; font-weight: 800; color: #111827; margin: 0 0 2px; }
+    .tl-time { font-size: 12px; color: #9ca3af; font-weight: 600; }
+    .tl-note { margin-top: 12px; font-size: 14px; color: #4b5563; padding-top: 12px; border-top: 1px solid #f3f4f6; line-height: 1.5; }
+    
     .bottom-spacer { height: 80px; height: calc(80px + env(safe-area-inset-bottom, 0px)); }
-  `],
+  `]
 })
 export class EmocionesComponent implements OnInit {
   private emotionsService = inject(EmotionsService);

@@ -1,110 +1,81 @@
 import { Component } from '@angular/core';
 import { IonicModule } from '@ionic/angular';
-import { RouterLink } from '@angular/router';
 import { CommonModule } from '@angular/common';
-import { GAMES_REGISTRY, GameDefinition } from '../../games/games.registry';
+import { RouterLink } from '@angular/router';
 
 @Component({
   selector: 'app-minijuegos',
   standalone: true,
-  imports: [IonicModule, RouterLink, CommonModule],
+  imports: [IonicModule, CommonModule, RouterLink],
   template: `
     <ion-content [fullscreen]="true">
-      <div class="page">
-        <section class="hero-section">
-          <div class="hero-bg"></div>
-          <div class="hero-content">
-            <ion-icon name="game-controller" class="hero-icon"></ion-icon>
-            <h1 class="hero-title">Pausas guiadas</h1>
-            <p class="hero-subtitle">Experiencias simples para respirar, bajar el ritmo y volver a ti.</p>
+      <div class="page gradient-bg">
+        <div class="content-wrapper">
+          <div class="illustration-container">
+            <div class="icon-circle">
+              <ion-icon name="game-controller"></ion-icon>
+            </div>
+            <!-- decorative sparkles -->
+            <ion-icon name="sparkles" class="sparkle s1"></ion-icon>
+            <ion-icon name="star" class="sparkle s2"></ion-icon>
+            <ion-icon name="planet" class="sparkle s3"></ion-icon>
           </div>
-        </section>
+          
+          <h1 class="title">Próximamente</h1>
+          <p class="subtitle">Este apartado está en desarrollo.</p>
+          <p class="description">Estamos trabajando para traerte experiencias interactivas que te ayudarán a relajarte, aprender y divertirte.</p>
+        </div>
 
-        <section class="section">
-          <div class="status-card">
-            <ion-icon name="construct-outline"></ion-icon>
-            <div>
-              <strong>Minijuegos en pruebas</strong>
-              <p>Por ahora dejamos solo ejercicios ligeros. Las experiencias complejas volveran cuando esten pulidas.</p>
+        <div class="support-card glass-card-strong">
+          <div class="support-header">
+            <div class="support-icon"><ion-icon name="settings"></ion-icon></div>
+            <div class="support-text">
+              <h3>Apoya el desarrollo de la app</h3>
+              <p>Tu apoyo nos ayuda a seguir mejorando y creando nuevas herramientas para ti.</p>
             </div>
           </div>
-
-          @if (games.length === 0) {
-            <div class="empty-state">
-              <ion-icon name="game-controller-outline"></ion-icon>
-              <p>No hay minijuegos disponibles en este momento.</p>
-            </div>
-          }
-
-          <div class="games-list">
-            @for (game of games; track game.id; let i = $index) {
-              <a class="card card-game" [routerLink]="game.route">
-                <div class="game-banner" [style.background]="game.color">
-                  <ion-icon [name]="game.icon"></ion-icon>
-                </div>
-                <div class="game-body">
-                  <div class="game-header">
-                    <h3>{{ game.title }}</h3>
-                    <span class="tag testing-tag">En pruebas</span>
-                  </div>
-                  <p>{{ game.description }}</p>
-                  <div class="game-footer">
-                    <span class="game-type"><ion-icon name="leaf-outline"></ion-icon> {{ game.gameType }}</span>
-                    <button class="btn-small">Iniciar</button>
-                  </div>
-                </div>
-              </a>
-            }
-          </div>
-        </section>
-
-        <div class="bottom-spacer"></div>
+          <button class="btn-support">
+            <ion-icon name="heart-outline"></ion-icon> Apoyar con compra
+          </button>
+        </div>
       </div>
     </ion-content>
   `,
   styles: [`
-    .page { background: #ffffff; min-height: 100%; }
-    .hero-section { position: relative; padding: 28px 20px 8px; overflow: hidden; text-align: center; }
-    .hero-bg { position: absolute; inset: 0; background: linear-gradient(135deg, #627eff 0%, #53c6e4 50%, #66a6da 100%); opacity: 0.06; pointer-events: none; }
-    .hero-content { position: relative; }
-    .hero-icon { font-size: 48px; color: var(--ion-color-primary); display: block; margin: 0 auto 8px; }
-    .hero-title { font-size: 26px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
-    .hero-subtitle { font-size: 14px; color: #6b7280; max-width: 280px; margin: 0 auto; line-height: 1.5; }
-    .section { padding: 4px 20px 22px; }
-    .card { background: #ffffff; border: 1px solid rgba(0,0,0,0.04); border-radius: 16px; overflow: hidden; margin-bottom: 12px; box-shadow: 0 2px 8px rgba(0,0,0,0.03); }
-    .status-card { display: flex; align-items: flex-start; gap: 14px; padding: 16px; margin-bottom: 14px; border-radius: 16px; background: #eef2ff; color: var(--ion-color-primary); }
-    .status-card ion-icon { font-size: 24px; flex-shrink: 0; margin-top: 2px; }
-    .status-card strong { display: block; color: #1f2937; font-size: 14px; margin-bottom: 4px; }
-    .status-card p { color: #6b7280; font-size: 12px; line-height: 1.5; margin: 0; }
-    .empty-state { text-align: center; padding: 40px 24px; color: #d1d5db; }
-    .empty-state ion-icon { font-size: 40px; margin-bottom: 10px; }
-    .empty-state p { font-size: 14px; color: #9ca3af; }
-    .games-list { display: flex; flex-direction: column; gap: 12px; }
-    .card-game { text-decoration: none; display: block; }
-    .game-banner { height: 110px; display: flex; align-items: center; justify-content: center; font-size: 48px; color: white; position: relative; overflow: hidden; }
-    .game-banner::after { content: ''; position: absolute; inset: 0; background: linear-gradient(180deg, transparent 50%, rgba(0,0,0,0.06) 100%); pointer-events: none; }
-    .game-body { padding: 16px; }
-    .game-header { display: flex; justify-content: space-between; align-items: center; margin-bottom: 8px; }
-    .game-header h3 { font-size: 16px; font-weight: 700; color: #1f2937; margin: 0; }
-    .tag { font-size: 10px; font-weight: 700; text-transform: uppercase; padding: 4px 8px; border-radius: 6px; letter-spacing: 0.02em; }
-    .testing-tag { background: #fef3c7; color: #b45309; }
-    .game-body p { font-size: 12px; color: #6b7280; margin: 0 0 12px; line-height: 1.5; }
-    .game-footer { display: flex; justify-content: space-between; align-items: center; }
-    .game-type { font-size: 11px; color: #9ca3af; display: flex; align-items: center; gap: 4px; }
-    .game-type ion-icon { font-size: 14px; }
-    .btn-small { background: var(--ion-color-primary); color: white; border: none; padding: 10px 22px; border-radius: 10px; font-weight: 700; font-size: 13px; }
-    .bottom-spacer { height: 80px; height: calc(80px + env(safe-area-inset-bottom, 0px)); }
-  `],
-})
-export class MinijuegosComponent {
-  games: GameDefinition[] = GAMES_REGISTRY.filter(game => ['respiracion', 'calma'].includes(game.id));
+    .page { min-height: 100%; display: flex; flex-direction: column; justify-content: space-between; padding: 40px 24px; position: relative; overflow: hidden; }
+    .gradient-bg { background: linear-gradient(135deg, #627eff 0%, #a78bfa 100%); color: white; }
+    
+    /* Decorative background blobs */
+    .page::before { content: ''; position: absolute; top: -100px; left: -100px; width: 300px; height: 300px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.15) 0%, transparent 70%); pointer-events: none; }
+    .page::after { content: ''; position: absolute; bottom: 20%; right: -150px; width: 400px; height: 400px; border-radius: 50%; background: radial-gradient(circle, rgba(255,255,255,0.1) 0%, transparent 70%); pointer-events: none; }
 
-  difficultyColor(d: string): string {
-    switch (d?.toLowerCase()) {
-      case 'facil': return '#10b981';
-      case 'medio': return '#f59e0b';
-      case 'dificil': return '#ef4444';
-      default: return '#6b7280';
+    .content-wrapper { flex: 1; display: flex; flex-direction: column; align-items: center; justify-content: center; text-align: center; position: relative; z-index: 2; margin-top: -60px; }
+    
+    .illustration-container { position: relative; margin-bottom: 32px; }
+    .icon-circle { width: 100px; height: 100px; background: rgba(255,255,255,0.25); backdrop-filter: blur(12px); -webkit-backdrop-filter: blur(12px); border-radius: 32px; display: flex; align-items: center; justify-content: center; font-size: 56px; color: white; box-shadow: 0 16px 40px rgba(0,0,0,0.1); border: 1px solid rgba(255,255,255,0.4); transform: rotate(-5deg); }
+    
+    .sparkle { position: absolute; color: white; opacity: 0.9; }
+    .s1 { top: -10px; right: -25px; font-size: 28px; animation: float 3s ease-in-out infinite; }
+    .s2 { bottom: 10px; left: -20px; font-size: 18px; animation: float 4s ease-in-out infinite reverse; }
+    .s3 { top: 50px; left: -30px; font-size: 24px; opacity: 0.6; animation: float 3.5s ease-in-out infinite; }
+    
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-8px); }
     }
-  }
-}
+
+    .title { font-size: 36px; font-weight: 800; margin: 0 0 12px; letter-spacing: -0.5px; }
+    .subtitle { font-size: 18px; font-weight: 600; opacity: 0.95; margin: 0 0 16px; }
+    .description { font-size: 15px; line-height: 1.6; opacity: 0.85; max-width: 280px; margin: 0; }
+
+    .support-card { padding: 20px; text-align: left; position: relative; z-index: 2; margin-bottom: calc(80px + env(safe-area-inset-bottom, 0px)); }
+    .support-header { display: flex; gap: 16px; align-items: center; margin-bottom: 20px; }
+    .support-icon { width: 48px; height: 48px; border-radius: 16px; background: #eff6ff; color: #627eff; display: flex; align-items: center; justify-content: center; font-size: 24px; flex-shrink: 0; }
+    .support-text h3 { font-size: 15px; font-weight: 800; color: #1f2937; margin: 0 0 4px; }
+    .support-text p { font-size: 13px; color: #6b7280; line-height: 1.4; margin: 0; }
+    
+    .btn-support { width: 100%; background: #8b5cf6; color: white; border: none; padding: 16px; border-radius: 16px; font-size: 15px; font-weight: 700; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 8px 20px rgba(139, 92, 246, 0.3); transition: transform 0.2s; }
+    .btn-support:active { transform: scale(0.98); }
+  `]
+})
+export class MinijuegosComponent {}

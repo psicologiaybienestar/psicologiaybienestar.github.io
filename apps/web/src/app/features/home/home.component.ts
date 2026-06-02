@@ -83,24 +83,7 @@ import { HomeAndroidComponent } from '../android/home-android.component';
       </div>
     </section>
 
-    <!-- Equipo Section -->
-    <section id="equipo" class="py-20 px-4">
-      <div class="container mx-auto max-w-6xl">
-        <h2 class="text-4xl font-bold text-gray-800 text-center mb-4 animate-fade-in">Nuestro Equipo</h2>
-        <div class="w-24 h-1 bg-gradient-to-r from-primary to-secondary mx-auto mb-12 rounded-full"></div>
-        <div class="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-10">
-          @for (member of team; track member.name; let i = $index) {
-            <div class="text-center" [ngClass]="'animate-fade-in-up delay-' + (i + 1)">
-              <div class="w-40 h-40 mx-auto mb-4 rounded-full overflow-hidden border-4 border-primary shadow-lg hover:scale-105 hover:shadow-xl transition-all duration-500">
-                <img [src]="member.image" [alt]="member.name" class="w-full h-full object-cover" />
-              </div>
-              <h3 class="text-lg font-bold text-gray-800">{{ member.name }}</h3>
-              <p class="text-gray-500 text-sm">{{ member.role }}</p>
-            </div>
-          }
-        </div>
-      </div>
-    </section>
+
 
     <!-- Testimonios Section -->
     <section id="testimonios" class="py-20 px-4 bg-[#f0f8ff]">
@@ -403,11 +386,6 @@ export class HomeComponent implements OnInit, OnDestroy, AfterViewInit {
     },
   ];
 
-  team = [
-    { name: 'Sindy Margarita Garrido', role: 'Psicóloga', image: 'assets/team/sindy_team.png' },
-    { name: 'Manuel Felipe Ascencio Tellez', role: 'Psicólogo', image: 'assets/team/felipe_team.png' },
-    { name: 'Viviana Quiroga Corredo', role: 'Psicóloga', image: 'assets/team/viviana_team.png' },
-  ];
 
   rainIcons: any[] = [];
 

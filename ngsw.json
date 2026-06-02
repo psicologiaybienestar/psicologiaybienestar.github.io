@@ -1,6 +1,6 @@
 {
   "configVersion": 1,
-  "timestamp": 1779960552071,
+  "timestamp": 1780415413371,
   "index": "/index.html",
   "assetGroups": [
     {
@@ -48,7 +48,7 @@
         "/84.4fb0a545d640af3f.js",
         "/843.e0f11ea985708dec.js",
         "/850.829a2c0d1c40a00a.js",
-        "/91.663eb42ce5d2a8fa.js",
+        "/91.67c00cd2153b1df7.js",
         "/924.03d3e4e277b09b47.js",
         "/963.e3ee0758efd5f92f.js",
         "/998.1acbeddaa1d85afc.js",
@@ -57,8 +57,8 @@
         "/main.f06c9ce4d9f9c87c.js",
         "/manifest.webmanifest",
         "/polyfills.76ed0f0e63d5e642.js",
-        "/runtime.5539bab1f97d7be2.js",
-        "/styles.9d6b274b590b6609.css"
+        "/runtime.1c0b3242afbf2898.js",
+        "/styles.d42a79c27c3224d0.css"
       ],
       "patterns": []
     },
@@ -154,7 +154,7 @@
     "/84.4fb0a545d640af3f.js": "42f6ff909ed0318516c311f1a9dc50a6a628cf22",
     "/843.e0f11ea985708dec.js": "be184c3accbcdf4a39cc916f65ca0e8079aaff1a",
     "/850.829a2c0d1c40a00a.js": "a01c075ab859983fc3e30825fc34eabba235c784",
-    "/91.663eb42ce5d2a8fa.js": "4ea977e12ba97171b4d1e32c3c8c22b3f0885ba1",
+    "/91.67c00cd2153b1df7.js": "0e11dbe85e49badb765ca4bd4b9e68055bb0c3cd",
     "/924.03d3e4e277b09b47.js": "fe3aed4b5710f8819fe490a9dd7f9663d8fc308d",
     "/963.e3ee0758efd5f92f.js": "f7b962e6213a967e9beebc765044f61e3756a0ef",
     "/998.1acbeddaa1d85afc.js": "43af9ef902aa19d9c9d34d726254ea08e41be8b3",
@@ -185,12 +185,12 @@
     "/assets/team/sindy_team.png": "069a472024b60b408c3a26f159f0922d2a9227db",
     "/assets/team/viviana_team.png": "3b4f727073b4fd04ad5aaea5a964a7c3e3556080",
     "/common.fcf542baaa4ede5e.js": "c3c7cc959f2d1816921e3482bfc22789a4096cef",
-    "/index.html": "489c6042bff6abd8409607d43249d0288b8186c7",
+    "/index.html": "0e6dab18d70be3010aa2700eaba269ccea758108",
     "/main.f06c9ce4d9f9c87c.js": "bcfcc6fa6b6a0daadee25cc41fe6b7c94b97fe56",
     "/manifest.webmanifest": "6577c79e94818cfe9ac0d555b6cee44f2e1bc1b8",
     "/polyfills.76ed0f0e63d5e642.js": "58c9cdb9a251255e7e9d3f107859e136788c41aa",
-    "/runtime.5539bab1f97d7be2.js": "7cf7fa93abd0947a36fdf4cf2f6e4806874050c5",
-    "/styles.9d6b274b590b6609.css": "3753d9d9082c23b0a23e00befb0f673dee6e85a2"
+    "/runtime.1c0b3242afbf2898.js": "6aac62a08874ff66f1faa2aef5b9bef29e703595",
+    "/styles.d42a79c27c3224d0.css": "552b824c0e492193c209c8d60c8cc8392e91e404"
   },
   "navigationUrls": [
     {

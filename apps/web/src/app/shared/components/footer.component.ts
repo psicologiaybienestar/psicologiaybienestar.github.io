@@ -33,9 +33,6 @@ import { RouterLink } from '@angular/router';
             <p class="text-sm">
               <span class="font-semibold">Teléfono 1:</span> +57 317 500 5472
             </p>
-            <p class="text-sm">
-              <span class="font-semibold">Teléfono 2:</span> +57 313 206 9954
-            </p>
           </div>
         </div>
 
